@@ -20,7 +20,7 @@ DEBUG = os.getenv('DEBUG')
 
 FRONT_HOST = os.getenv('FRONT_HOST')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(" ")
+ALLOWED_HOSTS=['134.209.249.203', 'host.docker.internal', '127.0.0.1', 'localhost', 'back', 'web']
 
 DB_USER = os.getenv('DB_USER')
 
