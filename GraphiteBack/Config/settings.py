@@ -6,7 +6,6 @@ from pathlib import Path
 
 
 # Базовые настройки приcd ложения
-APP_DIR = Path(__file__).resolve().parent
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
 dotenv_file = os.path.join(BASE_DIR, ".env.graphite_back")
@@ -65,7 +64,7 @@ ROOT_URLCONF = 'Config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [APP_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -107,7 +106,7 @@ USE_TZ = True
 
 # Путь к статическим файлам
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(APP_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 AUTH_USER_MODEL = 'api.User'
 
@@ -192,7 +191,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(os.path.dirname(APP_DIR), "media")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
 FIXTURE_DIRS = [
     '/fixtures/'
