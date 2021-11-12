@@ -70,7 +70,7 @@ class User(AbstractUser):
     username = None
 
     wallet_number = models.CharField('Wallet number', unique=True, max_length=20)
-    owner_key = models.CharField('Owner_key', max_length=256)
+    owner_key = models.CharField('Owner key', max_length=256)
 
     avatar = models.ImageField('Avatar', upload_to='user/avatars', null=True, blank=True)
     cover = models.ImageField('Cover', upload_to='user/cover', null=True, blank=True)
