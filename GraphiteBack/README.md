@@ -62,10 +62,9 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 
 ## Конечные точки
 ### Authorization 
-```json
-# Создание пользователя
+#### Создание пользователя
 /auth/users/
-
+```json
 POST ожидает 
     {
         "owner_key": "",
@@ -73,10 +72,9 @@ POST ожидает
         "password": ""
     }
 ```
-```json
-# Получение JWT токена
+#### Получение JWT токена
 /auth/jwt/create
-
+```json
 POST ожидает
     {
         "wallet_number": "",
@@ -88,20 +86,18 @@ POST ожидает
         "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2OTAwNjIzLCJqdGkiOiIzMDMxMzY0MjBjZDI0N2ZhODMyODdhMjk0ZjFiNjc0NiIsInVzZXJfaWQiOjF9.Ned2sZqKiouHXdy3ltGD3RyTKmey3q-mEu4VYncXj5w"
     }
 ```
-```json
-# Проверка валидности JWT токена
+#### Проверка валидности JWT токена
 /auth/jwt/verify
-
+```json
 POST ожидает
     {
         "token": "" 
     }
 При валидном токене возвращает status 200
 ```
-```json
-# Получение текущего имяпользователя
+#### Получение текущего пользователя
 /auth/users/me/
-
+```json
 GET возвращает
     {
         "id": 1,
@@ -134,8 +130,10 @@ GET возвращает
         "groups": [],
         "user_permissions": []
     }
-            
-# Создание и редактирование
+```
+#### Редактирование текущего пользователя
+/auth/users/me/
+```json          
 PUT, PATCH ожидают
   Для текущего пользователя        
     {
@@ -167,12 +165,9 @@ PUT, PATCH ожидают
         "user_permissions": []
     }
 ```
-
-### Основное API
-```json
-# Получение пользователей
+#### Получение пользователей
 /users-profiles/
-
+```json
 GET возвращает
     {
         "count": 1,
@@ -189,9 +184,9 @@ GET возвращает
         ]
     }
 ```
-```json
-# Получеине пользователя
+#### Получеине пользователя
 /users-profiles/{id}
+```json
 
 GET возвращает
   {
@@ -227,12 +222,11 @@ GET возвращает
     "drops": []
   } 
 ```
-```json
-# Получение категории drop
+#### Получение категории и тегов drop
+/drop-tags/ \
 /drop-categories/
-# Получение категории drop
-/drop-tags/
 
+```json
 GET возвращает 
     {
         "count": 2,
@@ -249,17 +243,19 @@ GET возвращает
             }
         ]
     }
-
-# Создание и редактирование 
-POST,PATCH,PUT (только для staff) ожидает
-{
-    "name": ""
-}
 ```
+#### Создание и редактирование категорий и тегов drop
+/drop-tags/ \
+/drop-categories/
 ```json
-# Получение Drops
+POST,PATCH,PUT (только для staff) ожидает
+    {
+        "name": ""
+    }
+```
+#### Получение Drops
 /drops/
-
+```json
 GET возвращает
     {
     "count": 1,
@@ -284,7 +280,10 @@ GET возвращает
     ]
     }
 
-# Создание Drop 
+```
+#### Создание Drop
+/drops/
+```json
 POST ожидает
     {
         "name": "",
@@ -297,9 +296,9 @@ POST ожидает
         "tags": []
   }
 ```
-```json
-# Получение Drop
+#### Получение Drop
 /drops/{id}
+```json
 GET возвращает
     {
         "id": 1,
@@ -317,7 +316,10 @@ GET возвращает
         "tags": []
     }
             
-# Редактирование Drop
+```
+#### Редактирование Drop
+/drops/{id}
+```json
 PUT, PATCH ожидают
     {
         "name": "first",
@@ -330,10 +332,9 @@ PUT, PATCH ожидают
         "tags": []
     }
 ```
-```json
-# Получение подписок на пользователей
+#### Получение подписок на пользователей
 /users-subscriptions/
-
+```json
 GET возвращает
     {
         "count": 1,
@@ -349,17 +350,18 @@ GET возвращает
             }
         ]
     }
-
-# Создание подписки
+```
+#### Создание подписки на пользователя
+/users-subscriptions/
+```json
 POST ожидает 
     {
         "user_of_interest": null
     }
 ```
-```json
-# Получение подписок на Drops
+#### Получение подписок на Drops
 /drops-subscriptions/
-
+```json
 GET возвращает
     {
         "count": 1,
@@ -376,17 +378,18 @@ GET возвращает
         ]
     }
 
-
-# Создание подписки
+```
+#### Создание подписки на Drop
+/drops-subscriptions/
+```json
 POST ожидает 
     {
         "drop": null
     }
 ```
-```json
-# Получение лайков на Drops
+#### Получение лайков на Drops
 /likes/
-
+```json
 GET возвращает
     {
         "count": 1,
@@ -402,8 +405,10 @@ GET возвращает
         ]
     }
 
-
-# Создание лайка
+```
+#### Создание лайка
+/likes/
+```json
 POST ожидает 
     {
         "drop": null
