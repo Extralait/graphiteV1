@@ -5,9 +5,9 @@ from api.models import User
 
 class StatsSerializer(serializers.ModelSerializer):
     subscribers_quantity = serializers.SerializerMethodField()
-    subscribers_on_own_galleries_quantity = serializers.SerializerMethodField()
+    subscribers_on_own_drops_quantity = serializers.SerializerMethodField()
     users_subscriptions_quantity = serializers.SerializerMethodField()
-    galleries_subscriptions_quantity = serializers.SerializerMethodField()
+    drops_subscriptions_quantity = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -16,25 +16,25 @@ class StatsSerializer(serializers.ModelSerializer):
         """
         Получить количество подписчиков
         """
-        return obj.user_users_subscriptions.count()
+        return obj.users_subscriptions.count()
 
-    def get_subscribers_on_own_galleries_quantity(self, obj):
+    def get_subscribers_on_own_drops_quantity(self, obj):
         """
         Получить количество подписчиков
         """
-        return sum(map(lambda x: x.galleries_subscriptions_set.count(), obj.galleries.all()))
+        return sum(map(lambda x: x.drops_subscriptions.count(), obj.drops.all()))
 
     def get_users_subscriptions_quantity(self, obj):
         """
         Получить количество подписок на пользователей
         """
-        return obj.users_subscriptions.count()
+        return obj.user_subscriptions.count()
 
-    def get_galleries_subscriptions_quantity(self, obj):
+    def get_drops_subscriptions_quantity(self, obj):
         """
         Получить количество подписок на галлереи
         """
-        return obj.galleries_subscriptions.count()
+        return obj.drop_subscriptions.count()
 
 
 class CurrentUserSerializer(StatsSerializer):
@@ -43,11 +43,11 @@ class CurrentUserSerializer(StatsSerializer):
     """
     class Meta:
         model = User
-        exclude = ['password', 'galleries', 'users_subscriptions',
-                   'galleries_subscriptions']
+        exclude = ['password', 'drops', 'user_subscriptions',
+                   'drop_subscriptions','owner_key']
 
         read_only_fields = ['last_login','wallet_number'
-                            'date_joined','owner_key']
+                            'date_joined']
 
     def update(self, instance, validated_data):
 
@@ -79,14 +79,20 @@ class CurrentUserSerializer(StatsSerializer):
         return instance
 
 
-class OtherUserSerializer(CurrentUserSerializer):
+class OtherUserDetailSerializer(CurrentUserSerializer):
 
     class Meta:
         model = User
-        exclude = ['password', 'galleries', 'users_subscriptions',
-                   'galleries_subscriptions','owner_key','wallet_number']
+        exclude = ['password', 'user_subscriptions',
+                   'drop_subscriptions','owner_key']
 
-        read_only_fields = ['last_login','wallet_number'
-                            'date_joined','owner_key']
+
+class OtherUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id','first_name','last_name',
+                  'avatar','wallet_number']
+
 
 

@@ -6,6 +6,8 @@ from pathlib import Path
 
 
 # Базовые настройки приcd ложения
+from django.db.models import QuerySet
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
 dotenv_file = os.path.join(BASE_DIR, ".env.graphite_back")
@@ -33,6 +35,7 @@ DB_PORT = os.getenv('DB_PORT')
 
 # Установленные приложения
 INSTALLED_APPS = [
+    'rest_framework_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'api',
     'djoser',
     'corsheaders',
+    'django_filters',
 ]
 
 # Програмное обеспечение
@@ -114,6 +118,7 @@ AUTH_USER_MODEL = 'api.User'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
+
 # Настройки DRF
 REST_FRAMEWORK = {
     # Права доступа поумолчанию
@@ -124,9 +129,13 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication"
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        "url_filter.integrations.drf.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
 }
-
 # Настройки djoser
 DJOSER = {
     'SEND_ACTIVATION_EMAIL': False,
@@ -204,3 +213,4 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+

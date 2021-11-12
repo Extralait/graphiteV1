@@ -1,25 +1,23 @@
 from rest_framework import serializers
 
-from api.models import ProfileType, VerifyStatus
+from api.models import Categories, Tags
 
 
-class ProfileTypeSerializer(serializers.ModelSerializer):
+class CategoriesSerializer(serializers.ModelSerializer):
     """
     тип профиля (сериализатор)
     """
 
     class Meta:
-        model = ProfileType
+        model = Categories
         fields = ['id', 'name']
-        read_only_fields = fields
 
 
-class ProcessedFileSerializer(serializers.ModelSerializer):
+class TagsSerializer(serializers.ModelSerializer):
     """
     Статус верификации (сериализатор)
     """
 
     class Meta:
-        model = VerifyStatus
+        model = Tags
         fields = ['id', 'name']
-        read_only_fields = fields
