@@ -54,7 +54,7 @@ class User(AbstractUser):
 
     class VerifyStatus(models.TextChoices):
         """
-         Уроаень образования
+         Статус верификации
         """
         NOT_VERIFIED = 'not_verified', 'Not verified'
         MODERATION = 'moderation', 'Moderation'
@@ -62,7 +62,7 @@ class User(AbstractUser):
 
     class ProfileType(models.TextChoices):
         """
-         Уроаень образования
+         Тип профиля
         """
         ENTITY = 'entity', 'Entity'
         INDIVIDUAL = 'individual', 'Individual'
