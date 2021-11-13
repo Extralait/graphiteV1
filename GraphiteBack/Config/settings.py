@@ -200,7 +200,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(os.path.dirname(APP_DIR), "media")
+MEDIA_ROOT = os.path.join(os.path.dirname(APP_DIR), "media/")
 print(MEDIA_ROOT)
 
 FIXTURE_DIRS = [
