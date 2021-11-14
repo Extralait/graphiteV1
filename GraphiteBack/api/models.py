@@ -135,8 +135,22 @@ class Tags(models.Model):
 
 
 class Drop(models.Model):
+
+
     name = models.CharField('Name',max_length=256)  # case/new company/instance
     descriptions = models.TextField('Description',null=True, blank=True)
+
+    # class BlockchainType(models.TextChoices):
+    #     """
+    #      Статус верификации
+    #     """
+    #     WAX = 'wax', 'WAX'
+    #     ANCHOR = 'anchor', 'Anchor'
+    #
+    # blockchain_type = models.CharField('Verify Status', max_length=20, choices=BlockchainType.choices,
+    #                                    null=True, blank=True    )
+    # blockchain_address = models.CharField('Blockchain address',max_length=256, blank=True, null=True)  # case/new company/instance
+    # blockchain_identifier = models.CharField('Blockchain identifier',max_length=256, blank=True, null=True)  # case/new company/instance
 
     category = models.ForeignKey(
         Categories, related_name='drops',verbose_name='Category',

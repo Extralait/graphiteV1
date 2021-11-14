@@ -4,6 +4,11 @@ from api.models import User
 
 
 class StatsSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        kwargs['partial'] = True
+        super(StatsSerializer, self).__init__(*args, **kwargs)
+
     subscribers_quantity = serializers.SerializerMethodField()
     subscribers_on_own_drops_quantity = serializers.SerializerMethodField()
     users_subscriptions_quantity = serializers.SerializerMethodField()
@@ -41,6 +46,7 @@ class CurrentUserSerializer(StatsSerializer):
     """
     Детали текущего пользователя (сериализатор)
     """
+
     class Meta:
         model = User
         exclude = ['password', 'drops', 'user_subscriptions',

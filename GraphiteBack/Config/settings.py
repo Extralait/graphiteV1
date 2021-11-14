@@ -141,7 +141,7 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': False,
     'SEND_CONFIRMATION_EMAIL': False,
     'TOKEN_MODEL': None,
-    'HIDE_USERS':True,
+    'HIDE_USERS':False,
     'SERIALIZERS': {
         'user': 'api.serializers.user.OtherUserSerializer',
         'current_user': 'api.serializers.user.CurrentUserSerializer',

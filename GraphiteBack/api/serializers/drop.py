@@ -7,6 +7,10 @@ from api.serializers.intermediate import UserUserSubscriptionSerializer
 
 class DropSerializer(UserUserSubscriptionSerializer):
 
+    def __init__(self, *args, **kwargs):
+        kwargs['partial'] = True
+        super(DropSerializer, self).__init__(*args, **kwargs)
+
     drops_subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
 
