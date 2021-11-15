@@ -82,10 +82,15 @@ class User(AbstractUser):
                                      default=VerifyStatus.NOT_VERIFIED)
 
     drops = models.ManyToManyField('Drop', related_name='drops_owner', verbose_name="Drops", through='OwnerDrop')
+    collections = models.ManyToManyField('Collection', related_name='user_collections', verbose_name='Collections',
+                                         through='OwnerCollection')
+
     user_subscriptions = models.ManyToManyField('self', related_name='users_subscriptions', symmetrical=False,
                                                 verbose_name="Users subscribers", through='UserUserSubscription')
     drop_subscriptions = models.ManyToManyField('Drop', related_name='drops_subscriptions',
                                                 verbose_name="Drops subscribers", through='UserDropSubscription')
+    collections_subscriptions = models.ManyToManyField('Collection', related_name='collections_subscriptions',
+                                                verbose_name="Collections subscribers", through='UserCollectionSubscription')
 
     is_verify = models.BooleanField("Verify", default=False)
     email_notification = models.BooleanField('email-notification', default=False)
@@ -153,11 +158,11 @@ class Drop(models.Model):
     blockchain_type = models.CharField('Blockchain type', max_length=20, choices=BlockchainType.choices,
                                        null=True, blank=True)
     blockchain_address = models.CharField('Blockchain address', max_length=256, blank=True,
-                                          null=True)  # case/new company/instance
+                                          null=True)
     blockchain_identifier = models.CharField('Blockchain identifier', max_length=256, blank=True,
-                                             null=True)  # case/new company/instance
+                                             null=True)
 
-    name = models.CharField('Name', max_length=256)  # case/new company/instance
+    name = models.CharField('Name', max_length=256)
     descriptions = models.TextField('Description', null=True, blank=True)
 
     category = models.ForeignKey(
@@ -181,7 +186,7 @@ class Drop(models.Model):
 
     picture_big = models.ImageField('Big picture', upload_to='drop/picture_big', null=True, blank=True)
     picture_small = models.ImageField('Small picture', upload_to='drop/picture_small', null=True, blank=True)
-
+    to_sell = models.BooleanField('To sell', default=False)
     url_landing = models.CharField('Landing URL', max_length=256, null=True, blank=True)
 
     auction_deadline = models.DateTimeField('Auction deadline', auto_now=True)
@@ -204,8 +209,8 @@ class Drop(models.Model):
         Обработка полей перед сохранением модели
         """
 
-        if not self.parent and self.pk is None:
-            self.all_sell_count = self.sell_count
+        # if not self.parent and self.pk is None:
+        #     self.all_sell_count = self.sell_count
         super().save(*args, **kwargs)
 
     class Meta:
@@ -216,36 +221,71 @@ class Drop(models.Model):
         return self.name
 
 
-class Like(models.Model):
+class Collection(models.Model):
+    name = models.CharField('Name', max_length=256)
+    drops = models.ManyToManyField(Drop, related_name='collection', verbose_name='Drops', through='CollectionDrop')
+
+    class Meta:
+        verbose_name = 'Collection'
+        verbose_name_plural = 'Collections'
+
+    def __str__(self):
+        return self.name
+
+
+class DropLike(models.Model):
     drop = models.ForeignKey(
-        Drop, related_name='likes', verbose_name='Drop',
+        Drop, related_name='drop_likes', verbose_name='Drop',
         on_delete=models.CASCADE, null=True, blank=True
     )
     user = models.ForeignKey(
-        User, related_name='likes', verbose_name='User',
+        User, related_name='drop_likes', verbose_name='User',
         on_delete=models.SET_NULL, null=True, blank=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Like'
-        verbose_name_plural = 'Likes'
+        verbose_name = 'Drop Like'
+        verbose_name_plural = 'Drop Likes'
         constraints = [
-            models.UniqueConstraint(fields=['user', 'drop'], name='unique_user_like')
+            models.UniqueConstraint(fields=['user', 'drop'], name='unique_user_drop_like')
         ]
 
     def __str__(self):
         return f'{self.drop} {self.user}'
 
 
-class DropView(models.Model):
-    drop = models.ForeignKey(
-        Drop, related_name='views', verbose_name='Drop',
+class CollectionLike(models.Model):
+    collection = models.ForeignKey(
+        Collection, related_name='collection_likes', verbose_name='Collection',
         on_delete=models.CASCADE, null=True, blank=True
     )
     user = models.ForeignKey(
-        User, related_name='views', verbose_name='User',
+        User, related_name='collection_likes', verbose_name='User',
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Collection Like'
+        verbose_name_plural = 'Collections Likes'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'collection'], name='unique_user_collections_like')
+        ]
+
+    def __str__(self):
+        return f'{self.collection} {self.user}'
+
+
+class DropView(models.Model):
+    drop = models.ForeignKey(
+        Drop, related_name='drop_views', verbose_name='Drop',
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    user = models.ForeignKey(
+        User, related_name='drop_views', verbose_name='User',
         on_delete=models.SET_NULL, null=True, blank=True
     )
 
@@ -255,15 +295,53 @@ class DropView(models.Model):
         verbose_name = 'View'
         verbose_name_plural = 'Views'
         constraints = [
-            models.UniqueConstraint(fields=['user', 'drop'], name='unique_user_views')
+            models.UniqueConstraint(fields=['user', 'drop'], name='unique_user_drop_views')
         ]
 
     def __str__(self):
         return f'{self.drop} {self.user}'
 
 
+class CollectionView(models.Model):
+    collection = models.ForeignKey(
+        Collection, related_name='collection_views', verbose_name='Collection',
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    user = models.ForeignKey(
+        User, related_name='collection_views', verbose_name='User',
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'View'
+        verbose_name_plural = 'Views'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'collection'], name='unique_user_collection_views')
+        ]
+
+    def __str__(self):
+        return f'{self.collection} {self.user}'
+
+
+class CollectionDrop(models.Model):
+    drop_collection = models.ForeignKey(Collection, related_name='collection_drop', verbose_name="Drop collection", on_delete=models.CASCADE)
+    drop = models.ForeignKey(Drop, related_name='collection_drop', on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Collection drop'
+        verbose_name_plural = 'Collections Drops'
+        constraints = [
+            models.UniqueConstraint(fields=['drop_collection', 'drop'], name='unique_collection_drop')
+        ]
+
+
 class OwnerDrop(models.Model):
-    drop_owner = models.ForeignKey(User,related_name='owner_drop',verbose_name="Drop owner", on_delete=models.CASCADE)
+    drop_owner = models.ForeignKey(User, related_name='owner_drop', verbose_name="Drop owner", on_delete=models.CASCADE)
     drop = models.ForeignKey(Drop, verbose_name="Drop", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -273,7 +351,23 @@ class OwnerDrop(models.Model):
         verbose_name = 'User drop'
         verbose_name_plural = 'Users Drops'
         constraints = [
-            models.UniqueConstraint(fields=['drop_owner', 'drop'], name='unicue_user_drop')
+            models.UniqueConstraint(fields=['drop_owner', 'drop'], name='unique_user_drop')
+        ]
+
+
+class OwnerCollection(models.Model):
+    collection_owner = models.ForeignKey(User, related_name='collection_ovner', verbose_name="Clloection owner",
+                                         on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collection, verbose_name="collection", on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'User collections'
+        verbose_name_plural = 'Users collections'
+        constraints = [
+            models.UniqueConstraint(fields=['collection_owner', 'collection'], name='unique_owner_collection')
         ]
 
 
@@ -305,4 +399,19 @@ class UserDropSubscription(models.Model):
         verbose_name_plural = 'Users drops subscriptions'
         constraints = [
             models.UniqueConstraint(fields=['subscriber', 'drop'], name='unique_drop_subscriber')
+        ]
+
+
+class UserCollectionSubscription(models.Model):
+    subscriber = models.ForeignKey(User, verbose_name="Subscriber", on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collection, verbose_name="collection", on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'User collection subscription'
+        verbose_name_plural = 'Users collection subscriptions'
+        constraints = [
+            models.UniqueConstraint(fields=['subscriber', 'collection'], name='unique_collection_subscriber')
         ]

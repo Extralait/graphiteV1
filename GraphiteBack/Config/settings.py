@@ -17,6 +17,10 @@ if os.path.isfile(dotenv_file):
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
 
+HTTPS = "on"
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 DEBUG = os.getenv('DEBUG')
 
 FRONT_HOST = os.getenv('FRONT_HOST')
@@ -110,7 +114,10 @@ USE_TZ = True
 
 # Путь к статическим файлам
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(APP_DIR, 'static/')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "assets"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 AUTH_USER_MODEL = 'api.User'
 

@@ -36,8 +36,8 @@ services:
   web:
     build: GraphiteBack
     container_name: web
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     command: sh -c "wait-for postgres:5432\
       && python manage.py makemigrations&& python manage.py migrate&& gunicorn Config.asgi:application --bind 0.0.0.0:8000 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
     volumes:

@@ -66,7 +66,7 @@ RUN chown -R app:app $APP_HOME
 RUN chown -R app:app /var/log/
 RUN chown -R app:app /var/run/
 
-EXPOSE 3000
+EXPOSE 8000
 
 # change to the app user
 USER app

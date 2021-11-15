@@ -25,8 +25,6 @@ class TagsSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-
-
 class DropSerializer(UserUserSubscriptionSerializer):
 
     def __init__(self, *args, **kwargs):
@@ -86,6 +84,8 @@ class DropSerializer(UserUserSubscriptionSerializer):
             instance.blockchain_address = validated_data.get('blockchain_address', instance.blockchain_address)
             instance.blockchain_identifier = validated_data.get('blockchain_identifier', instance.blockchain_identifier)
             instance.sell_type = validated_data.get('sell_type', instance.sell_type)
+            instance.all_sell_count = validated_data.get('all_sell_count', instance.all_sell_count)
+            instance.to_sell = validated_data.get('to_sell', instance.to_sell)
             instance.init_cost = validated_data.get('init_cost', instance.init_cost)
             instance.min_rate = validated_data.get('min_rate', instance.min_rate)
             instance.auction_deadline = validated_data.get('auction_deadline', instance.auction_deadline)
@@ -108,6 +108,7 @@ class GetDropSerializer(DropSerializer):
     likes_quantity = serializers.SerializerMethodField()
     views_quantity = serializers.SerializerMethodField()
     drop_owner = serializers.SerializerMethodField()
+    from_collection = serializers.SerializerMethodField()
 
     def get_drops_subscriptions_quantity(self, obj):
         """
@@ -119,19 +120,25 @@ class GetDropSerializer(DropSerializer):
         """
         Получить художников
         """
-        return obj.likes.count()
+        return obj.drop_likes.count()
 
     def get_views_quantity(self, obj):
         """
         Получить художников
         """
-        return obj.views.count()
+        return obj.drop_views.count()
 
     def get_drop_owner(self, obj):
         """
         Получить художников
         """
         return obj.drops_owner.all()[0].pk
+
+    def get_from_collection(self, obj):
+        """
+        Получить художников
+        """
+        return bool(obj.collection_drop.all().count())
 
 class BuyDropSerializer(serializers.Serializer):
     drop = serializers.IntegerField()

@@ -11,8 +11,14 @@ class StatsSerializer(serializers.ModelSerializer):
 
     subscribers_quantity = serializers.SerializerMethodField()
     subscribers_on_own_drops_quantity = serializers.SerializerMethodField()
+    subscribers_on_own_collections_quantity = serializers.SerializerMethodField()
     users_subscriptions_quantity = serializers.SerializerMethodField()
     drops_subscriptions_quantity = serializers.SerializerMethodField()
+    collections_subscriptions_quantity = serializers.SerializerMethodField()
+    own_drop_likes_quantity = serializers.SerializerMethodField()
+    own_collections_likes_quantity = serializers.SerializerMethodField()
+    own_drop_views_quantity = serializers.SerializerMethodField()
+    own_collections_views_quantity = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -27,7 +33,37 @@ class StatsSerializer(serializers.ModelSerializer):
         """
         Получить количество подписчиков
         """
-        return sum(map(lambda x: x.drops_subscriptions.count(), obj.drops.all()))
+        return sum(map(lambda x: x.drops_subscriptions.all().count(), obj.drops.all()))
+
+    def get_subscribers_on_own_collections_quantity(self, obj):
+        """
+        Получить количество подписчиков
+        """
+        return sum(map(lambda x: x.collections_subscriptions.all().count(), obj.collections.all()))
+
+    def get_own_drop_likes_quantity(self, obj):
+        """
+        Получить количество подписчиков
+        """
+        return sum(map(lambda x: x.drop_likes.all().count(), obj.drops.all()))
+
+    def get_own_collections_likes_quantity(self, obj):
+        """
+        Получить количество подписчиков
+        """
+        return sum(map(lambda x: x.collection_likes.all().count(), obj.collections.all()))
+
+    def get_own_drop_views_quantity(self, obj):
+        """
+        Получить количество подписчиков
+        """
+        return sum(map(lambda x: x.drop_views.all().count(), obj.drops.all()))
+
+    def get_own_collections_views_quantity(self, obj):
+        """
+        Получить количество подписчиков
+        """
+        return sum(map(lambda x: x.collection_views.all().count(), obj.collections.all()))
 
     def get_users_subscriptions_quantity(self, obj):
         """
@@ -41,6 +77,12 @@ class StatsSerializer(serializers.ModelSerializer):
         """
         return obj.drop_subscriptions.count()
 
+    def get_collections_subscriptions_quantity(self, obj):
+        """
+        Получить количество подписок на галлереи
+        """
+        return obj.collections_subscriptions.count()
+
 
 class CurrentUserSerializer(StatsSerializer):
     """
@@ -49,11 +91,11 @@ class CurrentUserSerializer(StatsSerializer):
 
     class Meta:
         model = User
-        exclude = ['password', 'drops', 'user_subscriptions',
+        exclude = ['password', 'user_subscriptions',
                    'drop_subscriptions','owner_key']
 
         read_only_fields = ['last_login','wallet_number'
-                            'date_joined']
+                            'date_joined', 'drops','collections']
 
     def update(self, instance, validated_data):
 
@@ -89,8 +131,7 @@ class OtherUserDetailSerializer(CurrentUserSerializer):
 
     class Meta:
         model = User
-        exclude = ['password', 'user_subscriptions',
-                   'drop_subscriptions','owner_key']
+        exclude = ['password','owner_key']
 
 
 class OtherUserSerializer(serializers.ModelSerializer):
