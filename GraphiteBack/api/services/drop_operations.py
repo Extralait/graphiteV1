@@ -14,34 +14,24 @@ def sell_drop(drop_id, count, user):
     if sell_count > count:
         drop.sell_count -= count
         drop.save()
-
-        if user_drop:
-            user_drop.sell_count += count
-            user_drop.save()
-        else:
-            drop.pk = None
-            drop.sell_count = count
-            drop.parent_id = drop_id
-            drop.save()
-            new_drop_id = drop.pk
-            OwnerDrop.objects.create(
-                drop_owner_id = user,
-                drop_id = new_drop_id,
-            )
-        return count
-
     else:
-        if user_drop:
-            user_drop.sell_count += sell_count
-            user_drop.parent = None
-            user_drop.save()
-            drop.delete()
-        else:
-            owner_drop = OwnerDrop.objects.get(drop = drop_id)
-            owner_drop.drop_owner_id = user
-            owner_drop.save()
+        drop.sell_count = 0
+        drop.save()
+        count = sell_count
 
-        return sell_count
-
+    if user_drop:
+        user_drop.sell_count += count
+        user_drop.save()
+    else:
+        drop.pk = None
+        drop.sell_count = count
+        drop.parent_id = drop_id
+        drop.save()
+        new_drop_id = drop.pk
+        OwnerDrop.objects.create(
+            drop_owner_id = user,
+            drop_id = new_drop_id,
+        )
+    return count
 
 
