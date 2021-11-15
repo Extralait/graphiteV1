@@ -258,43 +258,76 @@ POST,PATCH,PUT (только для staff) ожидает
 ```json
 GET возвращает
     {
-    "count": 1,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 1,
-            "drops_subscriptions_quantity": 0,
-            "likes_quantity": 0,
-            "name": "first",
-            "descriptions": "",
-            "picture_big": null,
-            "picture_small": null,
-            "url_landing": "",
-            "created_at": "2021-11-12T15:19:12.492843Z",
-            "updated_at": "2021-11-12T15:19:12.506987Z",
-            "category": null,
-            "artists": null,
-            "tags": []
-        }
-    ]
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "tags": [
+                    {
+                        "id": 1,
+                        "name": "first"
+                    },
+                    {
+                        "id": 2,
+                        "name": "second"
+                    }
+                ],
+                "category": {
+                    "id": 1,
+                    "name": "first"
+                },
+                "drops_subscriptions_quantity": 0,
+                "likes_quantity": 0,
+                "views_quantity": 0,
+                "drop_owner": 1,
+                "blockchain_type": "",
+                "blockchain_address": "",
+                "blockchain_identifier": "",
+                "name": "first",
+                "descriptions": "",
+                "sell_type": "",
+                "sell_count": 0,
+                "all_sell_count": 0,
+                "init_cost": 0,
+                "min_rate": 0,
+                "picture_big": null,
+                "picture_small": null,
+                "url_landing": "",
+                "auction_deadline": "2021-11-15T00:19:49.345225Z",
+                "royalty": 0.0,
+                "created_at": "2021-11-15T00:19:49.336258Z",
+                "updated_at": "2021-11-15T00:19:49.345225Z",
+                "artists": null,
+                "parent": null
+            }
+        ]
     }
-
 ```
 #### Создание Drop
 /drops/
 ```json
 POST ожидает
     {
+        "blockchain_type": null,
+        "blockchain_address": "",
+        "blockchain_identifier": "",
         "name": "",
         "descriptions": "",
+        "sell_type": null,
+        "sell_count": null,
+        "init_cost": null,
+        "min_rate": null,
         "picture_big": null,
         "picture_small": null,
         "url_landing": "",
+        "royalty": null,
         "category": null,
         "artists": null,
+        "parent": null,
         "tags": []
-  }
+    }
 ```
 #### Получение Drop
 /drops/{id}
@@ -302,34 +335,75 @@ POST ожидает
 GET возвращает
     {
         "id": 1,
+        "tags": [
+            {
+                "id": 1,
+                "name": "first"
+            },
+            {
+                "id": 2,
+                "name": "second"
+            }
+        ],
+        "category": {
+            "id": 1,
+            "name": "first"
+        },
         "drops_subscriptions_quantity": 0,
         "likes_quantity": 0,
+        "views_quantity": 0,
+        "drop_owner": 1,
+        "blockchain_type": "",
+        "blockchain_address": "",
+        "blockchain_identifier": "",
         "name": "first",
         "descriptions": "",
+        "sell_type": "",
+        "sell_count": 0,
+        "all_sell_count": 0,
+        "init_cost": 0,
+        "min_rate": 0,
         "picture_big": null,
         "picture_small": null,
         "url_landing": "",
-        "created_at": "2021-11-12T15:19:12.492843Z",
-        "updated_at": "2021-11-12T15:19:12.506987Z",
-        "category": null,
+        "auction_deadline": "2021-11-15T00:19:49.345225Z",
+        "royalty": 0.0,
+        "created_at": "2021-11-15T00:19:49.336258Z",
+        "updated_at": "2021-11-15T00:19:49.345225Z",
         "artists": null,
-        "tags": []
-    }
-            
+        "parent": null
+    } 
 ```
 #### Редактирование Drop
 /drops/{id}
 ```json
 PUT, PATCH ожидают
     {
+        "id": 1,
+        "blockchain_type": "",
+        "blockchain_address": "",
+        "blockchain_identifier": "",
         "name": "first",
         "descriptions": "",
+        "sell_type": "",
+        "sell_count": 0,
+        "all_sell_count": 0,
+        "init_cost": 0,
+        "min_rate": 0,
         "picture_big": null,
         "picture_small": null,
         "url_landing": "",
-        "category": null,
+        "auction_deadline": "2021-11-15T00:19:49.345225Z",
+        "royalty": 0.0,
+        "created_at": "2021-11-15T00:19:49.336258Z",
+        "updated_at": "2021-11-15T00:19:49.345225Z",
+        "category": 1,
         "artists": null,
-        "tags": []
+        "parent": null,
+        "tags": [
+            1,
+            2
+        ]
     }
 ```
 #### Получение подписок на пользователей
@@ -412,5 +486,64 @@ GET возвращает
 POST ожидает 
     {
         "drop": null
+    }
+```
+#### Получение просмотров Drops
+/views/
+```json
+GET возвращает
+    {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "created_at": "2021-11-12T15:29:15.552307Z",
+                "drop": 1,
+                "user": 2
+            }
+        ]
+    }
+
+```
+#### Создание просмотра
+/views/
+```json
+POST ожидает 
+    {
+        "drop": null
+    }
+```
+#### Получение владельцев Drops
+/views/
+```json
+GET возвращает
+    {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 1,
+                "created_at": "2021-11-15T00:19:49.346224Z",
+                "updated_at": "2021-11-15T00:19:49.346224Z",
+                "drop_owner": 1,
+                "drop": 1
+            }
+        ]
+    }
+```
+### Купить Drop
+/buy-drop/
+```json
+POST ожидает 
+    {
+        "drop": null,
+        "count": null
+    }
+    возвращает
+    {
+        'sell_count':sell_count
     }
 ```

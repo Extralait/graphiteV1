@@ -106,6 +106,7 @@ class GetDropSerializer(DropSerializer):
 
     drops_subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
+    views_quantity = serializers.SerializerMethodField()
     drop_owner = serializers.SerializerMethodField()
 
     def get_drops_subscriptions_quantity(self, obj):
@@ -119,6 +120,12 @@ class GetDropSerializer(DropSerializer):
         Получить художников
         """
         return obj.likes.count()
+
+    def get_views_quantity(self, obj):
+        """
+        Получить художников
+        """
+        return obj.views.count()
 
     def get_drop_owner(self, obj):
         """

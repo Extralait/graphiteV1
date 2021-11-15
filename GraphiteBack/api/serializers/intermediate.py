@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import UserUserSubscription, UserDropSubscription, Like, OwnerDrop
+from api.models import UserUserSubscription, UserDropSubscription, Like, OwnerDrop, DropView
 
 
 class UserUserSubscriptionSerializer(serializers.ModelSerializer):
@@ -62,6 +62,24 @@ class LikeSerializer(UserUserSubscriptionSerializer):
             **validated_data
         ))
         return like
+
+
+class DropViewSerializer(UserUserSubscriptionSerializer):
+
+    class Meta:
+        model = DropView
+        fields = '__all__'
+        read_only_fields = ['id','user']
+
+    def create(self, validated_data):
+        """
+        Стать художником
+        """
+        view = (DropView.objects.create(
+            user=self._user(),
+            **validated_data
+        ))
+        return view
 
 
 class OwnerDropSerializer(UserUserSubscriptionSerializer):

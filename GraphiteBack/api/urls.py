@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from api.views import UserProfileViewSet, CategoriesViewSet, TagsViewSet, DropViewSet, UserUserSubscriptionViewSet, \
-    UserDropSubscriptionViewSet, LikeViewSet, BuyDrop, OwnerDropViewSet
+    UserDropSubscriptionViewSet, LikeViewSet, BuyDrop, OwnerDropViewSet, DropViewViewSet
 
 # Django REST framework routes
 router = routers.DefaultRouter()
@@ -15,6 +15,7 @@ router.register(r'drops', DropViewSet)
 router.register(r'users-subscriptions', UserUserSubscriptionViewSet)
 router.register(r'drops-subscriptions', UserDropSubscriptionViewSet)
 router.register(r'likes', LikeViewSet)
+router.register(r'views', DropViewViewSet)
 
 urlpatterns = [
     # djoser auth urls

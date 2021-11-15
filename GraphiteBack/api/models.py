@@ -239,6 +239,29 @@ class Like(models.Model):
         return f'{self.drop} {self.user}'
 
 
+class DropView(models.Model):
+    drop = models.ForeignKey(
+        Drop, related_name='views', verbose_name='Drop',
+        on_delete=models.CASCADE, null=True, blank=True
+    )
+    user = models.ForeignKey(
+        User, related_name='views', verbose_name='User',
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'View'
+        verbose_name_plural = 'Views'
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'drop'], name='unique_user_views')
+        ]
+
+    def __str__(self):
+        return f'{self.drop} {self.user}'
+
+
 class OwnerDrop(models.Model):
     drop_owner = models.ForeignKey(User,related_name='owner_drop',verbose_name="Drop owner", on_delete=models.CASCADE)
     drop = models.ForeignKey(Drop, verbose_name="Drop", on_delete=models.CASCADE)
