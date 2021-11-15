@@ -18,7 +18,7 @@ router.register(r'drop-tags', TagsViewSet)
 router.register(r'drops-owners', OwnerDropViewSet)
 router.register(r'drops-subscriptions', UserDropSubscriptionViewSet)
 router.register(r'drops-likes', DropLikeViewSet)
-router.register(r'drop-views', DropViewViewSet)
+router.register(r'drops-views', DropViewViewSet)
 
 router.register(r'collections', CollectionViewSet)
 router.register(r'collections-owners', OwnerCollectionViewSet)
