@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import UserUserSubscription, UserDropSubscription, Like
+from api.models import UserUserSubscription, UserDropSubscription, Like, OwnerDrop
 
 
 class UserUserSubscriptionSerializer(serializers.ModelSerializer):
@@ -62,5 +62,14 @@ class LikeSerializer(UserUserSubscriptionSerializer):
             **validated_data
         ))
         return like
+
+
+class OwnerDropSerializer(UserUserSubscriptionSerializer):
+
+    class Meta:
+        model = OwnerDrop
+        fields = '__all__'
+        read_only_fields = ['id','owner','drop']
+
 
 

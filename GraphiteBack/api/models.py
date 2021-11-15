@@ -3,6 +3,7 @@ from enum import unique
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -76,15 +77,15 @@ class User(AbstractUser):
     cover = models.ImageField('Cover', upload_to='user/cover', null=True, blank=True)
 
     profile_type = models.CharField('Profile Type', max_length=20, choices=ProfileType.choices,
-                                       default=ProfileType.INDIVIDUAL)
+                                    default=ProfileType.INDIVIDUAL)
     verify_status = models.CharField('Verify Status', max_length=20, choices=VerifyStatus.choices,
-                                       default=VerifyStatus.NOT_VERIFIED)
+                                     default=VerifyStatus.NOT_VERIFIED)
 
     drops = models.ManyToManyField('Drop', related_name='drops_owner', verbose_name="Drops", through='OwnerDrop')
     user_subscriptions = models.ManyToManyField('self', related_name='users_subscriptions', symmetrical=False,
-                                                 verbose_name="Users subscribers", through='UserUserSubscription')
+                                                verbose_name="Users subscribers", through='UserUserSubscription')
     drop_subscriptions = models.ManyToManyField('Drop', related_name='drops_subscriptions',
-                                                 verbose_name="Drops subscribers", through='UserDropSubscription')
+                                                verbose_name="Drops subscribers", through='UserDropSubscription')
 
     is_verify = models.BooleanField("Verify", default=False)
     email_notification = models.BooleanField('email-notification', default=False)
@@ -135,42 +136,77 @@ class Tags(models.Model):
 
 
 class Drop(models.Model):
+    class BlockchainType(models.TextChoices):
+        """
+         Статус верификации
+        """
+        WAX = 'wax', 'WAX'
+        ANCHOR = 'anchor', 'Anchor'
 
+    class SellType(models.TextChoices):
+        """
+         Статус верификации
+        """
+        AUCTION = 'auction', 'Auction'
+        SELL = 'sell', 'Sell'
 
-    name = models.CharField('Name',max_length=256)  # case/new company/instance
-    descriptions = models.TextField('Description',null=True, blank=True)
+    blockchain_type = models.CharField('Blockchain type', max_length=20, choices=BlockchainType.choices,
+                                       null=True, blank=True)
+    blockchain_address = models.CharField('Blockchain address', max_length=256, blank=True,
+                                          null=True)  # case/new company/instance
+    blockchain_identifier = models.CharField('Blockchain identifier', max_length=256, blank=True,
+                                             null=True)  # case/new company/instance
 
-    # class BlockchainType(models.TextChoices):
-    #     """
-    #      Статус верификации
-    #     """
-    #     WAX = 'wax', 'WAX'
-    #     ANCHOR = 'anchor', 'Anchor'
-    #
-    # blockchain_type = models.CharField('Verify Status', max_length=20, choices=BlockchainType.choices,
-    #                                    null=True, blank=True    )
-    # blockchain_address = models.CharField('Blockchain address',max_length=256, blank=True, null=True)  # case/new company/instance
-    # blockchain_identifier = models.CharField('Blockchain identifier',max_length=256, blank=True, null=True)  # case/new company/instance
+    name = models.CharField('Name', max_length=256)  # case/new company/instance
+    descriptions = models.TextField('Description', null=True, blank=True)
 
     category = models.ForeignKey(
-        Categories, related_name='drops',verbose_name='Category',
+        Categories, related_name='drops', verbose_name='Category',
         on_delete=models.SET_NULL, null=True, blank=True
     )
 
-    tags = models.ManyToManyField(Tags, related_name='drops', verbose_name='Tags',blank=True)
+    tags = models.ManyToManyField(Tags, related_name='drops', verbose_name='Tags', blank=True)
 
     artists = models.ForeignKey(
         User, related_name='drop_artist', verbose_name='Artist',
         on_delete=models.SET_NULL, null=True, blank=True,
     )
 
-    picture_big = models.ImageField('Big picture', upload_to='drop/picture_big',null=True, blank=True)
-    picture_small = models.ImageField('Small picture',upload_to='drop/picture_small', null=True, blank=True)
+    sell_type = models.CharField('Sell type', max_length=20, choices=BlockchainType.choices,
+                                 null=True, blank=True)
+    sell_count = models.IntegerField('Sell count', default=0)
+    all_sell_count = models.IntegerField('All sell count', default=0)
+    init_cost = models.IntegerField('Init cost', default=0)
+    min_rate = models.IntegerField('Min rate', default=0)
 
-    url_landing = models.CharField('Landing URL',max_length=256, null=True, blank=True)
+    picture_big = models.ImageField('Big picture', upload_to='drop/picture_big', null=True, blank=True)
+    picture_small = models.ImageField('Small picture', upload_to='drop/picture_small', null=True, blank=True)
+
+    url_landing = models.CharField('Landing URL', max_length=256, null=True, blank=True)
+
+    auction_deadline = models.DateTimeField('Auction deadline', auto_now=True)
+    royalty = models.FloatField('Royalty', default=0,
+                                validators=[
+                                    MaxValueValidator(100),
+                                    MinValueValidator(0)
+                                ])
+
+    parent = models.ForeignKey(
+        'self', related_name='parent_drop', verbose_name='Parent',
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Обработка полей перед сохранением модели
+        """
+
+        if not self.parent and self.pk is None:
+            self.all_sell_count = self.sell_count
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Drop'
@@ -183,11 +219,11 @@ class Drop(models.Model):
 class Like(models.Model):
     drop = models.ForeignKey(
         Drop, related_name='likes', verbose_name='Drop',
-        on_delete=models.SET_NULL, null = True, blank= True
+        on_delete=models.CASCADE, null=True, blank=True
     )
     user = models.ForeignKey(
         User, related_name='likes', verbose_name='User',
-        on_delete=models.SET_NULL, null = True, blank= True
+        on_delete=models.SET_NULL, null=True, blank=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -199,14 +235,13 @@ class Like(models.Model):
             models.UniqueConstraint(fields=['user', 'drop'], name='unique_user_like')
         ]
 
-
     def __str__(self):
         return f'{self.drop} {self.user}'
 
 
 class OwnerDrop(models.Model):
-    owner = models.ForeignKey(User, verbose_name="Owner", on_delete=models.CASCADE)
-    drop = models.ForeignKey(Drop, verbose_name="drop", on_delete=models.CASCADE)
+    drop_owner = models.ForeignKey(User,related_name='owner_drop',verbose_name="Drop owner", on_delete=models.CASCADE)
+    drop = models.ForeignKey(Drop, verbose_name="Drop", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -215,7 +250,7 @@ class OwnerDrop(models.Model):
         verbose_name = 'User drop'
         verbose_name_plural = 'Users Drops'
         constraints = [
-            models.UniqueConstraint(fields=['owner', 'drop'], name='unicue_user_drop')
+            models.UniqueConstraint(fields=['drop_owner', 'drop'], name='unicue_user_drop')
         ]
 
 
@@ -241,7 +276,6 @@ class UserDropSubscription(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
     class Meta:
         verbose_name = 'User drop subscription'
