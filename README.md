@@ -27,11 +27,8 @@ docker stack rm proj
 docker swarm leave --force
 ```
 ### URL
-```
-REST API: http://127.0.0.1:8000/api/
-```
-
-
+Api: https://artgraphite.ru/api/ \
+Api documentation: https://artgraphite.ru/documentation/api.html
 
 # Инфо Сервер
 ssh -i ~/.ssh/kisi_key root@134.209.249.203
