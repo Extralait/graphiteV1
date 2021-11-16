@@ -1,15 +1,10 @@
-import json
-
-from django.db.models import QuerySet
+from djoser.permissions import CurrentUserOrAdmin
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
-from djoser.permissions import CurrentUserOrAdmin
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import serializers
 
-from api.permissions import NoBody
 from .models import User, Categories, Tags, Drop, UserUserSubscription, UserDropSubscription, DropLike, OwnerDrop, \
     DropView, OwnerCollection, CollectionView, CollectionLike, UserCollectionSubscription, CollectionDrop, Collection
 from .serializers.collection import GetCollectionSerializer, CollectionSerializer

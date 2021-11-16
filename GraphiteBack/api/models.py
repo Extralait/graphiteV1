@@ -177,7 +177,7 @@ class Drop(models.Model):
         on_delete=models.SET_NULL, null=True, blank=True,
     )
 
-    sell_type = models.CharField('Sell type', max_length=20, choices=BlockchainType.choices,
+    sell_type = models.CharField('Sell type', max_length=20, choices=SellType.choices,
                                  null=True, blank=True)
     sell_count = models.IntegerField('Sell count', default=0)
     all_sell_count = models.IntegerField('All sell count', default=0)
