@@ -1,7 +1,7 @@
 # API documentation 
 ## Базовый URL
 
-https://artgraphite.ru/api/
+<i>https://artgraphite.ru/api/</i>
 
 ## Правила формирования запросов
 
