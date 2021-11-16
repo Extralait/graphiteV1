@@ -1,9 +1,9 @@
 # API documentation 
-## Базовый URL
-
-<i>https://artgraphite.ru/api/</i>
 
 ## Правила формирования запросов
+### Базовый URL
+
+<i>https://artgraphite.ru/api/ </i>
 
 ### Сортировка
 ```sh
@@ -97,6 +97,7 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
     }
 # При валидном токене возвращает status 200
 ```
+### User
 #### Получение текущего пользователя
 <i>https://artgraphite.ru/api/auth/users/me/ \
 /auth/users/me/</i>
@@ -246,6 +247,7 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "collections_subscriptions": <array(list)>
     }
 ```
+### Drops
 #### Получение категории и тегов drop
 <i>https://artgraphite.ru/api/drop-tags/ \
 /drop-tags/ \
@@ -437,6 +439,7 @@ https://artgraphite.ru/api/drop-categories/ \
         "tags": <array(int)>
     }
 ```
+### Collections
 #### Получение коллекций
 <i>https://artgraphite.ru/api/collections/ \
 /collections/</i>
@@ -518,6 +521,7 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+### Subscriptions
 #### Получение подписок на пользователей
 <i>https://artgraphite.ru/api/users-subscriptions/ \
 /users-subscriptions/</i>
@@ -605,6 +609,7 @@ https://artgraphite.ru/api/drop-categories/ \
         "collection": <int>
     }
 ```
+### Likes
 #### Получение лайков на Drops
 <i>https://artgraphite.ru/api/drops-likes/ \
 /drops-likes/</i>
@@ -661,6 +666,7 @@ https://artgraphite.ru/api/drop-categories/ \
         "collection": <int>
     }
 ```
+### Views
 #### Получение просмотров Drops
 <i>https://artgraphite.ru/api/drops-views/ \
 /drops-views/</i>
@@ -717,6 +723,7 @@ https://artgraphite.ru/api/drop-categories/ \
         "drop": <int>
     }
 ```
+### Owners
 #### Получение владельцев Drops
 <i>https://artgraphite.ru/api/drops-owners/ \
 /drops-owners/</i>
@@ -755,7 +762,8 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
-### Купить Drop
+### Actions
+#### Купить Drop
 <i>https://artgraphite.ru/api/buy-drop/ \
 /buy-drop/</i>
 ```sh
