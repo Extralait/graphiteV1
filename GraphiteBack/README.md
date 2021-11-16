@@ -83,8 +83,8 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
     }
     # возвращает
     {
-        "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNzE1OTgyMywianRpIjoiN2M5MzljOWUwMTY3NDRhNTlhNzc0NmM1YWYyOGM0MWIiLCJ1c2VyX2lkIjoxfQ.wFDMqs5637cv7yHxKUnpYuxtxoe6wwzBBFomqqjkd0Q",
-        "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2OTAwNjIzLCJqdGkiOiIzMDMxMzY0MjBjZDI0N2ZhODMyODdhMjk0ZjFiNjc0NiIsInVzZXJfaWQiOjF9.Ned2sZqKiouHXdy3ltGD3RyTKmey3q-mEu4VYncXj5w"
+        "refresh": <str>,
+        "access": <str> 
     }
 ```
 #### Проверка валидности JWT токена
