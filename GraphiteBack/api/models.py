@@ -181,8 +181,8 @@ class Drop(models.Model):
                                  null=True, blank=True)
     sell_count = models.IntegerField('Sell count', default=0)
     all_sell_count = models.IntegerField('All sell count', default=0)
-    init_cost = models.IntegerField('Init cost', default=0)
-    min_rate = models.IntegerField('Min rate', default=0)
+    init_cost = models.FloatField('Init cost', default=0)
+    min_rate = models.FloatField('Min rate', default=0)
 
     picture_big = models.ImageField('Big picture', upload_to='drop/picture_big', null=True, blank=True)
     picture_small = models.ImageField('Small picture', upload_to='drop/picture_small', null=True, blank=True)
@@ -352,7 +352,7 @@ class OwnerDrop(models.Model):
         verbose_name_plural = 'Users Drops'
         constraints = [
             models.UniqueConstraint(fields=['drop_owner', 'drop'], name='unique_user_drop')
-        ]
+]
 
 
 class OwnerCollection(models.Model):
