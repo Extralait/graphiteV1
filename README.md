@@ -1,4 +1,4 @@
-# CryptAppBack
+# Graphite
 
 ### Project run
 ```
