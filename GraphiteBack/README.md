@@ -267,7 +267,7 @@ https://artgraphite.ru/api/drop-categories/ \
             },
             {
                 "id": <int>,
-                "name": <str>"
+                "name": <str>
             }
         ]
     }
