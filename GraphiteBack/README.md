@@ -283,7 +283,7 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 #### Получение Drops
 <i>https://artgraphite.ru/api/drops/ \
-drops/</i>
+/drops/</i>
 ```sh
 # GET возвращает
     {
