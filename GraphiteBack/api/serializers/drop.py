@@ -2,6 +2,7 @@ from rest_framework.exceptions import APIException
 from rest_framework import serializers
 
 from api.models import OwnerDrop, Drop, Tags, Categories
+from api.serializers.collection import GetCollectionSerializer
 from api.serializers.intermediate import UserUserSubscriptionSerializer
 from api.serializers.user import OtherUserDetailSerializer
 
@@ -105,12 +106,13 @@ class GetDropSerializer(DropSerializer):
     tags = TagsSerializer(many=True)
     category = CategoriesSerializer()
     drop_owner = OtherUserDetailSerializer(many=True,read_only=True,source='drops_owner')
+    from_collection = GetCollectionSerializer(many=True,read_only=True,source='collection')
     artists = OtherUserDetailSerializer(read_only=True)
 
     drops_subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
     views_quantity = serializers.SerializerMethodField()
-    from_collection = serializers.SerializerMethodField()
+    # from_collection = serializers.SerializerMethodField()
 
     def get_drops_subscriptions_quantity(self, obj):
         """
@@ -130,11 +132,11 @@ class GetDropSerializer(DropSerializer):
         """
         return obj.drop_views.count()
 
-    def get_from_collection(self, obj):
-        """
-        Получить художников
-        """
-        return bool(obj.collection_drop.all().count())
+    # def get_from_collection(self, obj):
+    #     """
+    #     Получить художников
+    #     """
+    #     return bool(obj.collection_drop.all().count())
 
 class BuyDropSerializer(serializers.Serializer):
     drop = serializers.IntegerField()
