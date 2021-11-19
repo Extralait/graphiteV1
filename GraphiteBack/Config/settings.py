@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_extensions',
     'api',
     'whitenoise.runserver_nostatic',
     'djoser',
@@ -215,6 +216,10 @@ FIXTURE_DIRS = [
     '/fixtures/'
 ]
 
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 # Настройки почты
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')

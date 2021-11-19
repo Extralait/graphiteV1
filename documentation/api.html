@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>API documentation</title>
     <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.css"/>
@@ -9,12 +8,6 @@
     <link type="text/css" rel="stylesheet" href="assets/css/pilcrow.css"/>
     <link type="text/css" rel="stylesheet" href="assets/css/hljs-github.min.css"/>
     <link type="text/css" rel="stylesheet" href="assets/css/style.css"/>
-    <style>
-    body {
-      background: url('assets/img/textured_paper.png') repeat top left;
-      background-color: #f6f6f6;
-    }
-    </style>
   </head>
 <body>
 
@@ -328,7 +321,6 @@ http://example.com/api/users?age__range=5,10&amp;name__incontains=foo&amp;profil
                 <span class="hljs-string">&quot;likes_quantity&quot;</span>: &lt;int&gt;,
                 <span class="hljs-string">&quot;views_quantity&quot;</span>: &lt;int&gt;,
                 <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;int&gt;,
-                <span class="hljs-string">&quot;from_collection&quot;</span>: &lt;bool&gt;,
                 <span class="hljs-string">&quot;blockchain_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (wax|anchor)</span>
                 <span class="hljs-string">&quot;blockchain_address&quot;</span>: &lt;str&gt;,
                 <span class="hljs-string">&quot;blockchain_identifier&quot;</span>: &lt;str&gt;,
@@ -347,7 +339,9 @@ http://example.com/api/users?age__range=5,10&amp;name__incontains=foo&amp;profil
                 <span class="hljs-string">&quot;royalty&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
                 <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
                 <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
-                <span class="hljs-string">&quot;artists&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;from_collection&quot;</span>:  &lt;array(object(collection)),
+                <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;array(object(user))&gt;
+                <span class="hljs-string">&quot;artists&quot;</span>: &lt;object(user)&gt;,
                 <span class="hljs-string">&quot;parent&quot;</span>: &lt;int&gt;
             }
         ]
@@ -415,7 +409,9 @@ http://example.com/api/users?age__range=5,10&amp;name__incontains=foo&amp;profil
         <span class="hljs-string">&quot;royalty&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
         <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
         <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
-        <span class="hljs-string">&quot;artists&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;from_collection&quot;</span>:  &lt;array(object(collection)),
+        <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;array(object(user))&gt;
+        <span class="hljs-string">&quot;artists&quot;</span>: &lt;object(user)&gt;,
         <span class="hljs-string">&quot;parent&quot;</span>: &lt;int&gt;
     } </code></pre><h4 id="редактирование-drop"><a class="header-link" href="#редактирование-drop"></a>Редактирование Drop</h4>
 <p><i><a href="https://artgraphite.ru/api/drops/">https://artgraphite.ru/api/drops/</a> <br>/drops/{id}</i></p>
@@ -694,7 +690,7 @@ http://example.com/api/users?age__range=5,10&amp;name__incontains=foo&amp;profil
     </div>
   </div>
 
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>
