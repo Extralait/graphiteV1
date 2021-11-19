@@ -342,7 +342,7 @@ class CollectionDrop(models.Model):
 
 class OwnerDrop(models.Model):
     drop_owner = models.ForeignKey(User, related_name='owner_drop', verbose_name="Drop owner", on_delete=models.CASCADE)
-    drop = models.ForeignKey(Drop, verbose_name="Drop", on_delete=models.CASCADE)
+    drop = models.ForeignKey(Drop,related_name='drop', verbose_name="Drop", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

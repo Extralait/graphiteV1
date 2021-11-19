@@ -48,9 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    'whitenoise.runserver_nostatic',
     'djoser',
-    'corsheaders',
     'django_filters',
+    'corsheaders',
 ]
 
 # Програмное обеспечение

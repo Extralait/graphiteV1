@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from api.models import OwnerDrop, Drop, Tags, Categories
 from api.serializers.intermediate import UserUserSubscriptionSerializer
+from api.serializers.user import OtherUserDetailSerializer
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
@@ -103,11 +104,12 @@ class DropSerializer(UserUserSubscriptionSerializer):
 class GetDropSerializer(DropSerializer):
     tags = TagsSerializer(many=True)
     category = CategoriesSerializer()
+    drop_owner = OtherUserDetailSerializer(many=True,read_only=True,source='drops_owner')
+    artists = OtherUserDetailSerializer(read_only=True)
 
     drops_subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
     views_quantity = serializers.SerializerMethodField()
-    drop_owner = serializers.SerializerMethodField()
     from_collection = serializers.SerializerMethodField()
 
     def get_drops_subscriptions_quantity(self, obj):
@@ -127,12 +129,6 @@ class GetDropSerializer(DropSerializer):
         Получить художников
         """
         return obj.drop_views.count()
-
-    def get_drop_owner(self, obj):
-        """
-        Получить художников
-        """
-        return obj.drops_owner.all()[0].pk
 
     def get_from_collection(self, obj):
         """
