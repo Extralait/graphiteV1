@@ -35,7 +35,7 @@ ssh -i ~/.ssh/kisi_key root@134.209.249.203
 git@github.com:atknin/graphite-back.git
 docker-compose logs -f
 
-
+/home/extralait/apps/graphite/GraphiteBack/
 Сборка
 docker-compose build
 
