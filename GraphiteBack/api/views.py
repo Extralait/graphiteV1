@@ -24,7 +24,6 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-
 class SmallResultsSetPagination(PageNumberPagination):
     page_size = 60
     page_size_query_param = 'page_size'
@@ -41,7 +40,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         """
         Права доступа
         """
-        if self.action in ['list','retrieve']:
+        if self.action in ['list', 'retrieve']:
             permission_classes = (AllowAny,)
         else:
             permission_classes = (CurrentUserOrAdmin,)
@@ -71,7 +70,7 @@ class CategoriesViewSet(viewsets.ModelViewSet):
         """
         Права доступа
         """
-        if self.action in ['list','retrieve']:
+        if self.action in ['list', 'retrieve']:
             permission_classes = (AllowAny,)
         else:
             permission_classes = (IsAdminUser,)
@@ -89,7 +88,7 @@ class TagsViewSet(CategoriesViewSet):
         """
         Права доступа
         """
-        if self.action in ['list','retrieve']:
+        if self.action in ['list', 'retrieve']:
             permission_classes = (AllowAny,)
         elif self.action == 'create':
             permission_classes = (IsAuthenticated,)
@@ -180,9 +179,15 @@ class BuyDrop(APIView):
         count = int(data['count'])
         user = request.user.id
 
-        sell_count = sell_drop(drop,count,user)
+        sell_count, customer, owner, customer_drop = sell_drop(drop, count, user)
 
-        return Response({'sell_count':sell_count}, status=status.HTTP_200_OK)
+        return Response({
+            'owner': owner,
+            'customer': customer,
+            'owner_drop': drop.pk,
+            'customer_drop': customer_drop,
+            'sell_count': sell_count
+        }, status=status.HTTP_200_OK)
 
 
 class UserUserSubscriptionViewSet(TagsViewSet):
@@ -212,11 +217,13 @@ class UserDropSubscriptionViewSet(TagsViewSet):
     filter_fields = [f.name for f in UserDropSubscription._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
 
+
 class DropLikeViewSet(TagsViewSet):
     serializer_class = DropLikeSerializer
     queryset = DropLike.objects.all()
     filter_fields = [f.name for f in DropLike._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
+
 
 class DropViewViewSet(TagsViewSet):
     serializer_class = DropViewSerializer
@@ -224,11 +231,13 @@ class DropViewViewSet(TagsViewSet):
     filter_fields = [f.name for f in DropView._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
 
+
 class OwnerDropViewSet(TagsViewSet):
     serializer_class = OwnerDropSerializer
     queryset = OwnerDrop.objects.all()
     filter_fields = [f.name for f in OwnerDrop._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
+
 
 class UserCollectionSubscriptionViewSet(TagsViewSet):
     serializer_class = UserCollectionSubscriptionSerializer
@@ -236,11 +245,13 @@ class UserCollectionSubscriptionViewSet(TagsViewSet):
     filter_fields = [f.name for f in UserCollectionSubscription._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
 
+
 class CollectionLikeViewSet(TagsViewSet):
     serializer_class = CollectionLikeSerializer
     queryset = CollectionLike.objects.all()
     filter_fields = [f.name for f in CollectionLike._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
+
 
 class CollectionViewViewSet(TagsViewSet):
     serializer_class = CollectionViewSerializer
@@ -248,20 +259,16 @@ class CollectionViewViewSet(TagsViewSet):
     filter_fields = [f.name for f in CollectionView._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
 
+
 class OwnerCollectionViewSet(TagsViewSet):
     serializer_class = OwnerCollectionSerializer
     queryset = OwnerCollection.objects.all()
     filter_fields = [f.name for f in OwnerCollection._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
 
+
 class CollectionDropViewSet(TagsViewSet):
     serializer_class = CollectionDropSerializer
     queryset = CollectionDrop.objects.all()
     filter_fields = [f.name for f in CollectionDrop._meta.fields if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
-
-
-
-
-
-

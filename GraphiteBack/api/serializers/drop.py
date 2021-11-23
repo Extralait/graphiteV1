@@ -36,7 +36,7 @@ class DropSerializer(UserUserSubscriptionSerializer):
     class Meta:
         model = Drop
         fields = '__all__'
-        read_only_fields = ['id','all_sell_count']
+        read_only_fields = ['id', 'all_sell_count']
 
     def _is_owner(self):
         owner_drops = []
@@ -64,8 +64,8 @@ class DropSerializer(UserUserSubscriptionSerializer):
         drop.save()
 
         OwnerDrop.objects.create(
-            drop_owner = self._user(),
-            drop = drop
+            drop_owner=self._user(),
+            drop=drop
         )
         return drop
 
@@ -105,14 +105,13 @@ class DropSerializer(UserUserSubscriptionSerializer):
 class GetDropSerializer(DropSerializer):
     tags = TagsSerializer(many=True)
     category = CategoriesSerializer()
-    drop_owner = OtherUserDetailSerializer(many=True,read_only=True,source='drops_owner')
-    from_collection = GetCollectionSerializer(many=True,read_only=True,source='collection')
+    drop_owner = OtherUserDetailSerializer(many=True, read_only=True, source='drops_owner')
+    from_collection = GetCollectionSerializer(many=True, read_only=True, source='collection')
     artists = OtherUserDetailSerializer(read_only=True)
 
     drops_subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
     views_quantity = serializers.SerializerMethodField()
-    # from_collection = serializers.SerializerMethodField()
 
     def get_drops_subscriptions_quantity(self, obj):
         """
@@ -137,6 +136,7 @@ class GetDropSerializer(DropSerializer):
     #     Получить художников
     #     """
     #     return bool(obj.collection_drop.all().count())
+
 
 class BuyDropSerializer(serializers.Serializer):
     drop = serializers.IntegerField()

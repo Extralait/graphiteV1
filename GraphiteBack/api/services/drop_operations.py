@@ -4,12 +4,13 @@ from api.models import Drop, OwnerDrop
 def sell_drop(drop_id, count, user):
     drop = Drop.objects.get(pk=drop_id)
     sell_count = drop.sell_count
+    owner = OwnerDrop.objects.get(drop_id).drop_owner.pk
 
     try:
-        user_drop_id = OwnerDrop.objects.get(drop__parent_id=drop_id, drop_owner=user).id
-        user_drop = Drop.objects.get(pk = user_drop_id)
+        user_drop_id = OwnerDrop.objects.get(drop__parent_id=drop_id, drop_owner=user).drop.pk
+        user_drop = Drop.objects.get(pk=user_drop_id)
     except OwnerDrop.DoesNotExist:
-        user_drop=None
+        user_drop = None
 
     if sell_count > count:
         drop.sell_count -= count
@@ -22,6 +23,7 @@ def sell_drop(drop_id, count, user):
     if user_drop:
         user_drop.sell_count += count
         user_drop.save()
+        customer_drop = user_drop_id
     else:
         drop.pk = None
         drop.sell_count = count
@@ -29,9 +31,9 @@ def sell_drop(drop_id, count, user):
         drop.save()
         new_drop_id = drop.pk
         OwnerDrop.objects.create(
-            drop_owner_id = user,
-            drop_id = new_drop_id,
+            drop_owner_id=user,
+            drop_id=new_drop_id,
         )
-    return count
+        customer_drop = new_drop_id
 
-
+    return count, user.pk, owner, customer_drop
