@@ -33,9 +33,10 @@ Api documentation: https://artgraphite.ru/documentation/api.html
 # Инфо Сервер
 ssh -i ~/.ssh/kisi_key root@134.209.249.203
 git@github.com:atknin/graphite-back.git
+git@github.com:Extralait/graphite.git
 docker-compose logs -f
 
-
+/home/extralait/apps/graphite/GraphiteBack/
 Сборка
 docker-compose build
 
