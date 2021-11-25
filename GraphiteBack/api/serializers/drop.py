@@ -36,7 +36,7 @@ class DropSerializer(UserUserSubscriptionSerializer):
     class Meta:
         model = Drop
         fields = '__all__'
-        read_only_fields = ['id', 'all_sell_count']
+        read_only_fields = ['id']
 
     def _is_owner(self):
         owner_drops = []
