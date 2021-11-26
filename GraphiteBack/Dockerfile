@@ -46,8 +46,8 @@ RUN addgroup --system app && adduser --system --group app
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
 RUN mkdir $APP_HOME
-RUN mkdir $APP_HOME/static
-RUN mkdir $APP_HOME/media
+#RUN mkdir $APP_HOME/static
+#RUN mkdir $APP_HOME/media
 
 WORKDIR $APP_HOME
 

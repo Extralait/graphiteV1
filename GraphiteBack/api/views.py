@@ -210,6 +210,26 @@ class UserUserSubscriptionViewSet(TagsViewSet):
 
         return [permission() for permission in permission_classes]
 
+class UserUserSubscriptionViewSet(TagsViewSet):
+    serializer_class = UserUserSubscriptionSerializer
+    queryset = UserUserSubscription.objects.all()
+    filter_fields = [f.name for f in UserUserSubscription._meta.fields if not f.__dict__.get('upload_to')]
+    ordering_fields = filter_fields
+
+    def get_permissions(self):
+        """
+        Права доступа
+        """
+
+        if self.action in ['list', 'retrieve']:
+            permission_classes = (AllowAny,)
+        elif self.action == 'create':
+            permission_classes = (IsAuthenticated,)
+        else:
+            permission_classes = (CurrentUserOrAdmin,)
+
+        return [permission() for permission in permission_classes]
+
 
 class UserDropSubscriptionViewSet(TagsViewSet):
     serializer_class = UserDropSubscriptionSerializer

@@ -3,6 +3,16 @@ from rest_framework import serializers
 from api.models import User
 
 
+class PassportDataSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        kwargs['partial'] = True
+        super(PassportDataSerializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
 class StatsSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):

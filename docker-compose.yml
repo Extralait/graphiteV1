@@ -42,7 +42,7 @@ services:
       && python manage.py makemigrations&& python manage.py migrate&& gunicorn Config.asgi:application --bind 0.0.0.0:8000 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
     volumes:
       - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/data
+      - media_volume:/home/app/web/media
       - ./wait-for:/bin/wait-for
     env_file:
       - GraphiteBack/.env.graphite_back

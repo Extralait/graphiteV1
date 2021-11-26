@@ -90,7 +90,8 @@ class User(AbstractUser):
     drop_subscriptions = models.ManyToManyField('Drop', related_name='drops_subscriptions',
                                                 verbose_name="Drops subscribers", through='UserDropSubscription')
     collections_subscriptions = models.ManyToManyField('Collection', related_name='collections_subscriptions',
-                                                verbose_name="Collections subscribers", through='UserCollectionSubscription')
+                                                       verbose_name="Collections subscribers",
+                                                       through='UserCollectionSubscription')
 
     is_verify = models.BooleanField("Verify", default=False)
     email_notification = models.BooleanField('email-notification', default=False)
@@ -116,6 +117,24 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.wallet_number} {self.last_name} {self.first_name}"
+
+
+class PassportData(models.Model):
+    user = models.OneToOneField(User, verbose_name='Password data', related_name='user_passport',
+                                on_delete=models.CASCADE, primary_key=True)
+    first_name = models.CharField('First name', max_length=50)
+    last_name = models.CharField('Last name', max_length=50)
+    birthday = models.DateField('Birthday')
+    passport_series = models.CharField('Passport series', max_length=50)
+    passport_number = models.IntegerField('Passport number')
+    passport_issue_date = models.DateField('Passport issue date')
+    passport_expiration_date = models.DateField('Passport Expiration Date')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Categories(models.Model):
@@ -224,6 +243,7 @@ class Drop(models.Model):
 class Collection(models.Model):
     name = models.CharField('Name', max_length=256)
     drops = models.ManyToManyField(Drop, related_name='collection', verbose_name='Drops', through='CollectionDrop')
+    specifications = models.JSONField('Specifications', null=True,blank=True)
 
     class Meta:
         verbose_name = 'Collection'
@@ -326,7 +346,8 @@ class CollectionView(models.Model):
 
 
 class CollectionDrop(models.Model):
-    drop_collection = models.ForeignKey(Collection, related_name='collection_drop', verbose_name="Drop collection", on_delete=models.CASCADE)
+    drop_collection = models.ForeignKey(Collection, related_name='collection_drop', verbose_name="Drop collection",
+                                        on_delete=models.CASCADE)
     drop = models.ForeignKey(Drop, related_name='collection_drop', on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -342,7 +363,7 @@ class CollectionDrop(models.Model):
 
 class OwnerDrop(models.Model):
     drop_owner = models.ForeignKey(User, related_name='owner_drop', verbose_name="Drop owner", on_delete=models.CASCADE)
-    drop = models.ForeignKey(Drop,related_name='drop', verbose_name="Drop", on_delete=models.CASCADE)
+    drop = models.ForeignKey(Drop, related_name='drop', verbose_name="Drop", on_delete=models.CASCADE)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -352,7 +373,7 @@ class OwnerDrop(models.Model):
         verbose_name_plural = 'Users Drops'
         constraints = [
             models.UniqueConstraint(fields=['drop_owner', 'drop'], name='unique_user_drop')
-]
+        ]
 
 
 class OwnerCollection(models.Model):
