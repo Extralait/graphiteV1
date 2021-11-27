@@ -4,7 +4,7 @@ from api.models import Drop, OwnerDrop
 def sell_drop(drop_id, count, user):
     drop = Drop.objects.get(pk=drop_id)
     sell_count = drop.sell_count
-    owner = OwnerDrop.objects.get(drop_id).drop_owner.pk
+    owner = OwnerDrop.objects.get(drop_id=drop_id).drop_owner.pk
 
     try:
         user_drop_id = OwnerDrop.objects.get(drop__parent_id=drop_id, drop_owner=user).drop.pk
