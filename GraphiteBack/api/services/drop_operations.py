@@ -7,7 +7,7 @@ def sell_drop(drop_id, count, user):
     owner = OwnerDrop.objects.get(drop_id=drop_id).drop_owner.pk
 
     try:
-        user_drop_id = OwnerDrop.objects.get(drop__parent_id=drop_id, drop_owner=user).drop.pk
+        user_drop_id = OwnerDrop.objects.get(drop__parent_id=drop_id, drop_owner_ШВ=user).drop.pk
         user_drop = Drop.objects.get(pk=user_drop_id)
     except OwnerDrop.DoesNotExist:
         user_drop = None
@@ -36,4 +36,4 @@ def sell_drop(drop_id, count, user):
         )
         customer_drop = new_drop_id
 
-    return count, user.pk, owner, customer_drop
+    return count, user, owner, customer_drop
