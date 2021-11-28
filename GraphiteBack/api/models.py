@@ -208,7 +208,7 @@ class Drop(models.Model):
     to_sell = models.BooleanField('To sell', default=False)
     url_landing = models.CharField('Landing URL', max_length=256, null=True, blank=True)
 
-    auction_deadline = models.DateTimeField('Auction deadline')
+    auction_deadline = models.DateTimeField('Auction deadline', null=True,blank=True)
     royalty = models.FloatField('Royalty', default=0,
                                 validators=[
                                     MaxValueValidator(100),
