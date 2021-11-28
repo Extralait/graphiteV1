@@ -208,7 +208,7 @@ class Drop(models.Model):
     to_sell = models.BooleanField('To sell', default=False)
     url_landing = models.CharField('Landing URL', max_length=256, null=True, blank=True)
 
-    auction_deadline = models.DateTimeField('Auction deadline', null=True,blank=True)
+    auction_deadline = models.DateTimeField('Auction deadline', null=True, blank=True)
     royalty = models.FloatField('Royalty', default=0,
                                 validators=[
                                     MaxValueValidator(100),
@@ -228,8 +228,8 @@ class Drop(models.Model):
         Обработка полей перед сохранением модели
         """
 
-        # if not self.parent and self.pk is None:
-        #     self.all_sell_count = self.sell_count
+        if not self.auction_deadline:
+            self.auction_deadline = None
         super().save(*args, **kwargs)
 
     class Meta:
