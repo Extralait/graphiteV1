@@ -1,5 +1,5 @@
 from django.conf.urls.static import static
-# from django.contrib import admin
+from django.contrib import admin
 from django.urls import path, include
 
 from config import settings
@@ -9,7 +9,7 @@ urlpatterns = [
     # Второй стиль админки
     path('grappelli/', include('grappelli.urls')),
     # Панель администратора
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     # API для приложений
     path("api/v1/", include("config.api.v1",)),
     # path("api/", include("drops.api.urls")),
