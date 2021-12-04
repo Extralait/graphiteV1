@@ -13,14 +13,14 @@ services:
     env_file:
       - project_config/.env.postgres
     networks:
-      - main
+      - second
     ports:
       - "5433:5432"
     restart: always
 
-  pgbackups:
-    container_name: pgbackups
-    hostname: pgbackups
+  pgbackups_2:
+    container_name: pgbackups_2
+    hostname: pgbackups_2
     image: prodrigestivill/postgres-backup-local
     restart: always
     user: postgres:postgres
@@ -33,46 +33,46 @@ services:
     env_file:
       - project_config/.env.postgres
     networks:
-      - main
+      - second
 
-  web:
+  web_2:
     build: GraphiteBack
-    container_name: web
+    container_name: web_2
     ports:
-      - "8000:8000"
-    command: sh -c "python manage.py makemigrations&& python manage.py migrate&& gunicorn config.asgi:application --bind 0.0.0.0:8000 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
+      - "8001:8001"
+    command: sh -c "python manage.py makemigrations&& python manage.py migrate&& gunicorn config.asgi:application --bind 0.0.0.0:8001 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
     env_file:
       - project_config/.env.back
-    hostname: web
+    hostname: web_2
     image: web-image
     networks:
-      - main
+      - second
     depends_on:
       - postgres_2
     restart: always
 
-  nginx:
-    container_name: nginx
+  nginx_2:
+    container_name: nginx_2
     image: nginx:alpine
-    hostname: nginx
+    hostname: nginx_2
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
     ports:
-      - "5000:5000"
+      - "4000:4000"
     depends_on:
-      - web
+      - web_2
     networks:
-      - main
+      - second
     restart: always
 
 networks:
-  main:
-    name: main
+  second:
+    name: second
 #    external: true
 #    driver: bridge
 
