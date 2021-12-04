@@ -12,6 +12,7 @@ http://example.com/api/users?ordering=username
 
 # Упорядочить по полю username в обратном порядке
 http://example.com/api/users?ordering=-username
+Также можно указать несколько заказов:
 
 # Упорядочить сначала по полю account, а затем по username
 http://example.com/api/users?ordering=account,username

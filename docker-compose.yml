@@ -11,9 +11,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - .env.postgres
+      - project_config/.env.postgres
     networks:
       - main
+    ports:
+      - "5433:5432"
     restart: always
 
   pgbackups:
@@ -29,7 +31,7 @@ services:
     depends_on:
       - postgres
     env_file:
-      - .env.postgres
+      - project_config/.env.postgres
     networks:
       - main
 
@@ -38,14 +40,12 @@ services:
     container_name: web
     ports:
       - "8000:8000"
-    command: sh -c "wait-for postgres:5432\
-      && python manage.py makemigrations&& python manage.py migrate&& gunicorn Config.asgi:application --bind 0.0.0.0:8000 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
+    command: sh -c "python manage.py makemigrations&& python manage.py migrate&& gunicorn config.asgi:application --bind 0.0.0.0:8000 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
-      - ./wait-for:/bin/wait-for
     env_file:
-      - GraphiteBack/.env.graphite_back
+      - project_config/.env.back
     hostname: web
     image: web-image
     networks:
@@ -60,7 +60,6 @@ services:
     hostname: nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./wait-for:/bin/wait-for
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
     ports:
@@ -74,8 +73,8 @@ services:
 networks:
   main:
     name: main
-    external: true
-    driver: bridge
+#    external: true
+#    driver: bridge
 
 volumes:
   static_volume:

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>API documentation</title>
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/bootstrap-responsive.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/pilcrow.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/hljs-github.min.css"/>
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css"/>
+  </head>
+<body>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3"><ul class="nav nav-list">
+    <li class="sidebar-header-1"><a href="#api-documentation">API documentation</a></li>
+    <li class="sidebar-header-2"><a href="#правила-формирования-запросов">Правила формирования запросов</a></li>
+    <li class="sidebar-header-3"><a href="#базовый-url">Базовый URL</a></li>
+    <li class="sidebar-header-3"><a href="#сортировка">Сортировка</a></li>
+    <li class="sidebar-header-3"><a href="#базовые-функции-поиска">Базовые функции поиска</a></li>
+    <li class="sidebar-header-3"><a href="#фильтр-по-вложенным-объектам">Фильтр по вложенным объектам</a></li>
+    <li class="sidebar-header-3"><a href="#сложный-фильтр">Сложный фильтр</a></li>
+    <li class="sidebar-header-2"><a href="#конечные-точки">Конечные точки</a></li>
+    <li class="sidebar-header-3"><a href="#authorization">Authorization</a></li>
+    <li class="sidebar-header-4"><a href="#создание-пользователя">Создание пользователя</a></li>
+    <li class="sidebar-header-4"><a href="#получение-jwt-токена">Получение JWT токена</a></li>
+    <li class="sidebar-header-4"><a href="#проверка-валидности-jwt-токена">Проверка валидности JWT токена</a></li>
+    <li class="sidebar-header-3"><a href="#user">User</a></li>
+    <li class="sidebar-header-4"><a href="#получение-текущего-пользователя">Получение текущего пользователя</a></li>
+    <li class="sidebar-header-4"><a href="#редактирование-текущего-пользователя">Редактирование текущего пользователя</a></li>
+    <li class="sidebar-header-4"><a href="#получение-пользователей">Получение пользователей</a></li>
+    <li class="sidebar-header-4"><a href="#получеине-пользователя">Получеине пользователя</a></li>
+    <li class="sidebar-header-3"><a href="#drops">Drops</a></li>
+    <li class="sidebar-header-4"><a href="#получение-категории-и-тегов-drop">Получение категории и тегов drop</a></li>
+    <li class="sidebar-header-4"><a href="#создание-и-редактирование-категорий-и-тегов-drop">Создание и редактирование категорий и тегов drop</a></li>
+    <li class="sidebar-header-4"><a href="#получение-drops">Получение Drops</a></li>
+    <li class="sidebar-header-4"><a href="#создание-drop">Создание Drop</a></li>
+    <li class="sidebar-header-4"><a href="#получение-drop">Получение Drop</a></li>
+    <li class="sidebar-header-4"><a href="#редактирование-drop">Редактирование Drop</a></li>
+    <li class="sidebar-header-3"><a href="#collections">Collections</a></li>
+    <li class="sidebar-header-4"><a href="#получение-коллекций">Получение коллекций</a></li>
+    <li class="sidebar-header-4"><a href="#создание-коллекции">Создание коллекции</a></li>
+    <li class="sidebar-header-4"><a href="#получение-коллекции">Получение коллекции</a></li>
+    <li class="sidebar-header-4"><a href="#редактирование-коллекции">Редактирование коллекции</a></li>
+    <li class="sidebar-header-4"><a href="#получение-drops-в-коллекции">Получение Drops в коллекции</a></li>
+    <li class="sidebar-header-3"><a href="#subscriptions">Subscriptions</a></li>
+    <li class="sidebar-header-4"><a href="#получение-подписок-на-пользователей">Получение подписок на пользователей</a></li>
+    <li class="sidebar-header-4"><a href="#создание-подписки-на-пользователя">Создание подписки на пользователя</a></li>
+    <li class="sidebar-header-4"><a href="#получение-подписок-на-drops">Получение подписок на Drops</a></li>
+    <li class="sidebar-header-4"><a href="#создание-подписки-на-drop">Создание подписки на Drop</a></li>
+    <li class="sidebar-header-4"><a href="#получение-подписок-на-коллекцию">Получение подписок на Коллекцию</a></li>
+    <li class="sidebar-header-4"><a href="#создание-подписки-на-коллекуию">Создание подписки на Коллекуию</a></li>
+    <li class="sidebar-header-3"><a href="#likes">Likes</a></li>
+    <li class="sidebar-header-4"><a href="#получение-лайков-на-drops">Получение лайков на Drops</a></li>
+    <li class="sidebar-header-4"><a href="#создание-лайка-на-drop">Создание лайка на Drop</a></li>
+    <li class="sidebar-header-4"><a href="#получение-лайков-на-коллекции">Получение лайков на коллекции</a></li>
+    <li class="sidebar-header-4"><a href="#создание-лайка-на-коллекции">Создание лайка на коллекции</a></li>
+    <li class="sidebar-header-3"><a href="#views">Views</a></li>
+    <li class="sidebar-header-4"><a href="#получение-просмотров-drops">Получение просмотров Drops</a></li>
+    <li class="sidebar-header-4"><a href="#создание-просмотра">Создание просмотра</a></li>
+    <li class="sidebar-header-4"><a href="#получение-просмотров-drops-1">Получение просмотров Drops</a></li>
+    <li class="sidebar-header-4"><a href="#создание-просмотра-1">Создание просмотра</a></li>
+    <li class="sidebar-header-3"><a href="#owners">Owners</a></li>
+    <li class="sidebar-header-4"><a href="#получение-владельцев-drops">Получение владельцев Drops</a></li>
+    <li class="sidebar-header-4"><a href="#получение-владельцев-коллекций">Получение владельцев коллекций</a></li>
+    <li class="sidebar-header-3"><a href="#actions">Actions</a></li>
+    <li class="sidebar-header-4"><a href="#купить-drop">Купить Drop</a></li>
+</ul>
+      </div>
+      <div class="span9 main"><h1 id="api-documentation"><a class="header-link" href="#api-documentation"></a>API documentation</h1>
+<h2 id="правила-формирования-запросов"><a class="header-link" href="#правила-формирования-запросов"></a>Правила формирования запросов</h2>
+<h3 id="базовый-url"><a class="header-link" href="#базовый-url"></a>Базовый URL</h3>
+<p><i><a href="https://artgraphite.ru/api/">https://artgraphite.ru/api/</a> </i></p>
+<h3 id="сортировка"><a class="header-link" href="#сортировка"></a>Сортировка</h3>
+<pre class="hljs"><code><span class="hljs-comment"># Упорядочить по полю username</span>
+http://example.com/api/users?ordering=username
+
+<span class="hljs-comment"># Упорядочить по полю username в обратном порядке</span>
+http://example.com/api/users?ordering=-username
+Также можно указать несколько заказов:
+
+<span class="hljs-comment"># Упорядочить сначала по полю account, а затем по username</span>
+http://example.com/api/users?ordering=account,username</code></pre><h3 id="базовые-функции-поиска"><a class="header-link" href="#базовые-функции-поиска"></a>Базовые функции поиска</h3>
+<pre class="hljs"><code><span class="hljs-comment"># Вернет пользователей со значением поля age = 18</span>
+http://example.com/api/users?age=18
+
+<span class="hljs-comment"># Вернет пользователей со значением поля age &lt; 18</span>
+http://example.com/api/users?age__lt=18
+
+<span class="hljs-comment"># Вернет пользователей со значением поля age &lt;= 18</span>
+http://example.com/api/users?age__lte=18
+
+<span class="hljs-comment"># Вернет пользователей со значением поля age &gt; 18</span>
+http://example.com/api/users?age__gt=18
+
+<span class="hljs-comment"># Вернет пользователей со значением поля age =&gt;= 18</span>
+http://example.com/api/users?age__gte=18
+
+<span class="hljs-comment"># Вернет пользователей со значением поля age 5, 10 или 15</span>
+http://example.com/api/users?age__in=5,10,15
+
+<span class="hljs-comment"># Вернет пользователей со значением поля age от 5 до 10</span>
+http://example.com/api/users?age__range=5,10
+
+<span class="hljs-comment"># Вернет пользователей со значением поля name содержащем подстроку foo</span>
+http://example.com/api/users?name__incontains=foo
+
+<span class="hljs-comment"># Вернет пользователей со значением поля name не содержащем подстроку foo</span>
+http://example.com/api/users?name__incontains!=foo
+</code></pre><h3 id="фильтр-по-вложенным-объектам"><a class="header-link" href="#фильтр-по-вложенным-объектам"></a>Фильтр по вложенным объектам</h3>
+<pre class="hljs"><code><span class="hljs-comment"># Вернет пользователей, присоединившихся между 2010 и 2015 через связанную модель пользователя (o2m)</span>
+example.com/users/?profile__joined__range=2010-01-01,2015-12-31</code></pre><h3 id="сложный-фильтр"><a class="header-link" href="#сложный-фильтр"></a>Сложный фильтр</h3>
+<pre class="hljs"><code><span class="hljs-comment"># Комбинация нескольких условий в одном запросе</span>
+http://example.com/api/users?age__range=5,10&amp;name__incontains=foo&amp;profile__joined__range=2010-01-01,2015-12-31</code></pre><h2 id="конечные-точки"><a class="header-link" href="#конечные-точки"></a>Конечные точки</h2>
+<h3 id="authorization"><a class="header-link" href="#authorization"></a>Authorization</h3>
+<h4 id="создание-пользователя"><a class="header-link" href="#создание-пользователя"></a>Создание пользователя</h4>
+<p><i><a href="https://artgraphite.ru/api/auth/users/">https://artgraphite.ru/api/auth/users/</a> <br>/auth/users/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;owner_key&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;wallet_number&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;password&quot;</span>: &lt;str&gt;
+    }</code></pre><h4 id="получение-jwt-токена"><a class="header-link" href="#получение-jwt-токена"></a>Получение JWT токена</h4>
+<p><i><a href="https://artgraphite.ru/api/auth/jwt/create/">https://artgraphite.ru/api/auth/jwt/create/</a> <br>/auth/jwt/create</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает</span>
+    {
+        <span class="hljs-string">&quot;wallet_number&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;password&quot;</span>: &lt;str&gt;
+    }
+    <span class="hljs-comment"># возвращает</span>
+    {
+        <span class="hljs-string">&quot;refresh&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;access&quot;</span>: &lt;str&gt; 
+    }</code></pre><h4 id="проверка-валидности-jwt-токена"><a class="header-link" href="#проверка-валидности-jwt-токена"></a>Проверка валидности JWT токена</h4>
+<p><i><a href="https://artgraphite.ru/api/auth/jwt/verify/">https://artgraphite.ru/api/auth/jwt/verify/</a> <br>/auth/jwt/verify</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает</span>
+    {
+        <span class="hljs-string">&quot;token&quot;</span>: &lt;str&gt; 
+    }
+<span class="hljs-comment"># При валидном токене возвращает status 200</span></code></pre><h3 id="user"><a class="header-link" href="#user"></a>User</h3>
+<h4 id="получение-текущего-пользователя"><a class="header-link" href="#получение-текущего-пользователя"></a>Получение текущего пользователя</h4>
+<p><i><a href="https://artgraphite.ru/api/auth/users/me/">https://artgraphite.ru/api/auth/users/me/</a> <br>/auth/users/me/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_on_own_drops_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_on_own_collections_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;users_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;drops_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;collections_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_drop_likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_collections_likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_drop_views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_collections_views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;last_login&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;is_superuser&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;first_name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;last_name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;email&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;is_staff&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;is_active&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;date_joined&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;wallet_number&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;avatar&quot;</span>: &lt;str(img_link)&gt;,
+        <span class="hljs-string">&quot;cover&quot;</span>: &lt;str(img_link)&gt;,
+        <span class="hljs-string">&quot;profile_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (entity|individual)</span>
+        <span class="hljs-string">&quot;verify_status&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (not_verified|moderation|verified)</span>
+        <span class="hljs-string">&quot;is_verify&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;email_notification&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;description&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;instagram&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;twitter&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;discord&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;tiktok&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;telegram&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;groups&quot;</span>: &lt;array(int)&gt;,
+        <span class="hljs-string">&quot;user_permissions&quot;</span>: &lt;array(list)&gt;,
+        <span class="hljs-string">&quot;drops&quot;</span>: &lt;array(list)&gt;,
+        <span class="hljs-string">&quot;collections&quot;</span>: &lt;array(list)&gt;,
+        <span class="hljs-string">&quot;collections_subscriptions&quot;</span>: &lt;array(list)&gt;
+    }</code></pre><h4 id="редактирование-текущего-пользователя"><a class="header-link" href="#редактирование-текущего-пользователя"></a>Редактирование текущего пользователя</h4>
+<p><i><a href="https://artgraphite.ru/api/auth/users/me/">https://artgraphite.ru/api/auth/users/me/</a> <br>/auth/users/me/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># PUT, PATCH ожидают</span>
+    <span class="hljs-comment"># Для текущего пользователя        </span>
+    {
+        <span class="hljs-string">&quot;first_name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;last_name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;email&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;avatar&quot;</span>: &lt;img&gt;,
+        <span class="hljs-string">&quot;cover&quot;</span>: &lt;img&gt;,
+        <span class="hljs-string">&quot;profile_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (entity|individual)</span>
+        <span class="hljs-string">&quot;email_notification&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;description&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;instagram&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;twitter&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;discord&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;tiktok&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;telegram&quot;</span>: &lt;str&gt;,
+    }
+    <span class="hljs-comment"># Экстра поля для staff</span>
+    {
+        <span class="hljs-string">&quot;is_active&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;verify_status&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (not_verified|moderation|verified)</span>
+        <span class="hljs-string">&quot;is_verify&quot;</span>: &lt;bool&gt;,
+    }
+    <span class="hljs-comment"># Экстра поля для superuser</span>
+    {
+        <span class="hljs-string">&quot;is_superuser&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;is_staff&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;groups&quot;</span>: &lt;array(int)&gt;,
+        <span class="hljs-string">&quot;user_permissions&quot;</span>: &lt;array(int)&gt;
+    }</code></pre><h4 id="получение-пользователей"><a class="header-link" href="#получение-пользователей"></a>Получение пользователей</h4>
+<p><i><a href="https://artgraphite.ru/api/users-profiles/">https://artgraphite.ru/api/users-profiles/</a> <br>/users-profiles/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;first_name&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;last_name&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;avatar&quot;</span>: &lt;str(img_link)&gt;,
+                <span class="hljs-string">&quot;wallet_number&quot;</span>: &lt;str&gt;
+            }
+        ]
+    }</code></pre><h4 id="получеине-пользователя"><a class="header-link" href="#получеине-пользователя"></a>Получеине пользователя</h4>
+<p><i><a href="https://artgraphite.ru/api/users-profiles/">https://artgraphite.ru/api/users-profiles/</a> <br>/users-profiles/{id}</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_on_own_drops_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_on_own_collections_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;users_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;drops_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;collections_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_drop_likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_collections_likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_drop_views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_collections_views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;last_login&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;is_superuser&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;first_name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;last_name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;email&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;is_staff&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;is_active&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;date_joined&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;wallet_number&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;avatar&quot;</span>: &lt;str(img_link)&gt;,
+        <span class="hljs-string">&quot;cover&quot;</span>: &lt;str(img_link)&gt;,
+        <span class="hljs-string">&quot;profile_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (entity|individual)</span>
+        <span class="hljs-string">&quot;verify_status&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (not_verified|moderation|verified)</span>
+        <span class="hljs-string">&quot;is_verify&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;email_notification&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;description&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;instagram&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;twitter&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;discord&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;tiktok&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;telegram&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;groups&quot;</span>: &lt;array(int)&gt;,
+        <span class="hljs-string">&quot;user_permissions&quot;</span>: &lt;array(list)&gt;,
+        <span class="hljs-string">&quot;drops&quot;</span>: &lt;array(list)&gt;,
+        <span class="hljs-string">&quot;collections&quot;</span>: &lt;array(list)&gt;,
+        <span class="hljs-string">&quot;collections_subscriptions&quot;</span>: &lt;array(list)&gt;
+    }</code></pre><h3 id="drops"><a class="header-link" href="#drops"></a>Drops</h3>
+<h4 id="получение-категории-и-тегов-drop"><a class="header-link" href="#получение-категории-и-тегов-drop"></a>Получение категории и тегов drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drop-tags/">https://artgraphite.ru/api/drop-tags/</a> <br>/drop-tags/ <br><a href="https://artgraphite.ru/api/drop-categories/">https://artgraphite.ru/api/drop-categories/</a> <br>/drop-categories/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает </span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+            },
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-и-редактирование-категорий-и-тегов-drop"><a class="header-link" href="#создание-и-редактирование-категорий-и-тегов-drop"></a>Создание и редактирование категорий и тегов drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drop-tags/">https://artgraphite.ru/api/drop-tags/</a> <br>/drop-tags/ <br><a href="https://artgraphite.ru/api/drop-categories/">https://artgraphite.ru/api/drop-categories/</a> <br>/drop-categories/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST,PATCH,PUT (только для staff) ожидает</span>
+    {
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+    }</code></pre><h4 id="получение-drops"><a class="header-link" href="#получение-drops"></a>Получение Drops</h4>
+<p><i><a href="https://artgraphite.ru/api/drops/">https://artgraphite.ru/api/drops/</a> <br>/drops/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;tags&quot;</span>: [
+                    {
+                        <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+                    },
+                    {
+                        <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+                    }
+                ],
+                <span class="hljs-string">&quot;category&quot;</span>: {
+                    <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                    <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+                },
+                <span class="hljs-string">&quot;drops_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;likes_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;views_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;blockchain_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (wax|anchor)</span>
+                <span class="hljs-string">&quot;blockchain_address&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;blockchain_identifier&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;descriptions&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;sell_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (auction|sell)</span>
+                <span class="hljs-string">&quot;sell_count&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;all_sell_count&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;init_cost&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+                <span class="hljs-string">&quot;min_rate&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+                <span class="hljs-string">&quot;picture_big&quot;</span>: &lt;str(img_link)&gt;,
+                <span class="hljs-string">&quot;picture_small&quot;</span>: &lt;str(img_link)&gt;,
+                <span class="hljs-string">&quot;to_sell&quot;</span>: &lt;bool&gt;,
+                <span class="hljs-string">&quot;url_landing&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;auction_deadline&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;royalty&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;from_collection&quot;</span>:  &lt;array(object(collection)),
+                <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;array(object(user))&gt;
+                <span class="hljs-string">&quot;artists&quot;</span>: &lt;object(user)&gt;,
+                <span class="hljs-string">&quot;parent&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-drop"><a class="header-link" href="#создание-drop"></a>Создание Drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drops/">https://artgraphite.ru/api/drops/</a> <br>/drops/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает</span>
+    {
+        <span class="hljs-string">&quot;blockchain_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (wax|anchor)</span>
+        <span class="hljs-string">&quot;blockchain_address&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;blockchain_identifier&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;descriptions&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;sell_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (auction|sell)</span>
+        <span class="hljs-string">&quot;sell_count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;all_sell_count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;init_cost&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;min_rate&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;picture_big&quot;</span>: &lt;img&gt;,
+        <span class="hljs-string">&quot;picture_small&quot;</span>: &lt;img&gt;,
+        <span class="hljs-string">&quot;to_sell&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;url_landing&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;royalty&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;category&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;artists&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;parent&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;tags&quot;</span>: &lt;array(int)&gt;
+    }</code></pre><h4 id="получение-drop"><a class="header-link" href="#получение-drop"></a>Получение Drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drops/">https://artgraphite.ru/api/drops/</a> <br>/drops/{id}</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;tags&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+            },
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;name&quot;</span>: &lt;second&gt;
+            }
+        ],
+        <span class="hljs-string">&quot;category&quot;</span>: {
+            <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+            <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+        },
+        <span class="hljs-string">&quot;drops_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;blockchain_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (wax|anchor)</span>
+        <span class="hljs-string">&quot;blockchain_address&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;blockchain_identifier&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;descriptions&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;sell_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (auction|sell)</span>
+        <span class="hljs-string">&quot;sell_count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;all_sell_count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;to_sell&quot;</span>: &lt;bool&gt;,
+        <span class="hljs-string">&quot;init_cost&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;min_rate&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;picture_big&quot;</span>: &lt;str(img_link)&gt;,
+        <span class="hljs-string">&quot;picture_small&quot;</span>: &lt;str(img_link)&gt;,
+        <span class="hljs-string">&quot;url_landing&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;auction_deadline&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;royalty&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;from_collection&quot;</span>:  &lt;array(object(collection)),
+        <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;array(object(user))&gt;
+        <span class="hljs-string">&quot;artists&quot;</span>: &lt;object(user)&gt;,
+        <span class="hljs-string">&quot;parent&quot;</span>: &lt;int&gt;
+    } </code></pre><h4 id="редактирование-drop"><a class="header-link" href="#редактирование-drop"></a>Редактирование Drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drops/">https://artgraphite.ru/api/drops/</a> <br>/drops/{id}</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># PUT, PATCH ожидают</span>
+    {
+        <span class="hljs-string">&quot;blockchain_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (wax|anchor)</span>
+        <span class="hljs-string">&quot;blockchain_address&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;blockchain_identifier&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;descriptions&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;sell_type&quot;</span>: &lt;str&gt;, <span class="hljs-comment"># (auction|sell)</span>
+        <span class="hljs-string">&quot;sell_count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;all_sell_count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;init_cost&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;min_rate&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;picture_big&quot;</span>: &lt;img&gt;,
+        <span class="hljs-string">&quot;picture_small&quot;</span>: &lt;img&gt;,
+        <span class="hljs-string">&quot;url_landing&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;auction_deadline&quot;</span>: &lt;str(datetime)&gt;,
+        <span class="hljs-string">&quot;royalty&quot;</span>: &lt;<span class="hljs-built_in">float</span>&gt;,
+        <span class="hljs-string">&quot;category&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;artists&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;parent&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;tags&quot;</span>: &lt;array(int)&gt;
+    }</code></pre><h3 id="collections"><a class="header-link" href="#collections"></a>Collections</h3>
+<h4 id="получение-коллекций"><a class="header-link" href="#получение-коллекций"></a>Получение коллекций</h4>
+<p><i><a href="https://artgraphite.ru/api/collections/">https://artgraphite.ru/api/collections/</a> <br>/collections/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возврашает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;collection_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;likes_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;views_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;collection_owner&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;subscribers_on_own_drops_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;own_drop_views_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;own_drop_likes_quantity&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;,
+                <span class="hljs-string">&quot;drops&quot;</span>: &lt;array(int)&gt;
+            },
+        ]
+    }</code></pre><h4 id="создание-коллекции"><a class="header-link" href="#создание-коллекции"></a>Создание коллекции</h4>
+<p><i><a href="https://artgraphite.ru/api/collections/">https://artgraphite.ru/api/collections/</a> <br>/collections/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает</span>
+    {
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+    }</code></pre><h4 id="получение-коллекции"><a class="header-link" href="#получение-коллекции"></a>Получение коллекции</h4>
+<p><i><a href="https://artgraphite.ru/api/collections/">https://artgraphite.ru/api/collections/</a> <br>/collections/{id}</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET позвращает</span>
+    {
+        <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;collection_subscriptions_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;collection_owner&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;subscribers_on_own_drops_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_drop_views_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;own_drop_likes_quantity&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;,
+        <span class="hljs-string">&quot;drops&quot;</span>: &lt;array(int)&gt;
+    } </code></pre><h4 id="редактирование-коллекции"><a class="header-link" href="#редактирование-коллекции"></a>Редактирование коллекции</h4>
+<p><i><a href="https://artgraphite.ru/api/collections/">https://artgraphite.ru/api/collections/</a> <br>/collections/{id}</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># PUT, PATCH ожидает</span>
+    {
+        <span class="hljs-string">&quot;name&quot;</span>: &lt;str&gt;
+    }</code></pre><h4 id="получение-drops-в-коллекции"><a class="header-link" href="#получение-drops-в-коллекции"></a>Получение Drops в коллекции</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-drops/">https://artgraphite.ru/api/collections-drops/</a> <br>/collections-drops/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;drop_collection&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+            },
+        ]
+    }</code></pre><h3 id="subscriptions"><a class="header-link" href="#subscriptions"></a>Subscriptions</h3>
+<h4 id="получение-подписок-на-пользователей"><a class="header-link" href="#получение-подписок-на-пользователей"></a>Получение подписок на пользователей</h4>
+<p><i><a href="https://artgraphite.ru/api/users-subscriptions/">https://artgraphite.ru/api/users-subscriptions/</a> <br>/users-subscriptions/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime).,
+                <span class="hljs-string">&quot;subscriber&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;subscription&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-подписки-на-пользователя"><a class="header-link" href="#создание-подписки-на-пользователя"></a>Создание подписки на пользователя</h4>
+<p><i><a href="https://artgraphite.ru/api/users-subscriptions/">https://artgraphite.ru/api/users-subscriptions/</a> <br>/users-subscriptions/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;subscription&quot;</span>: &lt;int&gt;
+    }</code></pre><h4 id="получение-подписок-на-drops"><a class="header-link" href="#получение-подписок-на-drops"></a>Получение подписок на Drops</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-subscriptions/">https://artgraphite.ru/api/drops-subscriptions/</a> <br>/drops-subscriptions/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime).,
+                <span class="hljs-string">&quot;subscriber&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-подписки-на-drop"><a class="header-link" href="#создание-подписки-на-drop"></a>Создание подписки на Drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-subscriptions/">https://artgraphite.ru/api/drops-subscriptions/</a> <br>/drops-subscriptions/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+    }</code></pre><h4 id="получение-подписок-на-коллекцию"><a class="header-link" href="#получение-подписок-на-коллекцию"></a>Получение подписок на Коллекцию</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-subscriptions/">https://artgraphite.ru/api/collections-subscriptions/</a> <br>/collections-subscriptions/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;updated_at&quot;</span>: &lt;str(datetime).,
+                <span class="hljs-string">&quot;collection&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-подписки-на-коллекуию"><a class="header-link" href="#создание-подписки-на-коллекуию"></a>Создание подписки на Коллекуию</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-subscriptions/">https://artgraphite.ru/api/collections-subscriptions/</a> <br>/collections-subscriptions/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;collection&quot;</span>: &lt;int&gt;
+    }</code></pre><h3 id="likes"><a class="header-link" href="#likes"></a>Likes</h3>
+<h4 id="получение-лайков-на-drops"><a class="header-link" href="#получение-лайков-на-drops"></a>Получение лайков на Drops</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-likes/">https://artgraphite.ru/api/drops-likes/</a> <br>/drops-likes/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;user&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-лайка-на-drop"><a class="header-link" href="#создание-лайка-на-drop"></a>Создание лайка на Drop</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-likes/">https://artgraphite.ru/api/drops-likes/</a> <br>/drops-likes/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+    }</code></pre><h4 id="получение-лайков-на-коллекции"><a class="header-link" href="#получение-лайков-на-коллекции"></a>Получение лайков на коллекции</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-likes/">https://artgraphite.ru/api/collections-likes/</a> <br>/collections-likes/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;collection&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;user&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-лайка-на-коллекции"><a class="header-link" href="#создание-лайка-на-коллекции"></a>Создание лайка на коллекции</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-likes/">https://artgraphite.ru/api/collections-likes/</a> <br>/collections-likes/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;collection&quot;</span>: &lt;int&gt;
+    }</code></pre><h3 id="views"><a class="header-link" href="#views"></a>Views</h3>
+<h4 id="получение-просмотров-drops"><a class="header-link" href="#получение-просмотров-drops"></a>Получение просмотров Drops</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-views/">https://artgraphite.ru/api/drops-views/</a> <br>/drops-views/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;user&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-просмотра"><a class="header-link" href="#создание-просмотра"></a>Создание просмотра</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-views/">https://artgraphite.ru/api/drops-views/</a> <br>/drops-views/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+    }</code></pre><h4 id="получение-просмотров-drops-1"><a class="header-link" href="#получение-просмотров-drops-1"></a>Получение просмотров Drops</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-views/">https://artgraphite.ru/api/collections-views/</a> <br>/collections-views/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;user&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="создание-просмотра-1"><a class="header-link" href="#создание-просмотра-1"></a>Создание просмотра</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-views/">https://artgraphite.ru/api/collections-views/</a> <br>/collections-views/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+    }</code></pre><h3 id="owners"><a class="header-link" href="#owners"></a>Owners</h3>
+<h4 id="получение-владельцев-drops"><a class="header-link" href="#получение-владельцев-drops"></a>Получение владельцев Drops</h4>
+<p><i><a href="https://artgraphite.ru/api/drops-owners/">https://artgraphite.ru/api/drops-owners/</a> <br>/drops-owners/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: 1,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;drop_owner&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h4 id="получение-владельцев-коллекций"><a class="header-link" href="#получение-владельцев-коллекций"></a>Получение владельцев коллекций</h4>
+<p><i><a href="https://artgraphite.ru/api/collections-owners/">https://artgraphite.ru/api/collections-owners/</a> <br>/collections-owners/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># GET возвращает</span>
+    {
+        <span class="hljs-string">&quot;count&quot;</span>: 1,
+        <span class="hljs-string">&quot;next&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;previous&quot;</span>: &lt;str(page_link)&gt;,
+        <span class="hljs-string">&quot;results&quot;</span>: [
+            {
+                <span class="hljs-string">&quot;id&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;created_at&quot;</span>: &lt;str(datetime)&gt;,
+                <span class="hljs-string">&quot;collection_owner&quot;</span>: &lt;int&gt;,
+                <span class="hljs-string">&quot;collection&quot;</span>: &lt;int&gt;
+            }
+        ]
+    }</code></pre><h3 id="actions"><a class="header-link" href="#actions"></a>Actions</h3>
+<h4 id="купить-drop"><a class="header-link" href="#купить-drop"></a>Купить Drop</h4>
+<p><i><a href="https://artgraphite.ru/api/buy-drop/">https://artgraphite.ru/api/buy-drop/</a> <br>/buy-drop/</i></p>
+<pre class="hljs"><code><span class="hljs-comment"># POST ожидает </span>
+    {
+        <span class="hljs-string">&quot;drop&quot;</span>: &lt;int&gt;,
+        <span class="hljs-string">&quot;count&quot;</span>: &lt;int&gt;
+    }
+    <span class="hljs-comment"># возвращает</span>
+    {
+        <span class="hljs-string">&#x27;sell_count&#x27;</span>: &lt;int&gt;
+    }</code></pre>      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>
