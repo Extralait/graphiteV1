@@ -17,7 +17,7 @@ class PassportDataSerializer(serializers.ModelSerializer):
         model = PassportData
         fields = '__all__'
         read_only_fields = [
-            'created_at', 'updated_at'
+            'verify_status'
         ]
 
 
@@ -187,8 +187,8 @@ class UserListSerializer(UserRelationshipCheck):
         fields = [
             'id', 'first_name', 'last_name',
             'avatar', 'wallet_number', 'instagram',
-            'twitter', 'discord', 'telegram', 'profile_type',
-            'is_viewed','is_subscribed'
+            'twitter', 'discord', 'telegram','website', 'profile_type',
+            'is_viewed','is_subscribed','date_joined','updated_at'
         ]
 
 
@@ -239,6 +239,8 @@ class CurrentUserDetailsSerializer(StatsSerializer):
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.cover = validated_data.get('cover', instance.cover)
+        instance.inn = validated_data.get('inn', instance.inn)
+        instance.website = validated_data.get('website', instance.website)
         instance.email_notification = validated_data.get('email_notification', instance.email_notification)
         instance.description = validated_data.get('description', instance.description)
         instance.instagram = validated_data.get('instagram', instance.instagram)

@@ -3,7 +3,7 @@
 ## Правила формирования запросов
 ### Базовый URL
 
-<i>https://artgraphite.ru/api/ </i>
+***https://dev.artgraphite.ru/api/v1***
 
 ### Сортировка
 ```sh
@@ -60,9 +60,51 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 
 ## Конечные точки
 ### Authorization 
+#### Получение JWT токена
+***https://dev.artgraphite.ru/api/auth/jwt/create/ \
+/api/v1/auth/jwt/create***
+```sh
+# POST ожидает
+    {
+        "wallet_number": <str>,
+        "password": <str>
+    }
+```
+Параметр | Тип | Обязательный | Описание | 
+---|---|---|---
+`wallet_number` | ***str*** | :heavy_check_mark: | Номер кошелька пользователя 
+`password` | ***str*** | :heavy_check_mark: | Пароль пользователя (уникальный идентификатор пользователя на wax)
+```sh
+# POST возвращает
+    {
+        "refresh": <str>,
+        "access": <str> 
+    }
+```
+Параметр | Тип  | Описание | 
+---|---|---
+`refresh` | ***int*** | Refresh JWT token пользователя
+`access` | ***str*** | Access JWT token пользователя
+
+#### Проверка валидности JWT токена 
+***https://dev.artgraphite.ru/api/auth/jwt/verify/ \
+/api/v1/auth/jwt/verify***
+```sh
+# POST ожидает
+    {
+        "token": <str> 
+    }
+# При валидном токене возвращает status 200
+```
+Параметр | Тип | Обязательный | Описание | 
+---|---|---|---
+`token` | ***str*** | :heavy_check_mark: | JWT token пользователя
+
+### User
 #### Создание пользователя
-<i>https://artgraphite.ru/api/auth/users/ \
-/auth/users/</i>
+***https://dev.artgraphite.ru/api/v1/users-profiles/ \
+/api/v1/users-profiles/***
+
 ```sh
 # POST ожидает 
     {
@@ -71,35 +113,96 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "password": <str>
     }
 ```
-#### Получение JWT токена
-<i>https://artgraphite.ru/api/auth/jwt/create/ \
-/auth/jwt/create</i>
+Параметр | Тип | Обязательный | Описание | 
+---|---|---|---
+`owner_key` | ***str*** | :heavy_check_mark: | Общий идентификатор wax
+`wallet_number` | ***str*** | :heavy_check_mark: | Номер кошелька пользователя 
+`password` | ***str*** | :heavy_check_mark: | Пароль пользователя (уникальный идентификатор пользователя на wax) 
+
+#### Получение списка пользователей
+***https://dev.artgraphite.ru/api/v1/users-profiles/ \
+/api/v1/users-profiles/***
+
 ```sh
-# POST ожидает
+# GET возвращает 
     {
-        "wallet_number": <str>,
-        "password": <str>
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": <int>,
+            "first_name": <str>,
+            "last_name": <str>,
+            "avatar": <str(image_path)>,
+            "wallet_number": <str>,
+            "instagram": null,
+            "twitter": null,
+            "discord": null,
+            "telegram": null,
+            "website": null,
+            "profile_type": null,
+            "is_viewed": false,
+            "is_subscribed": false
+        }
+      ]
     }
-    # возвращает
-    {
-        "refresh": <str>,
-        "access": <str> 
-    }
+
 ```
-#### Проверка валидности JWT токена
-<i>https://artgraphite.ru/api/auth/jwt/verify/ \
-/auth/jwt/verify</i>
+Параметр | Тип  | Описание | 
+---|---|---
+`id` | ***int*** | Уникальный ключ пользователя
+`first_name` | ***str*** | Имя
+`last_name` | ***str*** | Фамилия
+`avatar` | ***str*** | Ссылка на аватар пользователя
+`wallet_number` | ***str*** | Номер кошелька пользователя
+`instagram` | ***str*** | Инстаграм
+`twitter` | ***str*** | Твиттер
+`discord` | ***str*** | Дискорд
+`telegram` | ***str*** | Телеграм
+`website` | ***str*** | Адрес сайта
+`profile_type` | ***str*** | Тип профиля
+`is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером 
+`is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер 
+`date_joined` | ***str(datetime)*** | Дата присоединения пользователя 
+`updated_at` | ***str(datetime)*** | Дата обновления пользователя 
+####Получение паспорта текущего пользователя
+***https://dev.artgraphite.ru/api/v1/users-profiles/my-passport/ \
+/api/v1/users-profiles/my-passport/***
 ```sh
-# POST ожидает
+# GET
     {
-        "token": <str> 
+        "user": <int  >,
+        "first_name": <str>,
+        "last_name": <str>,
+        "birthday": str(datetime),
+        "passport_series": <str>,
+        "passport_number": <int>,
+        "passport_issue_date": str(datetime),
+        "passport_expiration_date": str(datetime),
+        "verify_status": str,
+        "created_at": str(datetime),
+        "updated_at": str(datetime)
     }
-# При валидном токене возвращает status 200
+
+
 ```
-### User
-#### Получение текущего пользователя
-<i>https://artgraphite.ru/api/auth/users/me/ \
-/auth/users/me/</i>
+Параметр | Тип  | Описание | 
+---|---|---
+`user` | ***int*** | Первичный ключ паспорта, совладающий с первичным ключем пользователя
+`first_name` | ***str*** | Имя
+`last_name` | ***str*** | Фамилия
+`birthday` | ***str(datetime)*** | Дата разположения
+`passport_series` | ***str*** | Серия паспорта
+`passport_number` | ***int*** | Номер паспорта
+`passport_issue_date` | ***str(datetime)*** | Дата выдачи паспорта
+`passport_expiration_date` | ***str(datetime)*** | Дата окончания действия паспорта
+`verify_status` | ***str(datetime)*** | Статус верификации
+`created_at` | ***str*** | Создан
+`updated_at` | ***str(datetime)*** | Обновлен
+
+
+
 ```sh
 # GET возвращает
     {
@@ -144,8 +247,8 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
     }
 ```
 #### Редактирование текущего пользователя
-<i>https://artgraphite.ru/api/auth/users/me/ \
-/auth/users/me/</i>
+***https://artgraphite.ru/api/auth/users/me/ \
+/auth/users/me/***
 ```sh          
 # PUT, PATCH ожидают
     # Для текущего пользователя        
@@ -179,8 +282,8 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
     }
 ```
 #### Получение пользователей
-<i>https://artgraphite.ru/api/users-profiles/ \
-/users-profiles/</i>
+***https://artgraphite.ru/api/users-profiles/ \
+/users-profiles/***
 ```sh
 # GET возвращает
     {
@@ -200,8 +303,8 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 ```
 #### Получеине пользователя
 
-<i>https://artgraphite.ru/api/users-profiles/ \
-/users-profiles/{id}</i>
+***https://artgraphite.ru/api/users-profiles/ \
+/users-profiles/{id}***
 
 ```sh
 # GET возвращает
@@ -248,10 +351,10 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 ```
 ### Drops
 #### Получение категории и тегов drop
-<i>https://artgraphite.ru/api/drop-tags/ \
+***https://artgraphite.ru/api/drop-tags/ \
 /drop-tags/ \
 https://artgraphite.ru/api/drop-categories/ \
-/drop-categories/</i>
+/drop-categories/***
 
 ```sh
 # GET возвращает 
@@ -272,10 +375,10 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание и редактирование категорий и тегов drop
-<i>https://artgraphite.ru/api/drop-tags/ \
+***https://artgraphite.ru/api/drop-tags/ \
 /drop-tags/ \
 https://artgraphite.ru/api/drop-categories/ \
-/drop-categories/</i>
+/drop-categories/***
 ```sh
 # POST,PATCH,PUT (только для staff) ожидает
     {
@@ -283,8 +386,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение Drops
-<i>https://artgraphite.ru/api/drops/ \
-/drops/</i>
+***https://artgraphite.ru/api/drops/ \
+/drops/***
 ```sh
 # GET возвращает
     {
@@ -339,8 +442,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание Drop
-<i>https://artgraphite.ru/api/drops/ \
-/drops/</i>
+***https://artgraphite.ru/api/drops/ \
+/drops/***
 ```sh
 # POST ожидает
     {
@@ -366,8 +469,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение Drop
-<i>https://artgraphite.ru/api/drops/ \
-/drops/{id}</i>
+***https://artgraphite.ru/api/drops/ \
+/drops/{id}***
 ```sh
 # GET возвращает
     {
@@ -415,8 +518,8 @@ https://artgraphite.ru/api/drop-categories/ \
     } 
 ```
 #### Редактирование Drop
-<i>https://artgraphite.ru/api/drops/ \
-/drops/{id}</i>
+***https://artgraphite.ru/api/drops/ \
+/drops/{id}***
 ```sh
 # PUT, PATCH ожидают
     {
@@ -443,8 +546,8 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 ### Collections
 #### Получение коллекций
-<i>https://artgraphite.ru/api/collections/ \
-/collections/</i>
+***https://artgraphite.ru/api/collections/ \
+/collections/***
 ```sh
 # GET возврашает
     {
@@ -468,8 +571,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание коллекции
-<i>https://artgraphite.ru/api/collections/ \
-/collections/</i>
+***https://artgraphite.ru/api/collections/ \
+/collections/***
 ```sh
 # POST ожидает
     {
@@ -477,8 +580,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение коллекции
-<i>https://artgraphite.ru/api/collections/ \
-/collections/{id}</i>
+***https://artgraphite.ru/api/collections/ \
+/collections/{id}***
 ```sh
 # GET позвращает
     {
@@ -495,8 +598,8 @@ https://artgraphite.ru/api/drop-categories/ \
     } 
 ```
 #### Редактирование коллекции
-<i>https://artgraphite.ru/api/collections/ \
-/collections/{id}</i>
+***https://artgraphite.ru/api/collections/ \
+/collections/{id}***
 ```sh
 # PUT, PATCH ожидает
     {
@@ -504,8 +607,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение Drops в коллекции
-<i>https://artgraphite.ru/api/collections-drops/ \
-/collections-drops/</i>
+***https://artgraphite.ru/api/collections-drops/ \
+/collections-drops/***
 ```sh
 # GET возвращает
     {
@@ -525,8 +628,8 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 ### Subscriptions
 #### Получение подписок на пользователей
-<i>https://artgraphite.ru/api/users-subscriptions/ \
-/users-subscriptions/</i>
+***https://artgraphite.ru/api/users-subscriptions/ \
+/users-subscriptions/***
 ```sh
 # GET возвращает
     {
@@ -545,8 +648,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание подписки на пользователя
-<i>https://artgraphite.ru/api/users-subscriptions/ \
-/users-subscriptions/</i>
+***https://artgraphite.ru/api/users-subscriptions/ \
+/users-subscriptions/***
 ```sh
 # POST ожидает 
     {
@@ -554,8 +657,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение подписок на Drops
-<i>https://artgraphite.ru/api/drops-subscriptions/ \
-/drops-subscriptions/</i>
+***https://artgraphite.ru/api/drops-subscriptions/ \
+/drops-subscriptions/***
 ```sh
 # GET возвращает
     {
@@ -574,8 +677,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание подписки на Drop
-<i>https://artgraphite.ru/api/drops-subscriptions/ \
-/drops-subscriptions/</i>
+***https://artgraphite.ru/api/drops-subscriptions/ \
+/drops-subscriptions/***
 ```sh
 # POST ожидает 
     {
@@ -583,8 +686,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение подписок на Коллекцию
-<i>https://artgraphite.ru/api/collections-subscriptions/ \
-/collections-subscriptions/</i>
+***https://artgraphite.ru/api/collections-subscriptions/ \
+/collections-subscriptions/***
 ```sh
 # GET возвращает
     {
@@ -603,8 +706,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание подписки на Коллекуию
-<i>https://artgraphite.ru/api/collections-subscriptions/ \
-/collections-subscriptions/</i>
+***https://artgraphite.ru/api/collections-subscriptions/ \
+/collections-subscriptions/***
 ```sh
 # POST ожидает 
     {
@@ -613,8 +716,8 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 ### Likes
 #### Получение лайков на Drops
-<i>https://artgraphite.ru/api/drops-likes/ \
-/drops-likes/</i>
+***https://artgraphite.ru/api/drops-likes/ \
+/drops-likes/***
 ```sh
 # GET возвращает
     {
@@ -632,8 +735,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание лайка на Drop
-<i>https://artgraphite.ru/api/drops-likes/ \
-/drops-likes/</i>
+***https://artgraphite.ru/api/drops-likes/ \
+/drops-likes/***
 ```sh
 # POST ожидает 
     {
@@ -641,8 +744,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение лайков на коллекции
-<i>https://artgraphite.ru/api/collections-likes/ \
-/collections-likes/</i>
+***https://artgraphite.ru/api/collections-likes/ \
+/collections-likes/***
 ```sh
 # GET возвращает
     {
@@ -660,8 +763,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание лайка на коллекции
-<i>https://artgraphite.ru/api/collections-likes/ \
-/collections-likes/</i>
+***https://artgraphite.ru/api/collections-likes/ \
+/collections-likes/***
 ```sh
 # POST ожидает 
     {
@@ -670,8 +773,8 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 ### Views
 #### Получение просмотров Drops
-<i>https://artgraphite.ru/api/drops-views/ \
-/drops-views/</i>
+***https://artgraphite.ru/api/drops-views/ \
+/drops-views/***
 ```sh
 # GET возвращает
     {
@@ -689,8 +792,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание просмотра
-<i>https://artgraphite.ru/api/drops-views/ \
-/drops-views/</i>
+***https://artgraphite.ru/api/drops-views/ \
+/drops-views/***
 ```sh
 # POST ожидает 
     {
@@ -698,8 +801,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение просмотров Drops
-<i>https://artgraphite.ru/api/collections-views/ \
-/collections-views/</i>
+***https://artgraphite.ru/api/collections-views/ \
+/collections-views/***
 ```sh
 # GET возвращает
     {
@@ -717,8 +820,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Создание просмотра
-<i>https://artgraphite.ru/api/collections-views/ \
-/collections-views/</i>
+***https://artgraphite.ru/api/collections-views/ \
+/collections-views/***
 ```sh
 # POST ожидает 
     {
@@ -727,8 +830,8 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 ### Owners
 #### Получение владельцев Drops
-<i>https://artgraphite.ru/api/drops-owners/ \
-/drops-owners/</i>
+***https://artgraphite.ru/api/drops-owners/ \
+/drops-owners/***
 ```sh
 # GET возвращает
     {
@@ -746,8 +849,8 @@ https://artgraphite.ru/api/drop-categories/ \
     }
 ```
 #### Получение владельцев коллекций
-<i>https://artgraphite.ru/api/collections-owners/ \
-/collections-owners/</i>
+***https://artgraphite.ru/api/collections-owners/ \
+/collections-owners/***
 ```sh
 # GET возвращает
     {
@@ -766,8 +869,8 @@ https://artgraphite.ru/api/drop-categories/ \
 ```
 ### Actions
 #### Купить Drop
-<i>https://artgraphite.ru/api/buy-drop/ \
-/buy-drop/</i>
+***https://artgraphite.ru/api/buy-drop/ \
+/buy-drop/***
 ```sh
 # POST ожидает 
     {

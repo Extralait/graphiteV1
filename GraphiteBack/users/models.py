@@ -48,6 +48,7 @@ class User(AbstractUser):
     """
     Пользователь (Модель)
     """
+
     class VerifyStatus(models.TextChoices):
         """
         Статус верификации
@@ -74,6 +75,12 @@ class User(AbstractUser):
     owner_key = models.CharField(
         verbose_name='Owner key',
         max_length=256
+    )
+    inn = models.CharField(
+        verbose_name='INN',
+        max_length=256,
+        null=True,
+        blank=True
     )
     avatar = models.ImageField(
         verbose_name='Avatar',
@@ -138,6 +145,12 @@ class User(AbstractUser):
     telegram = models.CharField(
         verbose_name='Telegram',
         max_length=50,
+        null=True,
+        blank=True
+    )
+    website = models.CharField(
+        verbose_name='Website',
+        max_length=256,
         null=True,
         blank=True
     )
@@ -224,6 +237,7 @@ class PassportData(models.Model):
     """
     Паспортные данные (Модель)
     """
+
     class VerifyStatus(models.TextChoices):
         """
         Статус верификации
