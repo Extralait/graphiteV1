@@ -26,7 +26,7 @@ PRODUCTION = env.bool("PRODUCTION")
 
 ROOT_URLCONF = "config.urls"
 
-ALLOWED_HOSTS = env.bool("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # Настройки языка и времени
 LANGUAGE_CODE = env.str("LANGUAGE_CODE")
