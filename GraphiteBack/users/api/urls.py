@@ -86,7 +86,42 @@ users_profiles_router = router.register(
         parents_query_lookups=['collection_subscriptions'],
         basename='users-profiles-collection-subscriptions'
     ),
-    # Подписки на пользователя
+    # Просмотры пользователя профилей пользователей
+    users_profiles_router.register(
+        prefix=r'profile-views',
+        viewset=UserProfileViewSet,
+        parents_query_lookups=['user_views'],
+        basename='users-profiles-profile-views'
+    ),
+    # Просмотры пользователя на дропах
+    users_profiles_router.register(
+        prefix=r'drop-views',
+        viewset=DropViewSet,
+        parents_query_lookups=['drop_views'],
+        basename='users-profiles-drop-views'
+    ),
+    # Просмотры пользователя на коллекциях
+    users_profiles_router.register(
+        prefix=r'collections-views',
+        viewset=CollectionViewSet,
+        parents_query_lookups=['collections_views'],
+        basename='users-profiles-collections-views'
+    ),
+    # Лайки пользователя на дропе
+    users_profiles_router.register(
+        prefix=r'drop-likes',
+        viewset=DropViewSet,
+        parents_query_lookups=['drop_likes'],
+        basename='users-profiles-drop-likes'
+    ),
+    # Лайки пользователя на коллекции
+    users_profiles_router.register(
+        prefix=r'collections-likes',
+        viewset=CollectionViewSet,
+        parents_query_lookups=['collections_likes'],
+        basename='users-profiles-collections-likes'
+    ),
+    # Подписчики
     users_profiles_router.register(
         prefix=r'profile-subscribers',
         viewset=UserProfileViewSet,

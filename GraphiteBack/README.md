@@ -1,11 +1,13 @@
-# API documentation 
+# API documentation
 
 ## Правила формирования запросов
+
 ### Базовый URL
 
 ***https://dev.artgraphite.ru/api/v1***
 
 ### Сортировка
+
 ```sh
 # Упорядочить по полю username
 http://example.com/api/users?ordering=username
@@ -18,6 +20,7 @@ http://example.com/api/users?ordering=account,username
 ```
 
 ### Базовые функции поиска
+
 ```sh
 # Вернет пользователей со значением поля age = 18
 http://example.com/api/users?age=18
@@ -47,22 +50,30 @@ http://example.com/api/users?name__incontains=foo
 http://example.com/api/users?name__incontains!=foo
 
 ```
+
 ### Фильтр по вложенным объектам
+
 ```sh
 # Вернет пользователей, присоединившихся между 2010 и 2015 через связанную модель пользователя (o2m)
 example.com/users/?profile__joined__range=2010-01-01,2015-12-31
 ```
+
 ### Сложный фильтр
+
 ```sh
 # Комбинация нескольких условий в одном запросе
 http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joined__range=2010-01-01,2015-12-31
 ```
 
 ## Конечные точки
-### Authorization 
+
+### Authorization - */auth/jwt/*
+
 #### Получение JWT токена
-***https://dev.artgraphite.ru/api/auth/jwt/create/ \
+
+***https://dev.artgraphite.ru/api/v1/auth/jwt/create/ \
 /api/v1/auth/jwt/create***
+
 ```sh
 # POST ожидает
     {
@@ -70,10 +81,12 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "password": <str>
     }
 ```
+
 Параметр | Тип | Обязательный | Описание | 
 ---|---|---|---
-`wallet_number` | ***str*** | :heavy_check_mark: | Номер кошелька пользователя 
+`wallet_number` | ***str*** | :heavy_check_mark: | Номер кошелька пользователя
 `password` | ***str*** | :heavy_check_mark: | Пароль пользователя (уникальный идентификатор пользователя на wax)
+
 ```sh
 # POST возвращает
     {
@@ -81,14 +94,17 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "access": <str> 
     }
 ```
+
 Параметр | Тип  | Описание | 
 ---|---|---
-`refresh` | ***int*** | Refresh JWT token пользователя
+`refresh` | ***str*** | Refresh JWT token пользователя
 `access` | ***str*** | Access JWT token пользователя
 
-#### Проверка валидности JWT токена 
-***https://dev.artgraphite.ru/api/auth/jwt/verify/ \
+#### Проверка валидности JWT токена
+
+***https://dev.artgraphite.ru/api/v1/auth/jwt/verify/ \
 /api/v1/auth/jwt/verify***
+
 ```sh
 # POST ожидает
     {
@@ -96,12 +112,15 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
     }
 # При валидном токене возвращает status 200
 ```
+
 Параметр | Тип | Обязательный | Описание | 
 ---|---|---|---
 `token` | ***str*** | :heavy_check_mark: | JWT token пользователя
 
-### User
+### User - */user-profiles/*
+
 #### Создание пользователя
+
 ***https://dev.artgraphite.ru/api/v1/users-profiles/ \
 /api/v1/users-profiles/***
 
@@ -113,22 +132,24 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "password": <str>
     }
 ```
+
 Параметр | Тип | Обязательный | Описание | 
 ---|---|---|---
 `owner_key` | ***str*** | :heavy_check_mark: | Общий идентификатор wax
-`wallet_number` | ***str*** | :heavy_check_mark: | Номер кошелька пользователя 
-`password` | ***str*** | :heavy_check_mark: | Пароль пользователя (уникальный идентификатор пользователя на wax) 
+`wallet_number` | ***str*** | :heavy_check_mark: | Номер кошелька пользователя
+`password` | ***str*** | :heavy_check_mark: | Пароль пользователя (уникальный идентификатор пользователя на wax)
 
 #### Получение списка пользователей
+
 ***https://dev.artgraphite.ru/api/v1/users-profiles/ \
 /api/v1/users-profiles/***
 
 ```sh
 # GET возвращает 
     {
-    "count": 1,
-    "next": null,
-    "previous": null,
+    "count": <int>,
+    "next": <str(page_link)>,
+    "previous": <str(page_link)>,
     "results": [
         {
             "id": <int>,
@@ -136,22 +157,28 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
             "last_name": <str>,
             "avatar": <str(image_path)>,
             "wallet_number": <str>,
-            "instagram": null,
-            "twitter": null,
-            "discord": null,
-            "telegram": null,
-            "website": null,
-            "profile_type": null,
-            "is_viewed": false,
-            "is_subscribed": false
+            "instagram": <str>,
+            "twitter": <str>,
+            "discord": <str>,
+            "telegram": <str>,
+            "website": <str>,
+            "profile_type": <str>,
+            "is_viewed": <bool>,
+            "is_subscribed": <bool>
+            "last_login": <str(datetime)>,
+            "date_joined": <str(datetime)>,
+            "updated_at": <str(datetime)>
         }
       ]
     }
 
 ```
+
 Параметр | Тип  | Описание | 
 ---|---|---
 `id` | ***int*** | Уникальный ключ пользователя
+`is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером
+`is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер
 `first_name` | ***str*** | Имя
 `last_name` | ***str*** | Фамилия
 `avatar` | ***str*** | Ссылка на аватар пользователя
@@ -162,31 +189,32 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 `telegram` | ***str*** | Телеграм
 `website` | ***str*** | Адрес сайта
 `profile_type` | ***str*** | Тип профиля
-`is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером 
-`is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер 
-`date_joined` | ***str(datetime)*** | Дата присоединения пользователя 
-`updated_at` | ***str(datetime)*** | Дата обновления пользователя 
-####Получение паспорта текущего пользователя
+`last_login` | ***str(datetime)*** | Дата и время последней авторизаии
+`date_joined` | ***str(datetime)*** | Дата и время присоединения пользователя
+`updated_at` | ***str(datetime)*** | Дата и время обновления пользователя
+
+#### Получение паспорта текущего пользователя
+
 ***https://dev.artgraphite.ru/api/v1/users-profiles/my-passport/ \
 /api/v1/users-profiles/my-passport/***
+
 ```sh
-# GET
+# GET возвращает
     {
-        "user": <int  >,
+        "user": <int>,
         "first_name": <str>,
         "last_name": <str>,
-        "birthday": str(datetime),
+        "birthday": str(date),
         "passport_series": <str>,
         "passport_number": <int>,
-        "passport_issue_date": str(datetime),
-        "passport_expiration_date": str(datetime),
-        "verify_status": str,
+        "passport_issue_date": str(date),
+        "passport_expiration_date": str(date),
+        "verify_status": <str>, # (not_verified|moderation|verified)
         "created_at": str(datetime),
         "updated_at": str(datetime)
     }
-
-
 ```
+
 Параметр | Тип  | Описание | 
 ---|---|---
 `user` | ***int*** | Первичный ключ паспорта, совладающий с первичным ключем пользователя
@@ -197,40 +225,82 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 `passport_number` | ***int*** | Номер паспорта
 `passport_issue_date` | ***str(datetime)*** | Дата выдачи паспорта
 `passport_expiration_date` | ***str(datetime)*** | Дата окончания действия паспорта
-`verify_status` | ***str(datetime)*** | Статус верификации
-`created_at` | ***str*** | Создан
+`verify_status` | ***str*** | Статус верификации (not_verified,moderation,verified)
+`created_at` | ***str(datetime)*** | Создан
 `updated_at` | ***str(datetime)*** | Обновлен
 
+#### Редактирование паспорта текущего пользователя
 
+***https://dev.artgraphite.ru/api/v1/users-profiles/my-passport/ \
+/api/v1/users-profiles/my-passport/***
+
+```sh
+# PUT, PATCH ожидает
+    {
+        "user": <int>,
+        "first_name": <str>,
+        "last_name": <str>,
+        "birthday": str(datetime),
+        "passport_series": <str>,
+        "passport_number": <int>,
+        "passport_issue_date": str(datetime),
+        "passport_expiration_date": str(datetime),
+        "verify_status": <str>, # (not_verified|moderation|verified)
+    }
+```
+
+Параметр | Тип  | Обязательный | Staff only |Описание | 
+---|---|---|---|---
+`user` | ***int*** | :x: | :x: |Первичный ключ паспорта, совладающий с первичным ключем пользователя
+`first_name` | ***str*** | :x: | :x: | Имя
+`last_name` | ***str*** | :x: | :x: | Фамилия
+`birthday` | ***str(datetime)*** | :x: | :x: | Дата разположения
+`passport_series` | ***str*** | :x: | :x: |Серия паспорта
+`passport_number` | ***int*** | :x: |  :x: |Номер паспорта
+`passport_issue_date` | ***str(datetime)*** | :x: | :x: | Дата выдачи паспорта
+`passport_expiration_date` | ***str(datetime)*** | :x: | :x: | Дата окончания действия паспорта
+`verify_status` | ***str*** | :x: | :heavy_check_mark: | Статус верификации (not_verified,moderation,verified)
+
+#### Получение текущего пользователя
+
+***https://dev.artgraphite.ru/api/v1/users-profiles/me/ \
+/api/v1/users-profiles/me/***
 
 ```sh
 # GET возвращает
     {
-        "id": <int>,
-        "subscribers_quantity": <int>,
-        "subscribers_on_own_drops_quantity": <int>,
-        "subscribers_on_own_collections_quantity": <int>,
+        "id": 1,
+        "drops_in_possession_quantity": <int>,
+        "drops_in_authorship_quantity": <int>,
+        "collections_in_possession_quantity": <int>,
         "users_subscriptions_quantity": <int>,
         "drops_subscriptions_quantity": <int>,
         "collections_subscriptions_quantity": <int>,
-        "own_drop_likes_quantity": <int>,
-        "own_collections_likes_quantity": <int>,
-        "own_drop_views_quantity": <int>,
-        "own_collections_views_quantity": <int>,
-        "last_login": <str(datetime)>,
+        "user_subscribers_quantity": <int>,
+        "drops_in_possession_subscribers_quantity": <int>,
+        "drops_in_authorship_subscribers_quantity": <int>,
+        "collections_subscribers_quantity": <int>,
+        "drops_in_possession_likes_quantity": <int>,
+        "drops_in_authorship_likes_quantity": <int>,
+        "collections_likes_quantity": <int>,
+        "drops_in_possession_views_quantity": <int>,
+        "drops_in_authorship_views_quantity": <int>,
+        "collections_views_quantity": <int>,
+        "all_notifications_quantity": <int>,
+        "unseen_notifications_quantity": <int>,
+        "passport_data": object(user_passport),
         "is_superuser": <bool>,
         "first_name": <str>,
         "last_name": <str>,
         "email": <str>,
         "is_staff": <bool>,
         "is_active": <bool>,
-        "date_joined": <str(datetime)>,
-        "wallet_number": <str>,
-        "avatar": <str(img_link)>,
-        "cover": <str(img_link)>,
+        "wallet_number": <int>,
+        "inn": <str>,
+        "avatar": <str(image_path)>,
+        "cover": <str(image_path)>,
         "profile_type": <str>, # (entity|individual)
         "verify_status": <str>, # (not_verified|moderation|verified)
-        "is_verify": <bool>,
         "email_notification": <bool>,
         "description": <str>,
         "instagram": <str>,
@@ -238,18 +308,69 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "discord": <str>,
         "tiktok": <str>,
         "telegram": <str>,
+        "website": <str>,
+        "last_login": <str(datetime)>,
+        "date_joined": <str(datetime)>,
         "updated_at": <str(datetime)>,
         "groups": <array(int)>,
-        "user_permissions": <array(list)>,
-        "drops": <array(list)>,
-        "collections": <array(list)>,
-        "collections_subscriptions": <array(list)>
+        "user_permissions": <array(int)>
     }
 ```
+
+Параметр | Тип  | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ пользователя
+`drops_in_possession_quantity` | ***int*** | Количество дропов во владении
+`drops_in_authorship_quantity` | ***int*** | Количество дропов под авторством
+`collections_in_possession_quantity` | ***int*** | Количество коллекций во владении
+`users_subscriptions_quantity` | ***int*** | Количество подписок на профили
+`drops_subscriptions_quantity` | ***int*** | Количество подписок на дропы
+`collections_subscriptions_quantity` | ***int*** | Количество подписок на коллеции
+`user_subscribers_quantity` | ***int*** | Количество подписчиков
+`drops_in_possession_subscribers_quantity` | ***int*** | Количество подписчиков на дропы во владении
+`drops_in_authorship_subscribers_quantity` | ***int*** | Количество подписчиков на дропы под авторством
+`collections_subscribers_quantity` | ***int*** | Количество подписчиков на коллекции во владении
+`drops_in_possession_likes_quantity` | ***int*** | Количество лайков на дропах во владениях
+`drops_in_authorship_likes_quantity` | ***int*** | Количество лайков на дропах под авторством
+`collections_likes_quantity` | ***int*** | Количество лайков на коллекциях
+`drops_in_possession_views_quantity` | ***int*** | Количество просмотров на дропах во владении
+`drops_in_authorship_views_quantity` | ***int*** | Количество просмотров на дропах под авторством
+`collections_views_quantity` | ***int*** | Количество просмотров на коллекциях
+`all_notifications_quantity` | ***int*** | Общее количество уведомлений
+`unseen_notifications_quantity` | ***int*** | Дропы во владении
+`passport_data` | ***object(user_passport)*** | Объект с [паспортными данными](#получение-паспорта-текущего-пользователя) пользователя
+`is_superuser` | ***bool*** | Является ли пользователь суперпользователем
+`is_staff` | ***str*** | Является ли пользователь администратором
+`is_active` | ***str*** | Является ли пользователь активным
+`first_name` | ***str*** | Имя
+`last_name` | ***str*** | Фамилия
+`email` | ***str*** | Электронная почта
+`wallet_number` | ***str*** | Номер криптовалютного кошелька пользователя
+`inn` | ***str*** | ИНН пользователя
+`avatar` | ***str(image_path)*** | Аватар профиля пользователя
+`cover` | ***str(image_path)*** | Обложка профиля пользователя
+`profile_type` | ***str*** | Тип профиля (entity, individual)
+`verify_status` | ***str*** | Статус верификации пользователя (not_verified, moderation, verified)
+`email_notification` | ***bool*** | Разрешение отправки e-mail сообщений
+`description` | ***str*** | Описание профиля
+`instagram` | ***str*** | Инстаграм
+`twitter` | ***str*** | Твиттер
+`discord` | ***str*** | Дискорд
+`tiktok` | ***str*** | Тикток
+`telegram` | ***str*** | Телеграм
+`website` | ***str*** | Адрес сайта
+`last_login` | ***str(datetime)*** | Дата и время последней авторизаии
+`date_joined` | ***str(datetime)*** | Дата и время присоединения пользователя
+`updated_at` | ***str(datetime)*** | Дата и время обновления пользователя
+`groups` | ***array(int)*** | Системные группы пользователя
+`user_permissions` | ***array(int)*** | Системные права пользователя
+
 #### Редактирование текущего пользователя
-***https://artgraphite.ru/api/auth/users/me/ \
-/auth/users/me/***
-```sh          
+
+***https://dev.artgraphite.ru/api/v1/users-profiles/me/ \
+/api/v1/users-profiles/me/***
+
+```sh        
 # PUT, PATCH ожидают
     # Для текущего пользователя        
     {
@@ -259,6 +380,7 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "avatar": <img>,
         "cover": <img>,
         "profile_type": <str>, # (entity|individual)
+        "inn": <str>,
         "email_notification": <bool>,
         "description": <str>,
         "instagram": <str>,
@@ -266,12 +388,12 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "discord": <str>,
         "tiktok": <str>,
         "telegram": <str>,
+        "website": <str>
     }
     # Экстра поля для staff
     {
         "is_active": <bool>,
         "verify_status": <str>, # (not_verified|moderation|verified)
-        "is_verify": <bool>,
     }
     # Экстра поля для superuser
     {
@@ -281,76 +403,239 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         "user_permissions": <array(int)>
     }
 ```
-#### Получение пользователей
-***https://artgraphite.ru/api/users-profiles/ \
-/users-profiles/***
+
+Параметр | Тип  | Обязательный | Staff only |Superuser only |Описание | 
+---|---|---|---|---|---
+`is_superuser` | ***bool*** | :x: | :x: | :heavy_check_mark: | Является ли пользователь суперпользователем
+`is_staff` | ***str*** | :x: | :x: | :heavy_check_mark: | Является ли пользователь администратором
+`is_active` | ***str*** | :x: | :heavy_check_mark: | :x: | Является ли пользователь активным
+`first_name` | ***str*** | :x: | :x: | :x: | Имя
+`last_name` | ***str*** | :x: | :x: | :x: | Фамилия
+`email` | ***str*** | :x: | :x: | :x: | Электронная почта
+`wallet_number` | ***str*** | :x: | :x: | :x: | Номер криптовалютного кошелька пользователя
+`inn` | ***str*** | :x: | :x: | :x: | ИНН пользователя
+`avatar` | ***str(image_path)*** | :x: | :x: | :x: | Аватар профиля пользователя
+`cover` | ***str(image_path)*** | :x: | :x: | :x: | Обложка профиля пользователя
+`profile_type` | ***str*** | :x: | :x: | :x: | Тип профиля (entity, individual)
+`verify_status` | ***str*** | :x: | :heavy_check_mark: | :x: | Статус верификации пользователя (not_verified, moderation, verified)
+`email_notification` | ***bool*** | :x: | :x: | :x: | Разрешение отправки e-mail сообщений
+`description` | ***str*** | :x: | :x: | :x: | Описание профиля
+`instagram` | ***str*** | :x: | :x: | :x: | Инстаграм
+`twitter` | ***str*** | :x: | :x: | :x: | Твиттер
+`discord` | ***str*** | :x: | :x: | :x: | Дискорд
+`tiktok` | ***str*** | :x: | :x: | :x: | Тикток
+`telegram` | ***str*** | :x: | :x: | :x: | Телеграм
+`website` | ***str*** | :x: | :x: | :x: | Адрес сайта
+`last_login` | ***str(datetime)*** | :x: | :x: | :x: | Дата и время последней авторизаии
+`date_joined` | ***str(datetime)*** | :x: | :x: | :x: | Дата и время присоединения пользователя
+`updated_at` | ***str(datetime)*** | :x: | :x: | :x: | Дата и время обновления пользователя
+`groups` | ***array(int)*** | :x: | :x: | :heavy_check_mark: | Системные группы пользователя
+`user_permissions` | ***array(int)*** | :x: | :x: | :heavy_check_mark: | Системные права пользователя
+
+#### Получение пользователя
+
+***https://dev.artgraphite.ru/api/v1/users-profiles/{id}/ \
+/api/v1/users-profiles/{id}/***
+
 ```sh
 # GET возвращает
     {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "first_name": <str>,
-                "last_name": <str>,
-                "avatar": <str(img_link)>,
-                "wallet_number": <str>
-            }
-        ]
-    }
-```
-#### Получеине пользователя
-
-***https://artgraphite.ru/api/users-profiles/ \
-/users-profiles/{id}***
-
-```sh
-# GET возвращает
-    {
-        "id": <int>,
-        "subscribers_quantity": <int>,
-        "subscribers_on_own_drops_quantity": <int>,
-        "subscribers_on_own_collections_quantity": <int>,
+        "id": 2,
+        "is_subscribed": <bool>,
+        "is_viewed": <bool>,
+        "drops_in_possession_quantity": <int>,
+        "drops_in_authorship_quantity": <int>,
+        "collections_in_possession_quantity": <int>,
         "users_subscriptions_quantity": <int>,
         "drops_subscriptions_quantity": <int>,
         "collections_subscriptions_quantity": <int>,
-        "own_drop_likes_quantity": <int>,
-        "own_collections_likes_quantity": <int>,
-        "own_drop_views_quantity": <int>,
-        "own_collections_views_quantity": <int>,
-        "last_login": <str(datetime)>,
+        "user_subscribers_quantity": <int>,
+        "drops_in_possession_subscribers_quantity": <int>,
+        "drops_in_authorship_subscribers_quantity": <int>,
+        "collections_subscribers_quantity": <int>,
+        "drops_in_possession_likes_quantity": <int>,
+        "drops_in_authorship_likes_quantity": <int>,
+        "collections_likes_quantity": <int>,
+        "drops_in_possession_views_quantity": <int>,
+        "drops_in_authorship_views_quantity": <int>,
+        "collections_views_quantity": <int>,
+        "all_notifications_quantity": <int>,
+        "unseen_notifications_quantity": <int>,
         "is_superuser": <bool>,
         "first_name": <str>,
         "last_name": <str>,
         "email": <str>,
         "is_staff": <bool>,
         "is_active": <bool>,
-        "date_joined": <str(datetime)>,
-        "wallet_number": <str>,
-        "avatar": <str(img_link)>,
-        "cover": <str(img_link)>,
+        "wallet_number": <int>,
+        "inn": <str>,
+        "avatar": <str(image_path)>,
+        "cover": <str(image_path)>,
         "profile_type": <str>, # (entity|individual)
         "verify_status": <str>, # (not_verified|moderation|verified)
-        "is_verify": <bool>,
-        "email_notification": <bool>,
         "description": <str>,
         "instagram": <str>,
         "twitter": <str>,
         "discord": <str>,
         "tiktok": <str>,
         "telegram": <str>,
+        "website": <str>,
+        "last_login": <str(datetime)>,
+        "date_joined": <str(datetime)>,
         "updated_at": <str(datetime)>,
         "groups": <array(int)>,
-        "user_permissions": <array(list)>,
-        "drops": <array(list)>,
-        "collections": <array(list)>,
-        "collections_subscriptions": <array(list)>
+        "user_permissions": <array(int)>
     }
 ```
+
+Параметр | Тип  | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ пользователя
+`is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером
+`is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер
+`drops_in_possession_quantity` | ***int*** | Количество дропов во владении
+`drops_in_authorship_quantity` | ***int*** | Количество дропов под авторством
+`collections_in_possession_quantity` | ***int*** | Количество коллекций во владении
+`users_subscriptions_quantity` | ***int*** | Количество подписок на профили
+`drops_subscriptions_quantity` | ***int*** | Количество подписок на дропы
+`collections_subscriptions_quantity` | ***int*** | Количество подписок на коллеции
+`user_subscribers_quantity` | ***int*** | Количество подписчиков
+`drops_in_possession_subscribers_quantity` | ***int*** | Количество подписчиков на дропы во владении
+`drops_in_authorship_subscribers_quantity` | ***int*** | Количество подписчиков на дропы под авторством
+`collections_subscribers_quantity` | ***int*** | Количество подписчиков на коллекции во владении
+`drops_in_possession_likes_quantity` | ***int*** | Количество лайков на дропах во владениях
+`drops_in_authorship_likes_quantity` | ***int*** | Количество лайков на дропах под авторством
+`collections_likes_quantity` | ***int*** | Количество лайков на коллекциях
+`drops_in_possession_views_quantity` | ***int*** | Количество просмотров на дропах во владении
+`drops_in_authorship_views_quantity` | ***int*** | Количество просмотров на дропах под авторством
+`collections_views_quantity` | ***int*** | Количество просмотров на коллекциях
+`all_notifications_quantity` | ***int*** | Общее количество уведомлений
+`unseen_notifications_quantity` | ***int*** | Дропы во владении
+`is_superuser` | ***bool*** | Является ли пользователь суперпользователем
+`is_staff` | ***str*** | Является ли пользователь администратором
+`is_active` | ***str*** | Является ли пользователь активным
+`first_name` | ***str*** | Имя
+`last_name` | ***str*** | Фамилия
+`email` | ***str*** | Электронная почта
+`wallet_number` | ***str*** | Номер криптовалютного кошелька пользователя
+`inn` | ***str*** | ИНН пользователя
+`avatar` | ***str(image_path)*** | Аватар профиля пользователя
+`cover` | ***str(image_path)*** | Обложка профиля пользователя
+`profile_type` | ***str*** | Тип профиля (entity, individual)
+`verify_status` | ***str*** | Статус верификации пользователя (not_verified, moderation, verified)
+`email_notification` | ***bool*** | Разрешение отправки e-mail сообщений
+`description` | ***str*** | Описание профиля
+`instagram` | ***str*** | Инстаграм
+`twitter` | ***str*** | Твиттер
+`discord` | ***str*** | Дискорд
+`tiktok` | ***str*** | Тикток
+`telegram` | ***str*** | Телеграм
+`website` | ***str*** | Адрес сайта
+`last_login` | ***str(datetime)*** | Дата и время последней авторизаии
+`date_joined` | ***str(datetime)*** | Дата и время присоединения пользователя
+`updated_at` | ***str(datetime)*** | Дата и время обновления пользователя
+`groups` | ***array(int)*** | Системные группы пользователя
+`user_permissions` | ***array(int)*** | Системные права пользователя
+
+#### Получение популярных художников
+
+***https://artgraphite.ru/api/v1/users-profiles/expensive-artists/ \
+/api/v1/users-profiles/expensive-artists/***
+
+```sh
+# GET возвращает
+{
+    "count": <int>,
+    "next": <str(page_link)>,
+    "previous": <str(page_link)>,
+    "results": [
+         <object(user_details)>,
+         <object(user_details)>,
+         <object(user_details)>,
+    ]
+}
+```
+
+Параметр | Тип  | Описание | 
+---|---|---
+`result` | ***array*** | Объекты пользователя (такиеже, как при получения [делатей пользователя](#получение-пользователя))
+
+#### Подписка на пользователя
+
+***https://artgraphite.ru/api/v1/users-profiles/{id}/subscription/ \
+/api/v1/users-profiles/{id}/subscription/***
+
+
+Метод | Дейстаие  
+---|---
+***POST*** | Подписывает текущего пользователя на пользователя по id  
+***DELETE*** | Отписывает текущего пользователя от пользователя по id  
+
+#### Просмотр профиля пользователя
+
+***https://artgraphite.ru/api/v1/users-profiles/{id}/viewing/ \
+/api/v1/users-profiles/{id}/viewing/***
+
+
+Метод | Дейстаие  
+---|---
+***POST*** | Добавляет просмотр от текущего пользователя на профиле пользователя по id
+
+
+### Вложенные конечные точки для */users-profiles/*
+>**На этих конечных точках работают:**
+>1) *Фильтрации и сортировки по query параметрам*
+>2) *Пагинация*
+>3) *Поиск*
+>4) *Extra actions для возвраемых моделей*
+>5) *Details со всеми доступными методами*
+
+Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
+---|---|---|---|---
+**notices** | ***/api/v1/users-profiles/{id_1}/notices/*** | **GET, EXTRA** | [notifications]() | **GET** Возвращает уведомления пользователя c id = id_1
+**notices** | ***/api/v1/users-profiles/{id_1}/notices/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [notification]() | **GET** Возвращает уведомление с id = id_2 пользователя c id = id_1
+**sell-transactions** | ***/api/v1/users-profiles/{id_1}/sell-transactions/*** | **GET, EXTRA** | [transactions]() | **GET** Возвращает транзакции продажи пользователя c id = id_1
+**sell-transactions** | ***/api/v1/users-profiles/{id_1}/sell-transactions/{id_2}*** | **GET, DELETE, EXTRA** | [transaction]() | **GET** Возвращает транзакцию продажи с id = id_2 пользователя c id = id_1
+**buy-transactions** | ***/api/v1/users-profiles/{id_1}/buy-transactions/*** | **GET, EXTRA** | [transactions]() | **GET** Возвращает транзакции покупки пользователя c id = id_1
+**buy-transactions** | ***/api/v1/users-profiles/{id_1}/buy-transactions/{id_2}*** | **GET, DELETE, EXTRA** | [transaction]() | **GET** Возвращает транзакцию покупки с id = id_2 пользователя c id = id_1
+**sell-offers** | ***/api/v1/users-profiles/{id_1}/sell-offers/*** | **POST, GET, EXTRA** | [offers]() | **GET** Возвращает полученные предложения пользователя c id = id_1
+**sell-offers** | ***/api/v1/users-profiles/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает полученное предложение с id = id_2 пользователя c id = id_1
+**buy-offers** | ***/api/v1/users-profiles/{id_1}/buy-offers/*** | **POST, GET, EXTRA** | [offers]() | **GET** Возвращает отправленные предложения пользователя c id = id_1
+**buy-offers** | ***/api/v1/users-profiles/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает отправленное предложение с id = id_2 пользователя c id = id_1
+**collections** | ***/api/v1/users-profiles/{id_1}/collections/*** | **POST, GET, EXTRA** | [collections]() | **GET** Возвращает коллекции пользователя c id = id_1
+**collections** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection]() | **GET** Возвращает коллекцию с id = id_2 пользователя c id = id_1
+**collections/drops** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}/drops/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает дропы в коллекции с id = id_2 пользователя c id = id_1
+**collections/drops** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}/drops/{id_3}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает дроп с id = id_3 в коллекции с id = id_2 пользователя c id = id_1
+**drops** | ***/api/v1/users-profiles/{id_1}/drops/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает дропы пользователя c id = id_1
+**drops** | ***/api/v1/users-profiles/{id_1}/drops/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает дроп с id = id_2 пользователя c id = id_1
+**profile-subscriptions** | ***/api/v1/users-profiles/{id_1}/profile-subscriptions/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписки на профили пользователя c id = id_1
+**profile-subscriptions** | ***/api/v1/users-profiles/{id_1}/profile-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает профиль с id = id_2 из подписок пользователя c id = id_1
+**drop-subscriptions** | ***/api/v1/users-profiles/{id_1}/drop-subscriptions/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает подписки на дропы пользователя c id = id_1
+**drop-subscriptions** | ***/api/v1/users-profiles/{id_1}/drop-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает дроп с id = id_2 из подписок пользователя c id = id_1
+**collection-subscriptions** | ***/api/v1/users-profiles/{id_1}/collection-subscriptions/*** | **POST, GET, EXTRA** | [collections]() | **GET** Возвращает подписки на коллекции пользователя c id = id_1
+**collection-subscriptions** | ***/api/v1/users-profiles/{id_1}/collection-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection]() | **GET** Возвращает коллекцию с id = id_2 из подписок пользователя c id = id_1
+**profile-views** | ***/api/v1/users-profiles/{id_1}/profile-views/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает просмотренных пользователей пользователем c id = id_1
+**profile-views** | ***/api/v1/users-profiles/{id_1}/profile-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает просмотренного пользователя с id = id_2 пользователем c id = id_1
+**drop-views** | ***/api/v1/users-profiles/{id_1}/drop-views/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает просмотренные дропы пользователем c id = id_1
+**drop-views** | ***/api/v1/users-profiles/{id_1}/drop-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает просмотренный дроп с id = id_2 пользователем c id = id_1
+**collections-views** | ***/api/v1/users-profiles/{id_1}/collections-views/*** | **POST, GET, EXTRA** | [collections]() | **GET** Возвращает просмотренные коллекции пользователем c id = id_1
+**collections-views** | ***/api/v1/users-profiles/{id_1}/collections-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection]() | **GET** Возвращает просмотренную коллекцию с id = id_2 пользователем c id = id_1
+**drop-likes** | ***/api/v1/users-profiles/{id_1}/drop-likes/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает лайкнутые дропы пользователем c id = id_1
+**drop-likes** | ***/api/v1/users-profiles/{id_1}/drop-likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drops]() | **GET** Возвращает лайкнутый дроп с id = id_2 пользователем c id = id_1
+**collections-likes** | ***/api/v1/users-profiles/{id_1}/collections-likes/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает лайкнутые коллекции пользователем c id = id_1
+**collections-likes** | ***/api/v1/users-profiles/{id_1}/collections-likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drops]() | **GET** Возвращает лайкнутую коллекцию с id = id_2 пользователем c id = id_1
+**profile-subscribers** | ***/api/v1/users-profiles/{id_1}/profile-subscribers/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписчиков пользователя c id = id_1
+**profile-subscribers** | ***/api/v1/users-profiles/{id_1}/profile-subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает подписчика с id = id_2 пользователя c id = id_1
+**views** | ***/api/v1/users-profiles/{id_1}/views/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей просмотревших пользователя c id = id_1
+**views** | ***/api/v1/users-profiles/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2 просматривающего пользователя c id = id_1
+
+
+#-----------OLD_VERSION------------
+
 ### Drops
+
 #### Получение категории и тегов drop
+
 ***https://artgraphite.ru/api/drop-tags/ \
 /drop-tags/ \
 https://artgraphite.ru/api/drop-categories/ \
@@ -374,20 +659,26 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание и редактирование категорий и тегов drop
+
 ***https://artgraphite.ru/api/drop-tags/ \
 /drop-tags/ \
 https://artgraphite.ru/api/drop-categories/ \
 /drop-categories/***
+
 ```sh
 # POST,PATCH,PUT (только для staff) ожидает
     {
         "name": <str>
     }
 ```
+
 #### Получение Drops
+
 ***https://artgraphite.ru/api/drops/ \
 /drops/***
+
 ```sh
 # GET возвращает
     {
@@ -441,9 +732,12 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание Drop
+
 ***https://artgraphite.ru/api/drops/ \
 /drops/***
+
 ```sh
 # POST ожидает
     {
@@ -468,9 +762,12 @@ https://artgraphite.ru/api/drop-categories/ \
         "tags": <array(int)>
     }
 ```
+
 #### Получение Drop
+
 ***https://artgraphite.ru/api/drops/ \
 /drops/{id}***
+
 ```sh
 # GET возвращает
     {
@@ -517,9 +814,12 @@ https://artgraphite.ru/api/drop-categories/ \
         "parent": <int>
     } 
 ```
+
 #### Редактирование Drop
+
 ***https://artgraphite.ru/api/drops/ \
 /drops/{id}***
+
 ```sh
 # PUT, PATCH ожидают
     {
@@ -544,10 +844,14 @@ https://artgraphite.ru/api/drop-categories/ \
         "tags": <array(int)>
     }
 ```
+
 ### Collections
+
 #### Получение коллекций
+
 ***https://artgraphite.ru/api/collections/ \
 /collections/***
+
 ```sh
 # GET возврашает
     {
@@ -570,18 +874,24 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание коллекции
+
 ***https://artgraphite.ru/api/collections/ \
 /collections/***
+
 ```sh
 # POST ожидает
     {
         "name": <str>
     }
 ```
+
 #### Получение коллекции
+
 ***https://artgraphite.ru/api/collections/ \
 /collections/{id}***
+
 ```sh
 # GET позвращает
     {
@@ -597,18 +907,24 @@ https://artgraphite.ru/api/drop-categories/ \
         "drops": <array(int)>
     } 
 ```
+
 #### Редактирование коллекции
+
 ***https://artgraphite.ru/api/collections/ \
 /collections/{id}***
+
 ```sh
 # PUT, PATCH ожидает
     {
         "name": <str>
     }
 ```
+
 #### Получение Drops в коллекции
+
 ***https://artgraphite.ru/api/collections-drops/ \
 /collections-drops/***
+
 ```sh
 # GET возвращает
     {
@@ -626,10 +942,14 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 ### Subscriptions
+
 #### Получение подписок на пользователей
+
 ***https://artgraphite.ru/api/users-subscriptions/ \
 /users-subscriptions/***
+
 ```sh
 # GET возвращает
     {
@@ -647,18 +967,24 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание подписки на пользователя
+
 ***https://artgraphite.ru/api/users-subscriptions/ \
 /users-subscriptions/***
+
 ```sh
 # POST ожидает 
     {
         "subscription": <int>
     }
 ```
+
 #### Получение подписок на Drops
+
 ***https://artgraphite.ru/api/drops-subscriptions/ \
 /drops-subscriptions/***
+
 ```sh
 # GET возвращает
     {
@@ -676,18 +1002,24 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание подписки на Drop
+
 ***https://artgraphite.ru/api/drops-subscriptions/ \
 /drops-subscriptions/***
+
 ```sh
 # POST ожидает 
     {
         "drop": <int>
     }
 ```
+
 #### Получение подписок на Коллекцию
+
 ***https://artgraphite.ru/api/collections-subscriptions/ \
 /collections-subscriptions/***
+
 ```sh
 # GET возвращает
     {
@@ -705,19 +1037,26 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание подписки на Коллекуию
+
 ***https://artgraphite.ru/api/collections-subscriptions/ \
 /collections-subscriptions/***
+
 ```sh
 # POST ожидает 
     {
         "collection": <int>
     }
 ```
+
 ### Likes
+
 #### Получение лайков на Drops
+
 ***https://artgraphite.ru/api/drops-likes/ \
 /drops-likes/***
+
 ```sh
 # GET возвращает
     {
@@ -734,18 +1073,24 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание лайка на Drop
+
 ***https://artgraphite.ru/api/drops-likes/ \
 /drops-likes/***
+
 ```sh
 # POST ожидает 
     {
         "drop": <int>
     }
 ```
+
 #### Получение лайков на коллекции
+
 ***https://artgraphite.ru/api/collections-likes/ \
 /collections-likes/***
+
 ```sh
 # GET возвращает
     {
@@ -762,19 +1107,26 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание лайка на коллекции
+
 ***https://artgraphite.ru/api/collections-likes/ \
 /collections-likes/***
+
 ```sh
 # POST ожидает 
     {
         "collection": <int>
     }
 ```
+
 ### Views
+
 #### Получение просмотров Drops
+
 ***https://artgraphite.ru/api/drops-views/ \
 /drops-views/***
+
 ```sh
 # GET возвращает
     {
@@ -791,18 +1143,24 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание просмотра
+
 ***https://artgraphite.ru/api/drops-views/ \
 /drops-views/***
+
 ```sh
 # POST ожидает 
     {
         "drop": <int>
     }
 ```
+
 #### Получение просмотров Drops
+
 ***https://artgraphite.ru/api/collections-views/ \
 /collections-views/***
+
 ```sh
 # GET возвращает
     {
@@ -819,19 +1177,26 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Создание просмотра
+
 ***https://artgraphite.ru/api/collections-views/ \
 /collections-views/***
+
 ```sh
 # POST ожидает 
     {
         "drop": <int>
     }
 ```
+
 ### Owners
+
 #### Получение владельцев Drops
+
 ***https://artgraphite.ru/api/drops-owners/ \
 /drops-owners/***
+
 ```sh
 # GET возвращает
     {
@@ -848,9 +1213,12 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 #### Получение владельцев коллекций
+
 ***https://artgraphite.ru/api/collections-owners/ \
 /collections-owners/***
+
 ```sh
 # GET возвращает
     {
@@ -867,10 +1235,14 @@ https://artgraphite.ru/api/drop-categories/ \
         ]
     }
 ```
+
 ### Actions
+
 #### Купить Drop
+
 ***https://artgraphite.ru/api/buy-drop/ \
 /buy-drop/***
+
 ```sh
 # POST ожидает 
     {
