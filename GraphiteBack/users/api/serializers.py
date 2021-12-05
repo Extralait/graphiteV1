@@ -20,6 +20,20 @@ class PassportDataSerializer(serializers.ModelSerializer):
             'verify_status'
         ]
 
+    def update(self, instance, validated_data):
+        """
+        Переопределение обновления паспорта пользователя
+        """
+        if instance.is_staff:
+            instance.verify_status = validated_data.get('verify_status', instance.verify_status)
+
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.birthday = validated_data.get('birthday', instance.birthday)
+        instance.passport_series = validated_data.get('passport_series', instance.passport_series)
+        instance.passport_number = validated_data.get('passport_number', instance.passport_number)
+        instance.passport_issue_date = validated_data.get('passport_issue_date', instance.passport_issue_date)
+        instance.passport_expiration_date = validated_data.get('passport_expiration_date', instance.passport_expiration_date)
 
 class StatsSerializer(serializers.ModelSerializer):
     """
@@ -47,7 +61,7 @@ class StatsSerializer(serializers.ModelSerializer):
     collections_views_quantity = serializers.SerializerMethodField()
 
     all_notifications_quantity = serializers.SerializerMethodField()
-    viewed_notifications_quantity = serializers.SerializerMethodField()
+    unseen_notifications_quantity = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -160,7 +174,7 @@ class StatsSerializer(serializers.ModelSerializer):
         """
         return obj.to_user_notifications.count()
 
-    def get_viewed_notifications_quantity(self, obj):
+    def get_unseen_notifications_quantity(self, obj):
         """
         Получить количество непрочитанных уведомлений
         """
@@ -188,7 +202,7 @@ class UserListSerializer(UserRelationshipCheck):
             'id', 'first_name', 'last_name',
             'avatar', 'wallet_number', 'instagram',
             'twitter', 'discord', 'telegram','website', 'profile_type',
-            'is_viewed','is_subscribed','date_joined','updated_at'
+            'is_viewed','is_subscribed','last_login','date_joined','updated_at'
         ]
 
 
@@ -266,7 +280,7 @@ class UserDetailsSerializer(UserRelationshipCheck, CurrentUserDetailsSerializer)
             'password', 'owner_key', 'user_subscriptions',
             'drop_subscriptions', 'collection_subscriptions',
             'drop_likes', 'collections_likes', 'drop_views',
-            'collections_views', 'email_notification','user_views',
+            'collections_views','user_views',
         ]
         read_only_fields = [
             'last_login', 'wallet_number', 'date_joined'

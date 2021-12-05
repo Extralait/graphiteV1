@@ -98,6 +98,7 @@ class UserProfileViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         detail=True,
         methods=['post'],
         name='subscription',
+        url_path='subscription',
         permission_classes=(IsAuthenticated,),
     )
     def add_subscription(self, request, **kwargs):
@@ -135,6 +136,7 @@ class UserProfileViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         detail=True,
         methods=['post'],
         name='viewing',
+        url_path='viewing',
         permission_classes=(IsAuthenticated,),
     )
     def add_view(self, request, **kwargs):
