@@ -1466,6 +1466,22 @@ https://dev.artgraphite.ru/api/v1/notifications/{id} \
 `created_at` | ***str(datetime)*** | Дата и время создания уведомления
 `updated_at` | ***str(datetime)*** | Дата и время обновления уведомления
 
+#### Редактирование уведомлений
+
+https://dev.artgraphite.ru/api/v1/notifications/{id} \
+/api/v1/notifications/{id}***
+
+```sh
+# GET возвращает (list)
+    {
+         "is_viewed": <bool>, 
+    }
+```
+
+Параметр | Тип | Описание | 
+---|---|---
+`is_viewed` | ***bool*** | Просмотрено ли уведомление
+
 Тип уведомления | Описание
 ---|---
 user_subscription | Подписка на пользователя
