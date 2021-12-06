@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from drops.models import Category, Tag, Drop
+from drops.models import Category, Tag, Drop, SpecialCollectionDrop
 from drops_collections.api.serializers import CollectionListSerializer
 from drops_collections.models import SpecialCollection
 from users.api.serializers import UserListSerializer
@@ -113,7 +113,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Drop
-        fields = '__all__'
+        exclude = ['is_active','owner','artist']
         read_only_fields = ['in_stock', 'is_active']
 
     def _user(self):
@@ -209,11 +209,19 @@ class MakeOfferSerializer(serializers.Serializer):
     unit_price = serializers.FloatField()
 
 
+class SpecialCollectionDropSerializer(serializers.ModelSerializer):
+    drop = DropDetailsSerializer(read_only=True)
+
+    class Meta:
+        model = SpecialCollectionDrop
+        fields = ['drop', 'level']
+
+
 class SpecialCollectionSerializer(serializers.ModelSerializer):
     """
     Специальные коллекции (Сериализатор)
     """
-    drops = DropListSerializer(read_only=True, many=True)
+    drops = SpecialCollectionDropSerializer(read_only=True, many=True, source='special_collection_drop')
 
     class Meta:
         model = SpecialCollection

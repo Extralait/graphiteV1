@@ -66,8 +66,6 @@ class Drop(models.Model):
         verbose_name='Blockchain type',
         max_length=20,
         choices=BlockchainType.choices,
-        blank=True,
-        null=True
     )
     blockchain_address = models.CharField(
         verbose_name='Blockchain address',
@@ -140,13 +138,9 @@ class Drop(models.Model):
     )
     all_count = models.IntegerField(
         verbose_name='All count',
-        default=0
     )
     init_cost = models.FloatField(
         verbose_name='Init cost',
-        default=0,
-        null=True,
-        blank=True
     )
     min_rate = models.FloatField(
         verbose_name='Min rate',
@@ -216,6 +210,14 @@ class Drop(models.Model):
         verbose_name='Is active',
         default=True,
     )
+    level = models.IntegerField(
+        verbose_name='Level',
+        default=0,
+        validators=[
+            MinValueValidator(0)
+        ]
+    )
+
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -363,7 +365,7 @@ class SpecialCollectionDrop(models.Model):
     """
     collection = models.ForeignKey(
         to='drops_collections.SpecialCollection',
-        related_name='special_collection',
+        related_name='special_collection_drop',
         verbose_name='Collection',
         on_delete=models.CASCADE,
         null=True,

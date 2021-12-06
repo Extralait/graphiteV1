@@ -66,6 +66,7 @@ class CollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         detail=True,
         methods=['post'],
         name='subscription',
+        url_path='subscription',
         permission_classes=(IsAuthenticated,),
     )
     def add_subscription(self, request, **kwargs):
@@ -103,6 +104,7 @@ class CollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         detail=True,
         methods=['post'],
         name='like',
+        url_path='like',
         permission_classes=(IsAuthenticated,),
     )
     def add_like(self, request, **kwargs):
@@ -140,6 +142,7 @@ class CollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         detail=True,
         methods=['post'],
         name='viewing',
+        url_path='viewing',
         permission_classes=(IsAuthenticated,),
     )
     def add_view(self, request, **kwargs):
