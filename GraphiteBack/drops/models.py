@@ -232,8 +232,9 @@ class Drop(models.Model):
         """
         if not self.pk and not self.parent:
             self.in_stock = self.all_count
-        if self.sell_count > self.in_stock:
-            self.sell_count = self.in_stock
+        if self.sell_count:
+            if self.sell_count > self.in_stock:
+                self.sell_count = self.in_stock
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
