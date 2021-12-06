@@ -20,6 +20,14 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
 
     owner_drop = Drop.objects.get(pk=drop_pk)
 
+    if owner_drop.sell_type != 'sell' or not owner_drop.to_sell:
+        return Response(
+            {
+                'detail': 'This drop not for sale'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     sell_count = owner_drop.sell_count
 
     if sell_count < count:

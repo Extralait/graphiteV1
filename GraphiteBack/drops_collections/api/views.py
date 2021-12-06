@@ -7,7 +7,6 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from drops_collections.api.serializers import (
     CollectionListSerializer,
     CollectionDetailsSerializer,
-    CurrentUserCollectionDetailsSerializer
 )
 from drops.api.serializers import SpecialCollectionSerializer
 from drops_collections.models import Collection, SpecialCollection
@@ -55,10 +54,7 @@ class CollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         elif self.action == 'list':
             serializer_class = CollectionListSerializer
         else:
-            if self._is_owner():
-                serializer_class = CurrentUserCollectionDetailsSerializer
-            else:
-                serializer_class = CollectionDetailsSerializer
+            serializer_class = CollectionDetailsSerializer
 
         return serializer_class
 

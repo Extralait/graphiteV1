@@ -10,44 +10,44 @@
 
 ```sh
 # Упорядочить по полю username
-http://example.com/api/users?ordering=username
+http://example.com/api/users/?ordering=username
 
 # Упорядочить по полю username в обратном порядке
-http://example.com/api/users?ordering=-username
+http://example.com/api/users/?ordering=-username
 
 # Упорядочить сначала по полю account, а затем по username
-http://example.com/api/users?ordering=account,username
+http://example.com/api/users/?ordering=account,username
 ```
 
 ### Базовые функции поиска
 
 ```sh
 # Вернет пользователей со значением поля age = 18
-http://example.com/api/users?age=18
+http://example.com/api/users/?age=18
 
 # Вернет пользователей со значением поля age < 18
-http://example.com/api/users?age__lt=18
+http://example.com/api/users/?age__lt=18
 
 # Вернет пользователей со значением поля age <= 18
-http://example.com/api/users?age__lte=18
+http://example.com/api/users/?age__lte=18
 
 # Вернет пользователей со значением поля age > 18
-http://example.com/api/users?age__gt=18
+http://example.com/api/users/?age__gt=18
 
 # Вернет пользователей со значением поля age =>= 18
-http://example.com/api/users?age__gte=18
+http://example.com/api/users/?age__gte=18
 
 # Вернет пользователей со значением поля age 5, 10 или 15
-http://example.com/api/users?age__in=5,10,15
+http://example.com/api/users/?age__in=5,10,15
 
 # Вернет пользователей со значением поля age от 5 до 10
-http://example.com/api/users?age__range=5,10
+http://example.com/api/users/?age__range=5,10
 
 # Вернет пользователей со значением поля name содержащем подстроку foo
-http://example.com/api/users?name__incontains=foo
+http://example.com/api/users/?name__incontains=foo
 
 # Вернет пользователей со значением поля name не содержащем подстроку foo
-http://example.com/api/users?name__incontains!=foo
+http://example.com/api/users/?name__incontains!=foo
 
 ```
 
@@ -62,7 +62,32 @@ example.com/users/?profile__joined__range=2010-01-01,2015-12-31
 
 ```sh
 # Комбинация нескольких условий в одном запросе
-http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joined__range=2010-01-01,2015-12-31
+http://example.com/api/users/?age__range=5,10&name__incontains=foo&profile__joined__range=2010-01-01,2015-12-31
+```
+
+### Пагинация
+***В проекте используется пагинация до 60 объектов на странице***
+```sh
+# GET возвращает 
+    {
+    "count": <int>,
+    "next": <str(page_link)>,
+    "previous": <str(page_link)>,
+    "results": [
+        ...
+      ]
+    }
+```
+
+Параметр | Тип  | Описание | 
+---|---|---
+`count` | ***int*** | Количество объектов, соответствующих запросу
+`next` | ***bool*** | Ссылка на следующую страницу
+`previous` | ***bool*** | Ссылка на предыдущую страницу
+
+```sh
+# Получение определенной страницы
+http://example.com/api/users/?page=15
 ```
 
 ## Конечные точки
@@ -171,7 +196,6 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
         }
       ]
     }
-
 ```
 
 Параметр | Тип  | Описание | 
@@ -587,7 +611,7 @@ http://example.com/api/users?age__range=5,10&name__incontains=foo&profile__joine
 >1) *Фильтрации и сортировки по query параметрам*
 >2) *Пагинация*
 >3) *Поиск*
->4) *Extra actions для возвраемых моделей*
+>4) *Extra actions для возвращаемых моделей*
 >5) *Details со всеми доступными методами*
 
 Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
@@ -704,6 +728,9 @@ api/v1/collections/{id}***
 # GET возвращает
     {
         "id": <int>,
+        "is_subscribed": <bool>,
+        "is_liked": <bool>,
+        "is_viewed": <bool>,
         "collection_subscribers_quantity": <int>,
         "drops_subscribers_quantity": <int>,
         "collection_likes_quantity": <int>,
@@ -719,34 +746,28 @@ api/v1/collections/{id}***
         "created_at": <str(datetime)>,
         "updated_at": <str(datetime)>
     } 
-    # Экстра поля для НЕ владельца
-    {
-        "is_subscribed": <bool>,
-        "is_liked": <bool>,
-        "is_viewed": <bool>,
-    }
 ```
 
-Параметр | Тип  | Only not owner  | Описание | 
----|---|---|---
-`id` | ***int*** |:x:| Первичный ключ коллекции
-`is_subscribed` | ***bool*** |:heavy_check_mark:|Подписан ли пользователь на коллекцию 
-`is_liked` | ***bool*** |:heavy_check_mark:| Лайкнул ли пользователь коллекцию
-`is_viewed` | ***bool*** |:heavy_check_mark:| Просматривал ли пользователь коллекцию
-`collection_subscribers_quantity` | ***int*** |:x:| Количество подписчиков на коллекцию
-`drops_subscribers_quantity` | ***int*** |:x:| Количество подписчиков на дропы в коллекции
-`collection_likes_quantity` | ***int*** |:x:| Количество лайков на коллекции
-`drops_likes_quantity` | ***int*** |:x:| Количество лайков на дропах в коллекции
-`collection_views_quantity` | ***int*** |:x:| Количество просмотров на коллекции
-`drops_views_quantity` | ***int*** |:x:| Количество просмотров на дропах в коллекции
-`drops_quantity` | ***int*** |:x:| Количество дропов в коллекции
-`owner` | ***object(user_in_list)*** |:x:| Владелец коллекции (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
-`name` | ***str*** |:x:| Название коллекции
-`picture_big` | ***<str(image_path)>*** |:x:| Большая картинка
-`picture_small` | ***<str(image_path)>*** |:x:| Маленькая картинка
-`is_active` | ***bool*** |:x:| Активна ли текуая коллекция
-`created_at` | ***str(datetime)*** |:x:| Дата и время создания коллекции
-`updated_at` | ***str(datetime)*** |:x:| Дата и время обновления коллекции
+Параметр | Тип  | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ коллекции
+`is_subscribed` | ***bool*** | Подписан ли пользователь на коллекцию 
+`is_liked` | ***bool*** | Лайкнул ли пользователь коллекцию
+`is_viewed` | ***bool*** | Просматривал ли пользователь коллекцию
+`collection_subscribers_quantity` | ***int*** | Количество подписчиков на коллекцию
+`drops_subscribers_quantity` | ***int*** | Количество подписчиков на дропы в коллекции
+`collection_likes_quantity` | ***int*** | Количество лайков на коллекции
+`drops_likes_quantity` | ***int*** | Количество лайков на дропах в коллекции
+`collection_views_quantity` | ***int*** | Количество просмотров на коллекции
+`drops_views_quantity` | ***int*** | Количество просмотров на дропах в коллекции
+`drops_quantity` | ***int*** | Количество дропов в коллекции
+`owner` | ***object(user_in_list)*** | Владелец коллекции (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`name` | ***str*** | Название коллекции
+`picture_big` | ***<str(image_path)>*** | Большая картинка
+`picture_small` | ***<str(image_path)>*** | Маленькая картинка
+`is_active` | ***bool*** | Активна ли текуая коллекция
+`created_at` | ***str(datetime)*** | Дата и время создания коллекции
+`updated_at` | ***str(datetime)*** | Дата и время обновления коллекции
 
 #### Редактирование коллекции
 
@@ -803,7 +824,7 @@ api/v1/collections/{id}***
 >1) *Фильтрации и сортировки по query параметрам*
 >2) *Пагинация*
 >3) *Поиск*
->4) *Extra actions для возвраемых моделей*
+>4) *Extra actions для возвращаемых моделей*
 >5) *Details со всеми доступными методами*
 
 Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
@@ -941,6 +962,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "picture_small": <str(image_path)>,
                 "parent": <object(drop_in_list)>,
                 "from_collection": <object(collection_in_list)>,
+                "is_active": <bool>,
                 "updated_at": <str(datetime)>,
                 "created_at": <str(datetime)>
             }
@@ -962,6 +984,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `picture_small` | ***<str(image_path)>*** | Маленькая картинка
 `parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)
 `from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
+`is_active` | ***<bool>*** | Активен ли текущий дроп
 `updated_at` | ***str(datetime)*** | Дата и время обновления дропа
 `created_at` | ***str(datetime)*** | Дата и время создания дропа
 
@@ -980,48 +1003,68 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "descriptions": <str>,
         "sell_type": <str>, # (auction|sell)
         "sell_count": <int>,
-        "all_sell_count": <int>,
+        "all_count": <int>,
         "init_cost": <float>,
         "min_rate": <float>,
-        "picture_big": <img>,
-        "picture_small": <img>,
+        "picture_big": <image>,
+        "picture_small": <image>,
         "to_sell": <bool>,
         "url_landing": <str>,
-        "royalty": <float>,
+        "auction_deadline": <str(datetime)>,
+        "royalty": <flot>,
+        "specifications": <json>,
+        "level": <int>,
         "category": <int>,
-        "artists": <int>,
-        "parent": <int>,
+        "from_collection": <int>,
         "tags": <array(int)>
     }
 ```
 
-#### Получение Drop
+Параметр | Тип | Обязательный | Описание |
+---|---|---|---
+`blockchain_type` | ***str*** | :heavy_check_mark: | Тип блокчейна (wax, anchor)
+`blockchain_address` | ***str*** | :x: | Адрес блокчейна
+`blockchain_identifier` | ***str*** | :x: | Блокчейн идентификатор 
+`name` | ***str*** | :heavy_check_mark: | Название дропа
+`descriptions` | ***str*** | :x: | Описание дропа
+`sell_type` | ***str*** | :x: | Тип продажи (auction, sell)
+`sell_count` | ***int*** | :x: | Количество копий на продажу
+`all_count` | ***int*** | :heavy_check_mark: | Всего копий
+`init_cost` | ***float*** | :heavy_check_mark: | Начальная цена за копию
+`min_rate` | ***float*** | :x: | Минимальная ставка
+`picture_big` | ***image*** | :x: | Большая картинка
+`picture_small` | ***image*** | :x: | Маленькая картинка
+`to_sell` | ***bool*** | :x: | Выставлен ли на продажу
+`url_landing` | ***str*** | :x: | Ссылка на лендинг
+`auction_deadline` | ***str(datetime)*** | :x: | Дата и время окончания аукциона
+`royalty` | ***float*** | :x: | Процент с продаж, получаемый автором
+`specifications` | ***json*** | :x: | Характеристики дропа (произвольный json)
+`level` | ***int*** | :x: | Уровень дропа в коллекции 
+`category` | ***int*** | :x: | Первичный ключ [категории](#получение-категорий-и-тегов-дропов) дропа
+`from_collection` | ***int*** | :x: | Первичный ключ [коллекции](#получение-коллекции) в которую входит дроп (вы обязательно должны быть владельцем этой коллекции)
+`tags` | ***array(int)*** | :x: | Массив первичныъ ключей [тегов](#получение-категорий-и-тегов-дропов) дропа
 
-***https://artgraphite.ru/api/drops/ \
-/drops/{id}***
+#### Получение дропа
+
+***https://dev.artgraphite.ru/api/v1/drops/{id} \
+/api/v1/drops/{id}***
 
 ```sh
 # GET возвращает
     {
         "id": <int>,
-        "tags": [
-            {
-                "id": <int>,
-                "name": <str>
-            },
-            {
-                "id": <int>,
-                "name": <second>
-            }
-        ],
-        "category": {
-            "id": <int>,
-            "name": <str>
-        },
-        "drops_subscriptions_quantity": <int>,
+        "is_subscribed": <bool>,
+        "is_liked": <bool>,
+        "is_viewed": <bool>,
+        "subscriptions_quantity": <int>,
         "likes_quantity": <int>,
         "views_quantity": <int>,
-        "drop_owner": <int>,
+        "category": <object(category)>,
+        "tags": array(object(tag)),
+        "artist": <object(user_in_list)>,
+        "owner": <object(user_in_list)>,
+        "from_collection": <object(collection_in_list)>,
+        "parent": <object(drop_in_list)>,
         "blockchain_type": <str>, # (wax|anchor)
         "blockchain_address": <str>,
         "blockchain_identifier": <str>,
@@ -1029,362 +1072,203 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "descriptions": <str>,
         "sell_type": <str>, # (auction|sell)
         "sell_count": <int>,
-        "all_sell_count": <int>,
-        "to_sell": <bool>,
+        "in_stock": <int>,
+        "all_count": <int>,
         "init_cost": <float>,
         "min_rate": <float>,
-        "picture_big": <str(img_link)>,
-        "picture_small": <str(img_link)>,
+        "picture_big": <str(image)>,
+        "picture_small": <str(image)>,
+        "to_sell": <bool>,
         "url_landing": <str>,
         "auction_deadline": <str(datetime)>,
         "royalty": <float>,
+        "specifications": <object>,
+        "is_active": <bool>,
+        "level": <int>,
         "created_at": <str(datetime)>,
-        "updated_at": <str(datetime)>,
-        "from_collection":  <array(object(collection)),
-        "drop_owner": <array(object(user))>
-        "artists": <object(user)>,
-        "parent": <int>
-    } 
+        "updated_at": <str(datetime)>
+    }
 ```
 
-#### Редактирование Drop
+Параметр | Тип | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ дропа
+`is_viewed` | ***bool*** | Просмотрен ли дроп текущим пользователем
+`is_subscribed` | ***bool*** | Подписан ли текущий пользователь на дроп
+`is_liked` | ***bool*** | Лайкнул ли текущий пользователь дроп
+`subscriptions_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
+`likes_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
+`views_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
+`category` | ***object(category)*** | [Категория дропа](#получение-категорий-и-тегов-дропов) 
+`tags` | ***array(object(tag))*** | [Теги дропа](#получение-категорий-и-тегов-дропов) 
+`artist` | ***object(user_in_list)*** | Художник (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`owner` | ***object(user_in_list)*** | Владелец (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
+`parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)
+`blockchain_type` | ***str*** | Тип блокчейна (wax, anchor)
+`blockchain_address` | ***str*** | Адрес блокчейна
+`blockchain_identifier` | ***str*** | Блокчейн идентификатор 
+`name` | ***str*** | Название дропа
+`descriptions` | ***str*** | Описание дропа
+`sell_type` | ***str*** | Тип продажи (auction, sell)
+`sell_count` | ***str*** | Количество копий на продажу
+`in_stock` | ***str*** | Количество копий в наличии
+`all_count` | ***str*** | Всего копий
+`init_cost` | ***str*** | Начальная цена за копию
+`min_rate` | ***str*** | Минимальная ставка
+`picture_big` | ***<str(image_path)>*** | Большая картинка
+`picture_small` | ***<str(image_path)>*** | Маленькая картинка
+`to_sell` | ***bool*** | Выставлен ли на продажу
+`url_landing` | ***str*** | Ссылка на лендинг
+`auction_deadline` | ***str(datetime)*** | Дата и время окончания аукциона
+`royalty` | ***float*** | Процент с продаж, получаемый автором
+`specifications` | ***object*** | Характеристики дропа (произвольный json)
+`is_active` | ***bool*** | Активен ли текущий дроп
+`level` | ***int*** | Уровень дропа в коллекции
+`updated_at` | ***str(datetime)*** | Дата и время обновления дропа
+`created_at` | ***str(datetime)*** | Дата и время создания дропа
 
-***https://artgraphite.ru/api/drops/ \
-/drops/{id}***
+#### Редактирование дропа
+
+***https://dev.artgraphite.ru/api/v1/drops/{id} \
+/api/v1/drops/{id}***
 
 ```sh
 # PUT, PATCH ожидают
     {
-        "blockchain_type": <str>, # (wax|anchor)
-        "blockchain_address": <str>,
-        "blockchain_identifier": <str>,
+        "id": 1,
         "name": <str>,
         "descriptions": <str>,
         "sell_type": <str>, # (auction|sell)
         "sell_count": <int>,
-        "all_sell_count": <int>,
-        "init_cost": <float>,
-        "min_rate": <float>,
-        "picture_big": <img>,
-        "picture_small": <img>,
+        "init_cost": <int>,
+        "min_rate": <int>,
+        "picture_big": <image>,
+        "picture_small": <image>,
+        "to_sell": <bool>,
         "url_landing": <str>,
         "auction_deadline": <str(datetime)>,
         "royalty": <float>,
+        "specifications": <json>,
+        "level": <int>,
         "category": <int>,
-        "artists": <int>,
-        "parent": <int>,
+        "from_collection": <int>,
         "tags": <array(int)>
     }
 ```
 
-### Subscriptions
+Параметр | Тип | Only artist | Описание |
+---|---|---|---
+`name` | ***str*** | :heavy_check_mark: | Название дропа
+`descriptions` | ***str*** | :heavy_check_mark: | Описание дропа
+`sell_type` | ***str*** | :x: | Тип продажи (auction, sell)
+`sell_count` | ***int*** | :x: | Количество копий на продажу
+`init_cost` | ***float*** | :x: | Начальная цена за копию
+`min_rate` | ***float*** | :x: | Минимальная ставка
+`picture_big` | ***image*** | :heavy_check_mark: | Большая картинка
+`picture_small` | ***image*** | :heavy_check_mark: | Маленькая картинка
+`to_sell` | ***bool*** | :x: | Выставлен ли на продажу
+`url_landing` | ***str*** | :heavy_check_mark: | Ссылка на лендинг
+`auction_deadline` | ***str(datetime)*** | :x: | Дата и время окончания аукциона
+`royalty` | ***float*** | :heavy_check_mark: | Процент с продаж, получаемый автором
+`specifications` | ***json*** | :heavy_check_mark: | Характеристики дропа (произвольный json)
+`level` | ***int*** | :x: | Уровень дропа в коллекции 
+`category` | ***int*** | :heavy_check_mark: | Первичный ключ [категории](#получение-категорий-и-тегов-дропов) дропа
+`from_collection` | ***int*** | :x: | Первичный ключ [коллекции](#получение-коллекции) в которую входит дроп (вы обязательно должны быть владельцем этой коллекции)
+`tags` | ***array(int)*** | :heavy_check_mark: | Массив первичныъ ключей [тегов](#получение-категорий-и-тегов-дропов) дропа
 
-#### Получение подписок на пользователей
+#### Подписка на дроп
 
-***https://artgraphite.ru/api/users-subscriptions/ \
-/users-subscriptions/***
+***https://dev.artgraphite.ru/api/v1/drops/{id}/subscription/ \
+/api/v1/drops/{id}/subscription/***
+
+Метод | Дейстаие  
+---|---
+***POST*** | Подписывает текущего пользователя на дроп по id  
+***DELETE*** | Отписывает текущего пользователя от дропа по id  
+
+#### Лайк на дроп
+
+***https://dev.artgraphite.ru/api/v1/drops/{id}/like/ \
+/api/v1/drops/{id}/like/***
+
+Метод | Дейстаие  
+---|---
+***POST*** | Ставит лайк текущего пользователя на дроп по id  
+***DELETE*** | Удаляет лайк текущего пользователя с дропа по id  
+
+#### Просмотр дропа 
+
+***https://dev.artgraphite.ru/api/v1/drops/{id}/viewing/ \
+/api/v1/drops/{id}/viewing/***
+
+Метод | Дейстаие  
+---|---
+***POST*** | Добавляет просмотр от текущего пользователя на дроп по id
+
+#### Покупка дропа 
+
+***https://dev.artgraphite.ru/api/v1/drops/{id}/buy-drop/ \
+/api/v1/drops/{id}/buy-drop/***
+
+Метод | Дейстаие  
+---|---
+***POST*** | Покупает count копий дропа по id (sell_count меньше count или to_sell = False или sell_type != sell вернет ошибку) в случае удачной сделки возвращает [транзакцию]()
 
 ```sh
-# GET возвращает
+# POST ожидает
     {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "updated_at": <str(datetime).,
-                "subscriber": <int>,
-                "subscription": <int>
-            }
-        ]
+        "count": <int>, 
     }
 ```
 
-#### Создание подписки на пользователя
+Параметр | Тип | Обязательный | Описание |
+---|---|---|---
+`count` | ***int*** | :heavy_check_mark: | Количество копий
 
-***https://artgraphite.ru/api/users-subscriptions/ \
-/users-subscriptions/***
+#### Сделать предложение покупки 
+
+***https://dev.artgraphite.ru/api/v1/drops/{id}/make-offer/ \
+/api/v1/drops/{id}/make-offer/***
+
+Метод | Дейстаие  
+---|---
+***POST*** | Покупает count копий дропа по id (in_stock меньше count вернет ошибку) в случае удачной сделки возвращает [оффер]()
 
 ```sh
-# POST ожидает 
+# POST ожидает
     {
-        "subscription": <int>
+        "count": <int>, 
+        "unit_price": <float>, 
     }
 ```
 
-#### Получение подписок на Drops
+Параметр | Тип | Обязательный | Описание |
+---|---|---|---
+`count` | ***int*** | :heavy_check_mark: | Количество копий
+`unit_price` | ***float*** | :heavy_check_mark: | Цена за единицу
 
-***https://artgraphite.ru/api/drops-subscriptions/ \
-/drops-subscriptions/***
+### Вложенные конечные точки для */drops/*
+>**На этих конечных точках работают:**
+>1) *Фильтрации и сортировки по query параметрам*
+>2) *Пагинация*
+>3) *Поиск*
+>4) *Extra actions для возвращаемых моделей*
+>5) *Details со всеми доступными методами*
 
-```sh
-# GET возвращает
-    {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "updated_at": <str(datetime).,
-                "subscriber": <int>,
-                "drop": <int>
-            }
-        ]
-    }
-```
-
-#### Создание подписки на Drop
-
-***https://artgraphite.ru/api/drops-subscriptions/ \
-/drops-subscriptions/***
-
-```sh
-# POST ожидает 
-    {
-        "drop": <int>
-    }
-```
-
-#### Получение подписок на Коллекцию
-
-***https://artgraphite.ru/api/collections-subscriptions/ \
-/collections-subscriptions/***
-
-```sh
-# GET возвращает
-    {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "updated_at": <str(datetime).,
-                "collection": <int>,
-                "drop": <int>
-            }
-        ]
-    }
-```
-
-#### Создание подписки на Коллекуию
-
-***https://artgraphite.ru/api/collections-subscriptions/ \
-/collections-subscriptions/***
-
-```sh
-# POST ожидает 
-    {
-        "collection": <int>
-    }
-```
-
-### Likes
-
-#### Получение лайков на Drops
-
-***https://artgraphite.ru/api/drops-likes/ \
-/drops-likes/***
-
-```sh
-# GET возвращает
-    {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "drop": <int>,
-                "user": <int>
-            }
-        ]
-    }
-```
-
-#### Создание лайка на Drop
-
-***https://artgraphite.ru/api/drops-likes/ \
-/drops-likes/***
-
-```sh
-# POST ожидает 
-    {
-        "drop": <int>
-    }
-```
-
-#### Получение лайков на коллекции
-
-***https://artgraphite.ru/api/collections-likes/ \
-/collections-likes/***
-
-```sh
-# GET возвращает
-    {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "collection": <int>,
-                "user": <int>
-            }
-        ]
-    }
-```
-
-#### Создание лайка на коллекции
-
-***https://artgraphite.ru/api/collections-likes/ \
-/collections-likes/***
-
-```sh
-# POST ожидает 
-    {
-        "collection": <int>
-    }
-```
-
-### Views
-
-#### Получение просмотров Drops
-
-***https://artgraphite.ru/api/drops-views/ \
-/drops-views/***
-
-```sh
-# GET возвращает
-    {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "drop": <int>,
-                "user": <int>
-            }
-        ]
-    }
-```
-
-#### Создание просмотра
-
-***https://artgraphite.ru/api/drops-views/ \
-/drops-views/***
-
-```sh
-# POST ожидает 
-    {
-        "drop": <int>
-    }
-```
-
-#### Получение просмотров Drops
-
-***https://artgraphite.ru/api/collections-views/ \
-/collections-views/***
-
-```sh
-# GET возвращает
-    {
-        "count": <int>,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "drop": <int>,
-                "user": <int>
-            }
-        ]
-    }
-```
-
-#### Создание просмотра
-
-***https://artgraphite.ru/api/collections-views/ \
-/collections-views/***
-
-```sh
-# POST ожидает 
-    {
-        "drop": <int>
-    }
-```
-
-### Owners
-
-#### Получение владельцев Drops
-
-***https://artgraphite.ru/api/drops-owners/ \
-/drops-owners/***
-
-```sh
-# GET возвращает
-    {
-        "count": 1,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "drop_owner": <int>,
-                "drop": <int>
-            }
-        ]
-    }
-```
-
-#### Получение владельцев коллекций
-
-***https://artgraphite.ru/api/collections-owners/ \
-/collections-owners/***
-
-```sh
-# GET возвращает
-    {
-        "count": 1,
-        "next": <str(page_link)>,
-        "previous": <str(page_link)>,
-        "results": [
-            {
-                "id": <int>,
-                "created_at": <str(datetime)>,
-                "collection_owner": <int>,
-                "collection": <int>
-            }
-        ]
-    }
-```
-
-### Actions
-
-#### Купить Drop
-
-***https://artgraphite.ru/api/buy-drop/ \
-/buy-drop/***
-
-```sh
-# POST ожидает 
-    {
-        "drop": <int>,
-        "count": <int>
-    }
-    # возвращает
-    {
-        'sell_count': <int>
-    }
-```
+Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
+---|---|---|---|---
+**subscribers** | ***/api/v1/drops/{id_1}/subscribers/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписчиков дропа c id = id_1
+**subscribers** | ***/api/v1/drops/{id_1}/subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает подписчика с id = id_2 дропа c id = id_1
+**likes** | ***/api/v1/drops/{id_1}/likes/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей, лайкнувших дроп c id = id_1
+**likes** | ***/api/v1/drops/{id_1}/likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2, лайкнувшего дроп c id = id_1
+**views** | ***/api/v1/drops/{id_1}/views/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей, просмотревших дроп c id = id_1
+**views** | ***/api/v1/drops/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2, просмотревшего дроп c id = id_1
+**sell-transactions** | ***/api/v1/drops/{id_1}/sell-transactions/*** | **GET** | [transactions]() | **GET** Возвращает транзакции продажи дропа c id = id_1
+**sell-transactions** | ***/api/v1/drops/{id_1}/sell-transactions/{id_2}*** | **GET, DELETE** | [transaction]() | **GET** Возвращает транзакцию продажи с id = id_2, дропа c id = id_1
+**buy-transactions** | ***/api/v1/drops/{id_1}/buy-transactions/*** | **GET** | [transactions]() | **GET** Возвращает транзакции покупки дропа c id = id_1
+**buy-transactions** | ***/api/v1/drops/{id_1}/buy-transactions/{id_2}*** | **GET, DELETE** | [transaction]() | **GET** Возвращает транзакцию покупки с id = id_2, дропа c id = id_1
+**sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/*** | **GET, EXTRA** | [offers]() | **GET** Возвращает предложения продажи дропа c id = id_1
+**sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает предложение продажи с id = id_2, дропа c id = id_1
+**buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/*** | **GET, EXTRA** | [offers]() | **GET** Возвращает предложения покупки дропа c id = id_1
+**buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает предложение покупки с id = id_2, дропа c id = id_1

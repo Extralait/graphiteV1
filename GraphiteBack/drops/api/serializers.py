@@ -83,7 +83,7 @@ class BaseDropSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'category','tags', 'artist',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_viewed', 'is_subscribed', 'is_liked',
+            'is_viewed', 'is_subscribed', 'is_liked', 'is_active',
             'updated_at', 'created_at'
         ]
 
@@ -99,7 +99,7 @@ class DropListSerializer(DropRelationshipCheck, BaseDropSerializer):
         fields = [
             'id', 'name', 'category','tags', 'artist',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_viewed', 'is_subscribed', 'is_liked',
+            'is_viewed', 'is_subscribed', 'is_liked', 'is_active',
             'updated_at', 'created_at'
         ]
 
@@ -115,8 +115,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Drop
-        exclude = ['is_active', 'owner', 'artist']
-        read_only_fields = ['in_stock', 'is_active']
+        exclude = ['owner', 'artist', 'parent','in_stock', 'is_active']
 
     def _user(self):
         """
@@ -170,16 +169,16 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             instance.category = validated_data.get('category', instance.category)
             instance.picture_big = validated_data.get('picture_big', instance.picture_big)
             instance.picture_small = validated_data.get('picture_small', instance.picture_small)
-            instance.blockchain_type = validated_data.get('blockchain_type', instance.blockchain_type)
-            instance.blockchain_address = validated_data.get('blockchain_address', instance.blockchain_address)
-            instance.blockchain_identifier = validated_data.get('blockchain_identifier', instance.blockchain_identifier)
+            # instance.blockchain_type = validated_data.get('blockchain_type', instance.blockchain_type)
+            # instance.blockchain_address = validated_data.get('blockchain_address', instance.blockchain_address)
+            # instance.blockchain_identifier = validated_data.get('blockchain_identifier', instance.blockchain_identifier)
             instance.url_landing = validated_data.get('url_landing', instance.url_landing)
             instance.specifications = validated_data.get('specifications', instance.specifications)
             instance.royalty = validated_data.get('royalty', instance.royalty)
-        try:
-            instance.tags.set(validated_data.get('tags', instance.tags))
-        except TypeError:
-            instance.tags.set(Tag.objects.none())
+            try:
+                instance.tags.set(validated_data.get('tags', instance.tags))
+            except TypeError:
+                instance.tags.set(Tag.objects.none())
 
         instance.save()
         return instance

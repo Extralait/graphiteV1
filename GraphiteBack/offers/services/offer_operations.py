@@ -12,11 +12,11 @@ from users.models import User
 def make_offer(drop_pk: int, count: int, unit_price: float, buyer: User):
     owner_drop = Drop.objects.get(pk=drop_pk)
 
-    sell_count = owner_drop.sell_count
+    in_stock = owner_drop.in_stock
     drop_name = owner_drop.name
     owner_pk = owner_drop.owner.pk
 
-    if sell_count < count:
+    if in_stock < count:
         return Response(
             {
                 'detail': 'Not enough copies available'

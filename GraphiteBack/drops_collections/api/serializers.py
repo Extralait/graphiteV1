@@ -83,14 +83,14 @@ class CollectionListSerializer(CollectionRelationshipCheck):
         fields = '__all__'
 
 
-class CurrentUserCollectionDetailsSerializer(StatsSerializer):
+class CollectionDetailsSerializer(CollectionRelationshipCheck, StatsSerializer):
     """
     Детали коллекции для владелька (Сериализатор)
     """
 
     def __init__(self, *args, **kwargs):
         kwargs['partial'] = True
-        super(CurrentUserCollectionDetailsSerializer, self).__init__(*args, **kwargs)
+        super(CollectionDetailsSerializer, self).__init__(*args, **kwargs)
 
     owner = UserListSerializer(read_only=True)
 
@@ -117,16 +117,6 @@ class CurrentUserCollectionDetailsSerializer(StatsSerializer):
         collection.save()
         return collection
 
-
-class CollectionDetailsSerializer(CollectionRelationshipCheck, CurrentUserCollectionDetailsSerializer):
-    """
-    Детали коллекции (Сериализатор)
-    """
-
-    class Meta:
-        model = Collection
-        fields = '__all__'
-        read_only_fields = ['is_active']
 
 
 
