@@ -43,6 +43,7 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
     owner_drop.save()
     owner_drop_name = owner_drop.name
     owner_pk = owner_drop.owner.pk
+    owner_drop_parent = owner_drop.parent
     if buyer_drop:
         owner_drop.in_stock += count
         owner_drop.save()
@@ -51,7 +52,10 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
         buyer_drop = owner_drop
         buyer_drop.sell_count = 0
         buyer_drop.in_stock = count
-        buyer_drop.parent_id = drop_pk
+        if not owner_drop_parent:
+            buyer_drop.parent_id = drop_pk
+        else:
+            buyer_drop.parent_id = owner_drop_parent.pk
         buyer_drop.owner_id = buyer_pk
         buyer_drop.to_sell = False
         buyer_drop.from_collection = None
