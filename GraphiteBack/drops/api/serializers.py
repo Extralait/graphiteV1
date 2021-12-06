@@ -81,14 +81,13 @@ class BaseDropSerializer(serializers.ModelSerializer):
     class Meta:
         model = Drop
         fields = [
-            'id', 'name', 'category','tags', 'artist',
+            'id', 'name', 'category','tags', 'artist','to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_viewed', 'is_subscribed', 'is_liked', 'is_active',
-            'updated_at', 'created_at'
+            'is_active', 'updated_at', 'created_at'
         ]
 
 
-class DropListSerializer(DropRelationshipCheck, BaseDropSerializer):
+class DropListSerializer(DropRelationshipCheck,BaseDropSerializer):
     """
     Лист дропов (Сериализатор)
     """
@@ -97,7 +96,7 @@ class DropListSerializer(DropRelationshipCheck, BaseDropSerializer):
     class Meta:
         model = Drop
         fields = [
-            'id', 'name', 'category','tags', 'artist',
+            'id', 'name', 'category','tags', 'artist','to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked', 'is_active',
             'updated_at', 'created_at'

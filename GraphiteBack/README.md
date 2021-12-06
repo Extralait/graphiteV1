@@ -962,6 +962,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "picture_small": <str(image_path)>,
                 "parent": <object(drop_in_list)>,
                 "from_collection": <object(collection_in_list)>,
+                "sell_type": <str>, # (auction|sell)
+                "to_sell": <bool>,
+                "sell_type",
                 "is_active": <bool>,
                 "updated_at": <str(datetime)>,
                 "created_at": <str(datetime)>
@@ -984,6 +987,8 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `picture_small` | ***str(image_path)*** | Маленькая картинка
 `parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)
 `from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
+`to_sell` | ***bool*** | Выставлен ли на продажу
+`sell_type` | ***str*** | Тип продажи (auction, sell)
 `is_active` | ***bool*** | Активен ли текущий дроп
 `updated_at` | ***str(datetime)*** | Дата и время обновления дропа
 `created_at` | ***str(datetime)*** | Дата и время создания дропа
