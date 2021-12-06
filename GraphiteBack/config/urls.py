@@ -12,11 +12,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # API для приложений
     path("api/v1/", include("config.api.v1",)),
-    # path("api/", include("drops.api.urls")),
-    # path("api/", include("drops_collections.api.urls")),
-    # path("api/", include("notifications.api.urls")),
-    # path("api/", include("transactions.api.urls")),
-    # path("api/", include("offers.api.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

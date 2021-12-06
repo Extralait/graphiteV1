@@ -24,7 +24,7 @@
 
     # install dependencies
     COPY requirements.txt .
-    RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+    RUN pip wheel --wheel-dir /usr/src/app/wheels -r requirements.txt
     # tensorflow-2.3.0-cp38-cp38-linux_x86_64.whl
     # copy project
     COPY . .

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework_extensions.routers import ExtendedSimpleRouter
 
-from drops.api.views import DropViewSet
+from drops.api.views import DropViewSet, CategoryViewSet, TagViewSet
 from offers.api.views import OfferViewSet
 from transactions.api.views import TransactionViewSet
 from users.api.views import UserProfileViewSet
@@ -64,7 +64,16 @@ drops_router = router.register(
         basename='drops-buy-offers'
     ),
 )
-
+router.register(
+    prefix=r'drops-tags',
+    viewset=TagViewSet,
+    basename='drops-tags'
+)
+router.register(
+    prefix=r'drops-categories',
+    viewset=CategoryViewSet,
+    basename='drops-categories'
+)
 urlpatterns = [
     # DRF router
     path('', include(router.urls)),

@@ -18,14 +18,14 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TagsSerializer(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     """
     Тег дропа (сериализатор)
     """
 
     class Meta:
         model = Tag
-        fields = ['id', 'name']
+        fields = '__all__'
 
 
 class StatsSerializer(serializers.ModelSerializer):
@@ -76,11 +76,16 @@ class BaseDropSerializer(serializers.ModelSerializer):
     owner = UserListSerializer(read_only=True)
     artist = UserListSerializer(read_only=True)
     from_collection = CollectionListSerializer()
-    tags = TagsSerializer(many=True)
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Drop
-        fields = '__all__'
+        fields = [
+            'id', 'name', 'category','tags', 'artist',
+            'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
+            'is_viewed', 'is_subscribed', 'is_liked',
+            'updated_at', 'created_at'
+        ]
 
 
 class DropListSerializer(DropRelationshipCheck, BaseDropSerializer):
@@ -92,10 +97,10 @@ class DropListSerializer(DropRelationshipCheck, BaseDropSerializer):
     class Meta:
         model = Drop
         fields = [
-            'id', 'name', 'category', 'artist',
-            'owner', 'picture_big', 'picture_small',
+            'id', 'name', 'category','tags', 'artist',
+            'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked',
-            'parent', 'created_at', 'created_at'
+            'updated_at', 'created_at'
         ]
 
 
@@ -108,12 +113,9 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         kwargs['partial'] = True
         super(DropCreateOrUpdateSerializer, self).__init__(*args, **kwargs)
 
-    tags = TagsSerializer(many=True)
-    parent = DropListSerializer(read_only=True)
-
     class Meta:
         model = Drop
-        exclude = ['is_active','owner','artist']
+        exclude = ['is_active', 'owner', 'artist']
         read_only_fields = ['in_stock', 'is_active']
 
     def _user(self):

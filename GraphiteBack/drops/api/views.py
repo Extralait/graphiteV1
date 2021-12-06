@@ -7,9 +7,10 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from drops.api.serializers import (
     DropListSerializer,
     DropDetailsSerializer,
-    DropCreateOrUpdateSerializer, DropBuySerializer, MakeOfferSerializer, SpecialCollectionSerializer
+    DropCreateOrUpdateSerializer, DropBuySerializer, MakeOfferSerializer, SpecialCollectionSerializer, TagSerializer,
+    CategorySerializer
 )
-from drops.models import Drop
+from drops.models import Drop, Tag, Category
 from drops_collections.models import SpecialCollection
 from offers.services.offer_operations import make_offer
 from transactions.services.transaction_operations import buy_drop
@@ -21,6 +22,9 @@ from utils.permissions import OwnerOrAdmin
 
 
 class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """
+    Дроп (Представление)
+    """
     pagination_class = StandardResultsSetPagination
     queryset = Drop.objects.all()
     filter_fields = [f.name for f in Drop._meta.fields + Drop._meta.related_objects if not f.__dict__.get('upload_to')]
@@ -228,6 +232,9 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
 
 class SpecialCollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    """
+    Специальная коллекция (Представление)
+    """
     queryset = SpecialCollection.objects.all()
     serializer_class = SpecialCollectionSerializer
 
@@ -241,3 +248,21 @@ class SpecialCollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             permission_classes = (IsAdminUser,)
 
         return [permission() for permission in permission_classes]
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    """
+    Тег дропа (Представление)
+    """
+    pagination_class = StandardResultsSetPagination
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    Категория дропа (Представление)
+    """
+    pagination_class = StandardResultsSetPagination
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
