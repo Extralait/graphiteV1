@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q
 from rest_framework import status, serializers, viewsets
 from rest_framework.decorators import action
@@ -7,11 +8,12 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from offers.api.serializers import OfferSerializer
 from offers.models import Offer
 from offers.services.offer_operations import confirm
-from transactions.api.views import TransactionViewSet
+from utils.pagination import StandardResultsSetPagination
 from utils.permissions import OwnerOrAdmin, ParticipantsOrAdmin, Nobody
 
 
 class OfferViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    pagination_class = StandardResultsSetPagination
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     filter_fields = [f.name for f in Offer._meta.fields + Offer._meta.related_objects if not f.__dict__.get('upload_to')]
@@ -49,9 +51,12 @@ class OfferViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return serializer_class
 
     def filter_queryset(self, queryset):
+
         user = self.request.user
         if user.is_staff:
             pass
+        elif type(self.request.user) == AnonymousUser:
+            return queryset.none()
         else:
             queryset = queryset.filter(Q(buyer=user) | Q(owner=user))
         return queryset

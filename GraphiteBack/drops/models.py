@@ -66,6 +66,8 @@ class Drop(models.Model):
         verbose_name='Blockchain type',
         max_length=20,
         choices=BlockchainType.choices,
+        null=True,
+        blank=True
     )
     blockchain_address = models.CharField(
         verbose_name='Blockchain address',

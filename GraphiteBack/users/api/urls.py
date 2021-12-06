@@ -20,10 +20,10 @@ users_profiles_router = router.register(
 (
     # Уведомдения пользователя
     users_profiles_router.register(
-        prefix=r'notices',
+        prefix=r'notifications',
         viewset=NotificationViewSet,
         parents_query_lookups=['to_user'],
-        basename='users-profiles-notices'
+        basename='users-profiles-notifications'
     ),
     # Транзакции продажи
     users_profiles_router.register(

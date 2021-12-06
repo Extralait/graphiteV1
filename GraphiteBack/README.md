@@ -616,42 +616,42 @@ http://example.com/api/users/?page=15
 
 Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
 ---|---|---|---|---
-**notices** | ***/api/v1/users-profiles/{id_1}/notices/*** | **GET, EXTRA** | [notifications]() | **GET** Возвращает уведомления пользователя c id = id_1
-**notices** | ***/api/v1/users-profiles/{id_1}/notices/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [notification]() | **GET** Возвращает уведомление с id = id_2 пользователя c id = id_1
-**sell-transactions** | ***/api/v1/users-profiles/{id_1}/sell-transactions/*** | **GET, EXTRA** | [transactions]() | **GET** Возвращает транзакции продажи пользователя c id = id_1
-**sell-transactions** | ***/api/v1/users-profiles/{id_1}/sell-transactions/{id_2}*** | **GET, DELETE, EXTRA** | [transaction]() | **GET** Возвращает транзакцию продажи с id = id_2 пользователя c id = id_1
-**buy-transactions** | ***/api/v1/users-profiles/{id_1}/buy-transactions/*** | **GET, EXTRA** | [transactions]() | **GET** Возвращает транзакции покупки пользователя c id = id_1
-**buy-transactions** | ***/api/v1/users-profiles/{id_1}/buy-transactions/{id_2}*** | **GET, DELETE, EXTRA** | [transaction]() | **GET** Возвращает транзакцию покупки с id = id_2 пользователя c id = id_1
-**sell-offers** | ***/api/v1/users-profiles/{id_1}/sell-offers/*** | **POST, GET, EXTRA** | [offers]() | **GET** Возвращает полученные предложения пользователя c id = id_1
-**sell-offers** | ***/api/v1/users-profiles/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает полученное предложение с id = id_2 пользователя c id = id_1
-**buy-offers** | ***/api/v1/users-profiles/{id_1}/buy-offers/*** | **POST, GET, EXTRA** | [offers]() | **GET** Возвращает отправленные предложения пользователя c id = id_1
-**buy-offers** | ***/api/v1/users-profiles/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает отправленное предложение с id = id_2 пользователя c id = id_1
-**collections** | ***/api/v1/users-profiles/{id_1}/collections/*** | **POST, GET, EXTRA** | [collections]() | **GET** Возвращает коллекции пользователя c id = id_1
-**collections** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection]() | **GET** Возвращает коллекцию с id = id_2 пользователя c id = id_1
-**collections/drops** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}/drops/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает дропы в коллекции с id = id_2 пользователя c id = id_1
-**collections/drops** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}/drops/{id_3}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает дроп с id = id_3 в коллекции с id = id_2 пользователя c id = id_1
-**drops** | ***/api/v1/users-profiles/{id_1}/drops/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает дропы пользователя c id = id_1
-**drops** | ***/api/v1/users-profiles/{id_1}/drops/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает дроп с id = id_2 пользователя c id = id_1
-**profile-subscriptions** | ***/api/v1/users-profiles/{id_1}/profile-subscriptions/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписки на профили пользователя c id = id_1
-**profile-subscriptions** | ***/api/v1/users-profiles/{id_1}/profile-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает профиль с id = id_2 из подписок пользователя c id = id_1
-**drop-subscriptions** | ***/api/v1/users-profiles/{id_1}/drop-subscriptions/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает подписки на дропы пользователя c id = id_1
-**drop-subscriptions** | ***/api/v1/users-profiles/{id_1}/drop-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает дроп с id = id_2 из подписок пользователя c id = id_1
-**collection-subscriptions** | ***/api/v1/users-profiles/{id_1}/collection-subscriptions/*** | **POST, GET, EXTRA** | [collections]() | **GET** Возвращает подписки на коллекции пользователя c id = id_1
-**collection-subscriptions** | ***/api/v1/users-profiles/{id_1}/collection-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection]() | **GET** Возвращает коллекцию с id = id_2 из подписок пользователя c id = id_1
-**profile-views** | ***/api/v1/users-profiles/{id_1}/profile-views/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает просмотренных пользователей пользователем c id = id_1
-**profile-views** | ***/api/v1/users-profiles/{id_1}/profile-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает просмотренного пользователя с id = id_2 пользователем c id = id_1
-**drop-views** | ***/api/v1/users-profiles/{id_1}/drop-views/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает просмотренные дропы пользователем c id = id_1
-**drop-views** | ***/api/v1/users-profiles/{id_1}/drop-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает просмотренный дроп с id = id_2 пользователем c id = id_1
-**collections-views** | ***/api/v1/users-profiles/{id_1}/collections-views/*** | **POST, GET, EXTRA** | [collections]() | **GET** Возвращает просмотренные коллекции пользователем c id = id_1
-**collections-views** | ***/api/v1/users-profiles/{id_1}/collections-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection]() | **GET** Возвращает просмотренную коллекцию с id = id_2 пользователем c id = id_1
-**drop-likes** | ***/api/v1/users-profiles/{id_1}/drop-likes/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает лайкнутые дропы пользователем c id = id_1
-**drop-likes** | ***/api/v1/users-profiles/{id_1}/drop-likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drops]() | **GET** Возвращает лайкнутый дроп с id = id_2 пользователем c id = id_1
-**collections-likes** | ***/api/v1/users-profiles/{id_1}/collections-likes/*** | **POST, GET, EXTRA** | [drops]() | **GET** Возвращает лайкнутые коллекции пользователем c id = id_1
-**collections-likes** | ***/api/v1/users-profiles/{id_1}/collections-likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drops]() | **GET** Возвращает лайкнутую коллекцию с id = id_2 пользователем c id = id_1
-**profile-subscribers** | ***/api/v1/users-profiles/{id_1}/profile-subscribers/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписчиков пользователя c id = id_1
-**profile-subscribers** | ***/api/v1/users-profiles/{id_1}/profile-subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает подписчика с id = id_2 пользователя c id = id_1
-**views** | ***/api/v1/users-profiles/{id_1}/views/*** | **POST, GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей просмотревших пользователя c id = id_1
-**views** | ***/api/v1/users-profiles/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2 просматривающего пользователя c id = id_1
+**notifications** | ***/api/v1/users-profiles/{id_1}/notifications/*** | **GET, EXTRA** | [notifications](#получение-уведомлений) | **GET** Возвращает уведомления пользователя c id = id_1
+**notifications** | ***/api/v1/users-profiles/{id_1}/notifications/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [notification](#получение-уведомлений) | **GET** Возвращает уведомление с id = id_2 пользователя c id = id_1
+**sell-transactions** | ***/api/v1/users-profiles/{id_1}/sell-transactions/*** | **GET, EXTRA** | [transactions](#получение-транзакций) | **GET** Возвращает транзакции продажи пользователя c id = id_1
+**sell-transactions** | ***/api/v1/users-profiles/{id_1}/sell-transactions/{id_2}*** | **GET, DELETE, EXTRA** | [transaction](#получение-транзакций) | **GET** Возвращает транзакцию продажи с id = id_2 пользователя c id = id_1
+**buy-transactions** | ***/api/v1/users-profiles/{id_1}/buy-transactions/*** | **GET, EXTRA** | [transactions](#получение-транзакций) | **GET** Возвращает транзакции покупки пользователя c id = id_1
+**buy-transactions** | ***/api/v1/users-profiles/{id_1}/buy-transactions/{id_2}*** | **GET, DELETE, EXTRA** | [transaction](#получение-транзакций) | **GET** Возвращает транзакцию покупки с id = id_2 пользователя c id = id_1
+**sell-offers** | ***/api/v1/users-profiles/{id_1}/sell-offers/*** | **POST, GET, EXTRA** | [offers](#получение-предложения) | **GET** Возвращает полученные предложения пользователя c id = id_1
+**sell-offers** | ***/api/v1/users-profiles/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer](#получение-предложения) | **GET** Возвращает полученное предложение с id = id_2 пользователя c id = id_1
+**buy-offers** | ***/api/v1/users-profiles/{id_1}/buy-offers/*** | **POST, GET, EXTRA** | [offers](#получение-предложения) | **GET** Возвращает отправленные предложения пользователя c id = id_1
+**buy-offers** | ***/api/v1/users-profiles/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer](#получение-предложения) | **GET** Возвращает отправленное предложение с id = id_2 пользователя c id = id_1
+**collections** | ***/api/v1/users-profiles/{id_1}/collections/*** | **POST, GET, EXTRA** | [collections](#получение-коллекций) | **GET** Возвращает коллекции пользователя c id = id_1
+**collections** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection](#получение-коллекции) | **GET** Возвращает коллекцию с id = id_2 пользователя c id = id_1
+**collections/drops** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}/drops/*** | **POST, GET, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает дропы в коллекции с id = id_2 пользователя c id = id_1
+**collections/drops** | ***/api/v1/users-profiles/{id_1}/collections/{id_2}/drops/{id_3}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop](#получение-дропа) | **GET** Возвращает дроп с id = id_3 в коллекции с id = id_2 пользователя c id = id_1
+**drops** | ***/api/v1/users-profiles/{id_1}/drops/*** | **POST, GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает дропы пользователя c id = id_1
+**drops** | ***/api/v1/users-profiles/{id_1}/drops/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает дроп с id = id_2 пользователя c id = id_1
+**profile-subscriptions** | ***/api/v1/users-profiles/{id_1}/profile-subscriptions/*** | **POST, GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает подписки на профили пользователя c id = id_1
+**profile-subscriptions** | ***/api/v1/users-profiles/{id_1}/profile-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает профиль с id = id_2 из подписок пользователя c id = id_1
+**drop-subscriptions** | ***/api/v1/users-profiles/{id_1}/drop-subscriptions/*** | **POST, GET, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает подписки на дропы пользователя c id = id_1
+**drop-subscriptions** | ***/api/v1/users-profiles/{id_1}/drop-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop](#получение-дропа) | **GET** Возвращает дроп с id = id_2 из подписок пользователя c id = id_1
+**collection-subscriptions** | ***/api/v1/users-profiles/{id_1}/collection-subscriptions/*** | **POST, GET, EXTRA** | [collections](#получение-коллекций) | **GET** Возвращает подписки на коллекции пользователя c id = id_1
+**collection-subscriptions** | ***/api/v1/users-profiles/{id_1}/collection-subscriptions/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection](#получение-коллекции) | **GET** Возвращает коллекцию с id = id_2 из подписок пользователя c id = id_1
+**profile-views** | ***/api/v1/users-profiles/{id_1}/profile-views/*** | **POST, GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает просмотренных пользователей пользователем c id = id_1
+**profile-views** | ***/api/v1/users-profiles/{id_1}/profile-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает просмотренного пользователя с id = id_2 пользователем c id = id_1
+**drop-views** | ***/api/v1/users-profiles/{id_1}/drop-views/*** | **POST, GET, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает просмотренные дропы пользователем c id = id_1
+**drop-views** | ***/api/v1/users-profiles/{id_1}/drop-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop](#получение-дропа) | **GET** Возвращает просмотренный дроп с id = id_2 пользователем c id = id_1
+**collections-views** | ***/api/v1/users-profiles/{id_1}/collections-views/*** | **POST, GET, EXTRA** | [collections](#получение-коллекций) | **GET** Возвращает просмотренные коллекции пользователем c id = id_1
+**collections-views** | ***/api/v1/users-profiles/{id_1}/collections-views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [collection](#получение-коллекции) | **GET** Возвращает просмотренную коллекцию с id = id_2 пользователем c id = id_1
+**drop-likes** | ***/api/v1/users-profiles/{id_1}/drop-likes/*** | **POST, GET, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает лайкнутые дропы пользователем c id = id_1
+**drop-likes** | ***/api/v1/users-profiles/{id_1}/drop-likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает лайкнутый дроп с id = id_2 пользователем c id = id_1
+**collections-likes** | ***/api/v1/users-profiles/{id_1}/collections-likes/*** | **POST, GET, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает лайкнутые коллекции пользователем c id = id_1
+**collections-likes** | ***/api/v1/users-profiles/{id_1}/collections-likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает лайкнутую коллекцию с id = id_2 пользователем c id = id_1
+**profile-subscribers** | ***/api/v1/users-profiles/{id_1}/profile-subscribers/*** | **POST, GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает подписчиков пользователя c id = id_1
+**profile-subscribers** | ***/api/v1/users-profiles/{id_1}/profile-subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает подписчика с id = id_2 пользователя c id = id_1
+**views** | ***/api/v1/users-profiles/{id_1}/views/*** | **POST, GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает пользователей просмотревших пользователя c id = id_1
+**views** | ***/api/v1/users-profiles/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает пользователя с id = id_2 просматривающего пользователя c id = id_1
 
 
 ### Collection - */collections/*
@@ -763,8 +763,8 @@ api/v1/collections/{id}***
 `drops_quantity` | ***int*** | Количество дропов в коллекции
 `owner` | ***object(user_in_list)*** | Владелец коллекции (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
 `name` | ***str*** | Название коллекции
-`picture_big` | ***<str(image_path)>*** | Большая картинка
-`picture_small` | ***<str(image_path)>*** | Маленькая картинка
+`picture_big` | ***str(image_path)*** | Большая картинка
+`picture_small` | ***str(image_path)*** | Маленькая картинка
 `is_active` | ***bool*** | Активна ли текуая коллекция
 `created_at` | ***str(datetime)*** | Дата и время создания коллекции
 `updated_at` | ***str(datetime)*** | Дата и время обновления коллекции
@@ -829,14 +829,14 @@ api/v1/collections/{id}***
 
 Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
 ---|---|---|---|---
-**subscribers** | ***/api/v1/collections/{id_1}/subscribers/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписчиков коллекции c id = id_1
-**subscribers** | ***/api/v1/collections/{id_1}/subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает подписчика с id = id_2 коллекции c id = id_1
-**likes** | ***/api/v1/collections/{id_1}/likes/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей, лайкнувших коллекцию c id = id_1
-**likes** | ***/api/v1/collections/{id_1}/likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2, лайкнувшего коллекцию c id = id_1
-**views** | ***/api/v1/collections/{id_1}/views/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей, просмотревших коллекцию c id = id_1
-**views** | ***/api/v1/collections/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2, просмотревшего коллекцию c id = id_1
-**drops** | ***/api/v1/collections/{id_1}/drops/*** | **GET, EXTRA** | [drops]() | **GET** Возвращает дропы в коллекции c id = id_1
-**drops** | ***/api/v1/collections/{id_1}/drops/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop]() | **GET** Возвращает дроп с id = id_2, в коллекции c id = id_1
+**subscribers** | ***/api/v1/collections/{id_1}/subscribers/*** | **GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает подписчиков коллекции c id = id_1
+**subscribers** | ***/api/v1/collections/{id_1}/subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает подписчика с id = id_2 коллекции c id = id_1
+**likes** | ***/api/v1/collections/{id_1}/likes/*** | **GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает пользователей, лайкнувших коллекцию c id = id_1
+**likes** | ***/api/v1/collections/{id_1}/likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает пользователя с id = id_2, лайкнувшего коллекцию c id = id_1
+**views** | ***/api/v1/collections/{id_1}/views/*** | **GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает пользователей, просмотревших коллекцию c id = id_1
+**views** | ***/api/v1/collections/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает пользователя с id = id_2, просмотревшего коллекцию c id = id_1
+**drops** | ***/api/v1/collections/{id_1}/drops/*** | **GET, EXTRA** | [drops](#получение-дропов) | **GET** Возвращает дропы в коллекции c id = id_1
+**drops** | ***/api/v1/collections/{id_1}/drops/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [drop](#получение-дропа) | **GET** Возвращает дроп с id = id_2, в коллекции c id = id_1
 
 ### SpecialCollection - */special-collections/*
 
@@ -886,10 +886,10 @@ api/v1/collections/{id}***
 
 Параметр | Тип  | Описание | 
 ---|---|---
-`drop` | ***object(drop_details)*** | Дроп (такой же, как при получении [деталей дропа](#))
+`drop` | ***object(drop_details)*** | Дроп (такой же, как при получении [деталей дропа](#получение-дропа))
 `level` | ***int*** | Уровень дропа в специальной коллекции
 
-### Drops - */drops/*
+### Drop - */drops/*
 
 #### Получение категорий и тегов дропов
 
@@ -980,11 +980,11 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `tags` | ***array(object(tag))*** | [Теги дропа](#получение-категорий-и-тегов-дропов) 
 `artist` | ***object(user_in_list)*** | Художник (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
 `owner` | ***object(user_in_list)*** | Владелец (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
-`picture_big` | ***<str(image_path)>*** | Большая картинка
-`picture_small` | ***<str(image_path)>*** | Маленькая картинка
+`picture_big` | ***str(image_path)*** | Большая картинка
+`picture_small` | ***str(image_path)>*** | Маленькая картинка
 `parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)
 `from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
-`is_active` | ***<bool>*** | Активен ли текущий дроп
+`is_active` | ***bool*** | Активен ли текущий дроп
 `updated_at` | ***str(datetime)*** | Дата и время обновления дропа
 `created_at` | ***str(datetime)*** | Дата и время создания дропа
 
@@ -1022,7 +1022,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 
 Параметр | Тип | Обязательный | Описание |
 ---|---|---|---
-`blockchain_type` | ***str*** | :heavy_check_mark: | Тип блокчейна (wax, anchor)
+`blockchain_type` | ***str*** | :x: | Тип блокчейна (wax, anchor)
 `blockchain_address` | ***str*** | :x: | Адрес блокчейна
 `blockchain_identifier` | ***str*** | :x: | Блокчейн идентификатор 
 `name` | ***str*** | :heavy_check_mark: | Название дропа
@@ -1116,8 +1116,8 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `all_count` | ***str*** | Всего копий
 `init_cost` | ***str*** | Начальная цена за копию
 `min_rate` | ***str*** | Минимальная ставка
-`picture_big` | ***<str(image_path)>*** | Большая картинка
-`picture_small` | ***<str(image_path)>*** | Маленькая картинка
+`picture_big` | ***str(image_path)*** | Большая картинка
+`picture_small` | ***str(image_path)*** | Маленькая картинка
 `to_sell` | ***bool*** | Выставлен ли на продажу
 `url_landing` | ***str*** | Ссылка на лендинг
 `auction_deadline` | ***str(datetime)*** | Дата и время окончания аукциона
@@ -1213,7 +1213,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 
 Метод | Дейстаие  
 ---|---
-***POST*** | Покупает count копий дропа по id (sell_count меньше count или to_sell = False или sell_type != sell вернет ошибку) в случае удачной сделки возвращает [транзакцию]()
+***POST*** | Покупает count копий дропа по id (sell_count меньше count или to_sell = False или sell_type != sell вернет ошибку) в случае удачной сделки возвращает [транзакцию](#получение-транзакций)
 
 ```sh
 # POST ожидает
@@ -1233,7 +1233,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 
 Метод | Дейстаие  
 ---|---
-***POST*** | Покупает count копий дропа по id (in_stock меньше count вернет ошибку) в случае удачной сделки возвращает [оффер]()
+***POST*** | Покупает count копий дропа по id (in_stock меньше count вернет ошибку) в случае удачной сделки возвращает [оффер](#получение-предложения)
 
 ```sh
 # POST ожидает
@@ -1258,17 +1258,229 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 
 Префикс | Конечная точка | Доступные методы | Сериализация |Описание 
 ---|---|---|---|---
-**subscribers** | ***/api/v1/drops/{id_1}/subscribers/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает подписчиков дропа c id = id_1
-**subscribers** | ***/api/v1/drops/{id_1}/subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает подписчика с id = id_2 дропа c id = id_1
-**likes** | ***/api/v1/drops/{id_1}/likes/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей, лайкнувших дроп c id = id_1
-**likes** | ***/api/v1/drops/{id_1}/likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2, лайкнувшего дроп c id = id_1
-**views** | ***/api/v1/drops/{id_1}/views/*** | **GET, EXTRA** | [users-profiles]() | **GET** Возвращает пользователей, просмотревших дроп c id = id_1
-**views** | ***/api/v1/drops/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile]() | **GET** Возвращает пользователя с id = id_2, просмотревшего дроп c id = id_1
-**sell-transactions** | ***/api/v1/drops/{id_1}/sell-transactions/*** | **GET** | [transactions]() | **GET** Возвращает транзакции продажи дропа c id = id_1
-**sell-transactions** | ***/api/v1/drops/{id_1}/sell-transactions/{id_2}*** | **GET, DELETE** | [transaction]() | **GET** Возвращает транзакцию продажи с id = id_2, дропа c id = id_1
-**buy-transactions** | ***/api/v1/drops/{id_1}/buy-transactions/*** | **GET** | [transactions]() | **GET** Возвращает транзакции покупки дропа c id = id_1
-**buy-transactions** | ***/api/v1/drops/{id_1}/buy-transactions/{id_2}*** | **GET, DELETE** | [transaction]() | **GET** Возвращает транзакцию покупки с id = id_2, дропа c id = id_1
-**sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/*** | **GET, EXTRA** | [offers]() | **GET** Возвращает предложения продажи дропа c id = id_1
-**sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает предложение продажи с id = id_2, дропа c id = id_1
-**buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/*** | **GET, EXTRA** | [offers]() | **GET** Возвращает предложения покупки дропа c id = id_1
-**buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer]() | **GET** Возвращает предложение покупки с id = id_2, дропа c id = id_1
+**subscribers** | ***/api/v1/drops/{id_1}/subscribers/*** | **GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает подписчиков дропа c id = id_1
+**subscribers** | ***/api/v1/drops/{id_1}/subscribers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает подписчика с id = id_2 дропа c id = id_1
+**likes** | ***/api/v1/drops/{id_1}/likes/*** | **GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает пользователей, лайкнувших дроп c id = id_1
+**likes** | ***/api/v1/drops/{id_1}/likes/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает пользователя с id = id_2, лайкнувшего дроп c id = id_1
+**views** | ***/api/v1/drops/{id_1}/views/*** | **GET, EXTRA** | [users-profiles](#получение-списка-пользователей) | **GET** Возвращает пользователей, просмотревших дроп c id = id_1
+**views** | ***/api/v1/drops/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает пользователя с id = id_2, просмотревшего дроп c id = id_1
+**sell-transactions** | ***/api/v1/drops/{id_1}/sell-transactions/*** | **GET** | [transactions](#получение-транзакций) | **GET** Возвращает транзакции продажи дропа c id = id_1
+**sell-transactions** | ***/api/v1/drops/{id_1}/sell-transactions/{id_2}*** | **GET, DELETE** | [transaction](#получение-транзакций) | **GET** Возвращает транзакцию продажи с id = id_2, дропа c id = id_1
+**buy-transactions** | ***/api/v1/drops/{id_1}/buy-transactions/*** | **GET** | [transactions](#получение-транзакций) | **GET** Возвращает транзакции покупки дропа c id = id_1
+**buy-transactions** | ***/api/v1/drops/{id_1}/buy-transactions/{id_2}*** | **GET, DELETE** | [transaction](#получение-транзакций) | **GET** Возвращает транзакцию покупки с id = id_2, дропа c id = id_1
+**sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/*** | **GET, EXTRA** | [offers](#получение-предложения) | **GET** Возвращает предложения продажи дропа c id = id_1
+**sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer](#получение-предложения) | **GET** Возвращает предложение продажи с id = id_2, дропа c id = id_1
+**buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/*** | **GET, EXTRA** | [offers](#получение-предложения) | **GET** Возвращает предложения покупки дропа c id = id_1
+**buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer](#получение-предложения) | **GET** Возвращает предложение покупки с id = id_2, дропа c id = id_1
+
+### Transaction - */transactions/*
+
+#### Получение транзакций
+
+***https://dev.artgraphite.ru/api/v1/transactions/ \
+/api/v1/transactions/ \
+https://dev.artgraphite.ru/api/v1/transactions/{id} \
+/api/v1/transactions/{id}***
+
+```sh
+# GET возвращает (list)
+    {
+        "count": <int>,
+        "next": <str(page_link)>,
+        "previous": <str(page_link)>,
+        "results": [
+            {
+                "id": <int>,
+                "copies_count": <int>,
+                "unit_price": <float>,
+                "royalty": <float>,
+                "is_active": <bool>,
+                "drop": <int>,
+                "owner": <int>,
+                "buyer": <int>
+                "created_at": <str(datetime)>,
+                "updated_at": <str(datetime)>,
+            }
+        ]
+    }
+    
+# GET возвращает (details)
+    {
+        "id": <int>,
+        "copies_count": <int>,
+        "unit_price": <float>,
+        "royalty": <float>,
+        "is_active": <bool>,
+        "drop": <int>,
+        "owner": <int>,
+        "buyer": <int>
+        "created_at": <str(datetime)>,
+        "updated_at": <str(datetime)>,
+    }
+```
+
+Параметр | Тип | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ транзакции
+`copies_count` | ***int*** | Количество копий
+`unit_price` | ***float*** | Цена за единицу
+`royalty` | ***float*** | Процент с продаж, получаемый художником
+`is_active` | ***bool*** | Активна ли транзакция
+`drop` | ***int*** | Первичный ключ [дропа](#получение-дропа)
+`owner` | ***int*** | Первичный ключ [продавца](#получение-пользователя)
+`buyer` | ***int*** | Первичный ключ [покупателя](#получение-пользователя)
+`created_at` | ***str(datetime)*** | Дата и время создания транзакции
+`updated_at` | ***str(datetime)*** | Дата и время обновления транзакции
+
+### Offer - */offers/*
+
+#### Получение предложения
+
+***https://dev.artgraphite.ru/api/v1/offers/ \
+/api/v1/offers/ \
+https://dev.artgraphite.ru/api/v1/offers/{id} \
+/api/v1/offers/{id}***
+
+```sh
+# GET возвращает (list)
+    {
+        "count": <int>,
+        "next": <str(page_link)>,
+        "previous": <str(page_link)>,
+        "results": [
+            {
+                "id": <int>,
+                "copies_count": <int>,
+                "unit_price": <float>,
+                "is_active": <bool>,
+                "drop": <int>,
+                "owner": <int>,
+                "buyer": <int>
+                "created_at": <str(datetime)>,
+                "updated_at": <str(datetime)>,
+            }
+        ]
+    }
+    
+# GET возвращает (details)
+    {
+        "id": <int>,
+        "copies_count": <int>,
+        "unit_price": <float>,
+        "is_active": <bool>,
+        "drop": <int>,
+        "owner": <int>,
+        "buyer": <int>
+        "created_at": <str(datetime)>,
+        "updated_at": <str(datetime)>,
+    }
+```
+
+Параметр | Тип | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ предложения
+`copies_count` | ***int*** | Количество копий
+`unit_price` | ***float*** | Цена за единицу
+`is_active` | ***bool*** | Активна ли транзакция
+`drop` | ***int*** | Первичный ключ [дропа](#получение-дропа)
+`owner` | ***int*** | Первичный ключ [продавца](#получение-пользователя)
+`buyer` | ***int*** | Первичный ключ [покупателя](#получение-пользователя)
+`created_at` | ***str(datetime)*** | Дата и время создания предложения
+`updated_at` | ***str(datetime)*** | Дата и время обновления предложения
+
+#### Подтверждение предложения 
+
+***https://dev.artgraphite.ru/api/v1/offers/{id}/confirm \
+/api/v1/offers/{id}/confirm*** 
+
+Метод | Дейстаие  
+---|---
+***POST*** | Подтверждает предложение по id (в случае успеха возвращает [транзакцию](#получение-транзакций))
+
+
+### Notification - */notifications/*
+
+#### Получение уведомлений
+
+***https://dev.artgraphite.ru/api/v1/notifications/ \
+/api/v1/notifications/ \
+https://dev.artgraphite.ru/api/v1/notifications/{id} \
+/api/v1/notifications/{id}***
+
+```sh
+# GET возвращает (list)
+    {
+        "count": <int>,
+        "next": <str(page_link)>,
+        "previous": <str(page_link)>,
+        "results": [
+            {
+                "id": <int>,
+                "notification_type": <str>,
+                "header": <str>,
+                "body": <str>,
+                "details": <str>,
+                "is_viewed": <bool>,
+                "is_active": <bool>,
+                "from_user": <int>,
+                "to_user": <int>,
+                "to_drop": <int>,
+                "to_collection": <int>
+                "created_at": <str(datetime)>,
+                "updated_at": <str(datetime)>,
+            }
+        ]
+    }
+    
+# GET возвращает (details)
+    {
+        "id": <int>,
+        "notification_type": <str>,
+        "header": <str>,
+        "body": <str>,
+        "details": <str>,
+        "is_viewed": <bool>,
+        "is_active": <bool>,
+        "from_user": <int>,
+        "to_user": <int>,
+        "to_drop": <int>,
+        "to_collection": <int>
+        "created_at": <str(datetime)>,
+        "updated_at": <str(datetime)>,
+    }
+```
+
+Параметр | Тип | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ уведомления
+`notification_type` | ***str*** | Тип уведомления
+`header` | ***str*** | Заголовок
+`body` | ***str*** | Тело уведомления
+`details` | ***str*** | Детали 
+`is_viewed` | ***bool*** | Просмотрено ли уведомление
+`is_active` | ***bool*** | Активно ли уведомление
+`from_user` | ***int*** | Отправитель
+`to_user` | ***int*** | Получатель
+`to_drop` | ***int*** | Целевой дроп
+`to_collection` | ***int*** | Целевая коллекция
+`created_at` | ***str(datetime)*** | Дата и время создания уведомления
+`updated_at` | ***str(datetime)*** | Дата и время обновления уведомления
+
+Тип уведомления | Описание
+---|---
+user_subscription | Подписка на пользователя
+drop_subscription | Подписка на дроп
+collection_subscription | Подписка на коллекцию
+drop_like | Лайк на дропе
+collection_like | Лайк на коллекции
+user_view | Просмотр на пользователе
+drop_view | Просмотр на дропе
+collection_view | Просмотр на коллекции
+drop_put_up_for_sale | Дроп выставлен на продажу (не реализовано)
+drop_buy | Покупка дропа
+offer | Создание предложения
+confirm_offer | Подтверждение предложения
+new_drop | Новый дроп (не реализовано)
+system | Системное уведомление (не реализовано)
+
+

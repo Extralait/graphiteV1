@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework_extensions.mixins import NestedViewSetMixin
@@ -31,6 +32,8 @@ class TransactionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         user = self.request.user
         if user.is_staff:
             pass
+        elif type(self.request.user) == AnonymousUser:
+            return queryset.none()
         else:
             queryset = queryset.filter(Q(buyer=user) | Q(owner=user))
         return queryset

@@ -16,5 +16,6 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = '__all__'
         read_only_fields = ['notification_type','from_user','to_user',
-                            'to_drop','to_collection','header','body']
+                            'to_drop','to_collection','header','body',
+                            'is_active','details']
 
