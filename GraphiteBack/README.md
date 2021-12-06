@@ -1472,7 +1472,7 @@ https://dev.artgraphite.ru/api/v1/notifications/{id} \
 /api/v1/notifications/{id}***
 
 ```sh
-# GET возвращает (list)
+# GET возвращает 
     {
          "is_viewed": <bool>, 
     }
@@ -1484,19 +1484,19 @@ https://dev.artgraphite.ru/api/v1/notifications/{id} \
 
 Тип уведомления | Описание
 ---|---
-user_subscription | Подписка на пользователя
-drop_subscription | Подписка на дроп
-collection_subscription | Подписка на коллекцию
-drop_like | Лайк на дропе
-collection_like | Лайк на коллекции
-user_view | Просмотр на пользователе
-drop_view | Просмотр на дропе
-collection_view | Просмотр на коллекции
-drop_put_up_for_sale | Дроп выставлен на продажу (не реализовано)
-drop_buy | Покупка дропа
-offer | Создание предложения
-confirm_offer | Подтверждение предложения
-new_drop | Новый дроп (не реализовано)
-system | Системное уведомление (не реализовано)
+`user_subscription` | Подписка на пользователя
+`drop_subscription` | Подписка на дроп
+`collection_subscription` | Подписка на коллекцию
+`drop_like` | Лайк на дропе
+`collection_like` | Лайк на коллекции
+`user_view` | Просмотр на пользователе
+`drop_view` | Просмотр на дропе
+`collection_view` | Просмотр на коллекции
+`drop_put_up_for_sale` | Дроп выставлен на продажу (не реализовано)
+`drop_buy` | Покупка дропа
+`offer` | Создание предложения
+`confirm_offer` | Подтверждение предложения
+`new_drop` | Новый дроп (не реализовано)
+`system` | Системное уведомление (не реализовано)
 
 
