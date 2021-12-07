@@ -180,6 +180,10 @@ http://example.com/api/users/?page=15
             "id": <int>,
             "first_name": <str>,
             "last_name": <str>,
+            "drops_in_possession_quantity": <int>,
+            "collections_in_possession_quantity": <int>,
+            "user_subscribers_quantity": <int>,
+            "users_views_quantity": <int>,
             "avatar": <str(image_path)>,
             "wallet_number": <str>,
             "instagram": <str>,
@@ -205,6 +209,10 @@ http://example.com/api/users/?page=15
 `is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер
 `first_name` | ***str*** | Имя
 `last_name` | ***str*** | Фамилия
+`drops_in_possession_quantity` | ***int*** | Количество дропов во владении
+`collections_in_possession_quantity` | ***int*** | Количество коллекций во владении
+`users_subscriptions_quantity` | ***int*** | Количество подписок на профили
+`users_views_quantity` | ***int*** | Количество просмотров на профиле
 `avatar` | ***str*** | Ссылка на аватар пользователя
 `wallet_number` | ***str*** | Номер кошелька пользователя
 `instagram` | ***str*** | Инстаграм
@@ -307,6 +315,7 @@ http://example.com/api/users/?page=15
         "drops_in_possession_likes_quantity": <int>,
         "drops_in_authorship_likes_quantity": <int>,
         "collections_likes_quantity": <int>,
+        "users_views_quantity": <int>,
         "drops_in_possession_views_quantity": <int>,
         "drops_in_authorship_views_quantity": <int>,
         "collections_views_quantity": <int>,
@@ -357,6 +366,7 @@ http://example.com/api/users/?page=15
 `drops_in_possession_likes_quantity` | ***int*** | Количество лайков на дропах во владениях
 `drops_in_authorship_likes_quantity` | ***int*** | Количество лайков на дропах под авторством
 `collections_likes_quantity` | ***int*** | Количество лайков на коллекциях
+`users_views_quantity` | ***int*** | Количество просмотров на профиле
 `drops_in_possession_views_quantity` | ***int*** | Количество просмотров на дропах во владении
 `drops_in_authorship_views_quantity` | ***int*** | Количество просмотров на дропах под авторством
 `collections_views_quantity` | ***int*** | Количество просмотров на коллекциях
@@ -480,6 +490,7 @@ http://example.com/api/users/?page=15
         "drops_in_possession_likes_quantity": <int>,
         "drops_in_authorship_likes_quantity": <int>,
         "collections_likes_quantity": <int>,
+        "users_views_quantity": <int>,
         "drops_in_possession_views_quantity": <int>,
         "drops_in_authorship_views_quantity": <int>,
         "collections_views_quantity": <int>,
@@ -530,6 +541,7 @@ http://example.com/api/users/?page=15
 `drops_in_possession_likes_quantity` | ***int*** | Количество лайков на дропах во владениях
 `drops_in_authorship_likes_quantity` | ***int*** | Количество лайков на дропах под авторством
 `collections_likes_quantity` | ***int*** | Количество лайков на коллекциях
+`users_views_quantity` | ***int*** | Количество просмотров на профиле
 `drops_in_possession_views_quantity` | ***int*** | Количество просмотров на дропах во владении
 `drops_in_authorship_views_quantity` | ***int*** | Количество просмотров на дропах под авторством
 `collections_views_quantity` | ***int*** | Количество просмотров на коллекциях
@@ -670,6 +682,10 @@ http://example.com/api/users/?page=15
     "results": [
         {
             "id": <int>,
+            "collection_subscribers_quantity": <int>,
+            "collection_likes_quantity": <int>,
+            "collection_views_quantity": <int>,
+            "drops_quantity": <int>,
             "is_subscribed": <int>,
             "is_liked": <int>,
             "is_viewed": <int>,
@@ -688,6 +704,10 @@ http://example.com/api/users/?page=15
 Параметр | Тип  | Описание | 
 ---|---|---
 `id` | ***int*** | Первичный ключ коллекции
+`collection_subscribers_quantity` | ***int*** | Количество подписчиков на коллекцию
+`collection_likes_quantity` | ***int*** | Количество лайков на коллекции
+`collection_views_quantity` | ***int*** | Количество просмотров на коллекции
+`drops_quantity` | ***int*** | Количество дропов в коллекции
 `is_subscribed` | ***int*** | Подписан ли текущий пользователь на коллекцию
 `is_liked` | ***int*** | Лайкнул ли текущий пользователь коллекцию 
 `is_viewed` | ***int*** | Просматривал ли текущий пользователь коллекцию
@@ -950,6 +970,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "results": [
             {
                 "id": <int>,
+                "subscriptions_quantity": <int>,
+                "likes_quantity": <int>,
+                "views_quantity": <int>,
                 "is_viewed": <bool>,
                 "is_subscribed": <bool>,
                 "is_liked": <bool>,
@@ -964,7 +987,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "from_collection": <object(collection_in_list)>,
                 "sell_type": <str>, # (auction|sell)
                 "to_sell": <bool>,
-                "sell_type",
+                "init_cost": <float>,
                 "is_active": <bool>,
                 "updated_at": <str(datetime)>,
                 "created_at": <str(datetime)>
@@ -975,6 +998,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 Параметр | Тип | Описание | 
 ---|---|---
 `id` | ***int*** | Первичный ключ дропа
+`subscriptions_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
+`likes_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
+`views_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
 `is_viewed` | ***bool*** | Просмотрен ли дроп текущим пользователем
 `is_subscribed` | ***bool*** | Подписан ли текущий пользователь на дроп
 `is_liked` | ***bool*** | Лайкнул ли текущий пользователь дроп
@@ -989,6 +1015,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
 `to_sell` | ***bool*** | Выставлен ли на продажу
 `sell_type` | ***str*** | Тип продажи (auction, sell)
+`init_cost` | ***float*** | Начальная цена за копию
 `is_active` | ***bool*** | Активен ли текущий дроп
 `updated_at` | ***str(datetime)*** | Дата и время обновления дропа
 `created_at` | ***str(datetime)*** | Дата и время создания дропа
@@ -1035,7 +1062,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `sell_type` | ***str*** | :x: | Тип продажи (auction, sell)
 `sell_count` | ***int*** | :x: | Количество копий на продажу
 `all_count` | ***int*** | :heavy_check_mark: | Всего копий
-`init_cost` | ***float*** | :heavy_check_mark: | Начальная цена за копию
+`init_cost` | ***float*** | :x: | Начальная цена за копию
 `min_rate` | ***float*** | :x: | Минимальная ставка
 `picture_big` | ***image*** | :x: | Большая картинка
 `picture_small` | ***image*** | :x: | Маленькая картинка

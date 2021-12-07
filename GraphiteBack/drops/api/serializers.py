@@ -81,13 +81,13 @@ class BaseDropSerializer(serializers.ModelSerializer):
     class Meta:
         model = Drop
         fields = [
-            'id', 'name', 'category','tags', 'artist','to_sell', 'sell_type',
+            'id', 'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_active', 'updated_at', 'created_at'
+            'is_active', 'updated_at', 'created_at', 'init_cost'
         ]
 
 
-class DropListSerializer(DropRelationshipCheck,BaseDropSerializer):
+class DropListSerializer(StatsSerializer,DropRelationshipCheck, BaseDropSerializer):
     """
     Лист дропов (Сериализатор)
     """
@@ -96,9 +96,10 @@ class DropListSerializer(DropRelationshipCheck,BaseDropSerializer):
     class Meta:
         model = Drop
         fields = [
-            'id', 'name', 'category','tags', 'artist','to_sell', 'sell_type',
+            'id','subscriptions_quantity','likes_quantity', 'views_quantity',
+            'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_viewed', 'is_subscribed', 'is_liked', 'is_active',
+            'is_viewed', 'is_subscribed', 'is_liked', 'is_active', 'init_cost',
             'updated_at', 'created_at'
         ]
 
@@ -114,13 +115,41 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Drop
-        exclude = ['owner', 'artist', 'parent','in_stock', 'is_active']
+        exclude = ['owner', 'artist', 'parent', 'in_stock', 'is_active']
 
     def _user(self):
         """
         Получение текущего пользователя
         """
         return self.context['request'].user
+
+    def to_sell_check(self, validated_data):
+
+        sell_count = validated_data.get('sell_count', None)
+        init_cost = validated_data.get('init_cost', None)
+        min_rate = validated_data.get('min_rate', None)
+        to_sell = validated_data.get('to_sell', None)
+        sell_type = validated_data.get('sell_type', None)
+
+        errors = {'errors': []}
+
+        if to_sell:
+            if sell_type in ["to_sell", "auction"]:
+                if not sell_count:
+                    errors['errors'].append({
+                        'details': 'sell_count must be greater than 0'
+                    })
+                if not init_cost:
+                    errors['errors'].append({
+                        'details': 'init_cost must be greater than 0'
+                    })
+            if sell_type == 'auction':
+                if not min_rate:
+                    errors['errors'].append({
+                        'details': 'min_rate must be greater than 0'
+                    })
+
+        return errors
 
     def create(self, validated_data):
         """
@@ -131,6 +160,11 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
         if from_collection and not self._user().collections.filter(pk=from_collection.pk).count():
             raise APIException(f'You are not the owner of collection "{from_collection.name}"')
+
+        to_sell_errors = self.to_sell_check(validated_data)
+
+        if len(to_sell_errors['errors']):
+            raise APIException(to_sell_errors)
 
         drop = (Drop.objects.create(
             owner=self._user(),
@@ -154,6 +188,11 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
         if from_collection and not self._user().collections.filter(pk=from_collection.pk).count():
             raise APIException(f'You are not the owner of collection "{from_collection.name}"')
+
+        to_sell_errors = self.to_sell_check(validated_data)
+
+        if len(to_sell_errors['errors']):
+            raise APIException(to_sell_errors)
 
         instance.sell_type = validated_data.get('sell_type', instance.sell_type)
         instance.sell_count = validated_data.get('sell_count', instance.sell_count)

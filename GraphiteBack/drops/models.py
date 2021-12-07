@@ -143,6 +143,8 @@ class Drop(models.Model):
     )
     init_cost = models.FloatField(
         verbose_name='Init cost',
+        null=True,
+        blank=True
     )
     min_rate = models.FloatField(
         verbose_name='Min rate',

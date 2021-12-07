@@ -56,6 +56,7 @@ class StatsSerializer(serializers.ModelSerializer):
     drops_in_authorship_likes_quantity = serializers.SerializerMethodField()
     collections_likes_quantity = serializers.SerializerMethodField()
 
+    users_views_quantity = serializers.SerializerMethodField()
     drops_in_possession_views_quantity = serializers.SerializerMethodField()
     drops_in_authorship_views_quantity = serializers.SerializerMethodField()
     collections_views_quantity = serializers.SerializerMethodField()
@@ -126,7 +127,7 @@ class StatsSerializer(serializers.ModelSerializer):
         """
         return sum(map(lambda x: x.likes.count(), obj.collections.all()))
 
-    def get_users_views(self, obj):
+    def get_users_views_quantity(self, obj):
         """
         Получить количество просмотров профиля
         """
@@ -181,6 +182,43 @@ class StatsSerializer(serializers.ModelSerializer):
         return obj.to_user_notifications.filter(is_viewed=False).count()
 
 
+class ShortStatsSerializer(serializers.ModelSerializer):
+    """
+    Короткая статистика пользователя (Сериализатор)
+    """
+    drops_in_possession_quantity = serializers.SerializerMethodField()
+    collections_in_possession_quantity = serializers.SerializerMethodField()
+    user_subscribers_quantity = serializers.SerializerMethodField()
+    users_views_quantity = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+
+    def get_drops_in_possession_quantity(self, obj):
+        """
+        Получить количество дропов во владении
+        """
+        return obj.owners_drops.count()
+
+    def get_collections_in_possession_quantity(self, obj):
+        """
+        Получить количество коллекций
+        """
+        return obj.collections.count()
+
+    def get_user_subscribers_quantity(self, obj):
+        """
+        Получить количество подписчиков на профиль
+        """
+        return obj.subscribers.count()
+
+    def get_users_views_quantity(self, obj):
+        """
+        Получить количество просмотров профиля
+        """
+        return obj.views.count()
+
+
 class UserRelationshipCheck(RelationshipCheck):
     """
     Отношения между пользователями (Сериализатор)
@@ -192,7 +230,7 @@ class UserRelationshipCheck(RelationshipCheck):
         model = User
 
 
-class UserListSerializer(UserRelationshipCheck):
+class UserListSerializer(ShortStatsSerializer,UserRelationshipCheck):
     """
     Лист пользователей (Сериализатор)
     """
@@ -200,6 +238,8 @@ class UserListSerializer(UserRelationshipCheck):
         model = User
         fields = [
             'id', 'first_name', 'last_name',
+            'drops_in_possession_quantity', 'collections_in_possession_quantity',
+            'user_subscribers_quantity', 'users_views_quantity',
             'avatar', 'wallet_number', 'instagram',
             'twitter', 'discord', 'telegram','website', 'profile_type',
             'is_viewed','is_subscribed','last_login','date_joined','updated_at'

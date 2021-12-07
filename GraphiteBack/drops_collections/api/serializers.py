@@ -22,7 +22,7 @@ class StatsSerializer(serializers.ModelSerializer):
 
     def get_drops_quantity(self, obj):
         """
-        Получить количество коллекций
+        Получить количество дропов
         """
         return obj.drops.count()
 
@@ -63,6 +63,43 @@ class StatsSerializer(serializers.ModelSerializer):
         return sum(map(lambda x: x.views.count(), obj.drops.all()))
 
 
+class ShortStatsSerializer(serializers.ModelSerializer):
+    """
+    Короткая статистика коллекции (Сериализатор)
+    """
+    collection_subscribers_quantity = serializers.SerializerMethodField()
+    collection_likes_quantity = serializers.SerializerMethodField()
+    collection_views_quantity = serializers.SerializerMethodField()
+    drops_quantity = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Collection
+
+    def get_drops_quantity(self, obj):
+        """
+        Получить количество коллекций
+        """
+        return obj.drops.count()
+
+    def get_collection_subscribers_quantity(self, obj):
+        """
+        Получить количество подписчиков на коллекцию
+        """
+        return obj.subscribers.count()
+
+    def get_collection_likes_quantity(self, obj):
+        """
+        Получить количество лайков на коллекции
+        """
+        return obj.likes.count()
+
+    def get_collection_views_quantity(self, obj):
+        """
+        Получить количество просмотров коллекции
+        """
+        return obj.views.count()
+
+
 class CollectionRelationshipCheck(RelationshipCheck):
     """
     Отношения с пользователями (Сериализатор)
@@ -72,7 +109,7 @@ class CollectionRelationshipCheck(RelationshipCheck):
         model = Collection
 
 
-class CollectionListSerializer(CollectionRelationshipCheck):
+class CollectionListSerializer(ShortStatsSerializer,CollectionRelationshipCheck):
     """
     Лист коллекций (Сериализатор)
     """
