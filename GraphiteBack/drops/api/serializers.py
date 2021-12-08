@@ -188,9 +188,10 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             artist=self._user(),
             **validated_data
         ))
-
+        print(tags)
         if tags:
             for tag in tags:
+                print(tag)
                 tag, create = Tag.objects.get_or_create(name=tag['name'])
                 drop.tags.add(tag)
 
