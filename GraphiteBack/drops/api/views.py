@@ -1,6 +1,8 @@
+from pprint import pprint
+
 from rest_framework import viewsets, serializers, status
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
@@ -12,13 +14,14 @@ from drops.api.serializers import (
     CategorySerializer
 )
 from drops.models import Drop, Tag, Category
-from drops_collections.models import SpecialCollection
-from offers.services.offer_operations import make_offer
-from transactions.services.transaction_operations import buy_drop
 from drops.services.like import delete_like, add_like
 from drops.services.subscription import delete_subscription, add_subscription
 from drops.services.view import add_view
+from drops_collections.models import SpecialCollection
+from offers.services.offer_operations import make_offer
+from transactions.services.transaction_operations import buy_drop
 from utils.pagination import StandardResultsSetPagination
+from utils.parsers import MultipartJsonParser
 from utils.permissions import OwnerOrAdmin
 
 
@@ -26,12 +29,21 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     Дроп (Представление)
     """
-    parser_classes = (MultiPartParser,JSONParser)
+    parser_classes = [MultipartJsonParser, JSONParser]
 
     pagination_class = StandardResultsSetPagination
     queryset = Drop.objects.all()
     filter_fields = [f.name for f in Drop._meta.fields + Drop._meta.related_objects if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
+
+    def get_serializer_context(self):
+        context = super(DropViewSet, self).get_serializer_context()
+
+        if len(self.request.FILES) > 0:
+            context.update({
+                'included_images': self.request.FILES
+            })
+        return context
 
     def get_permissions(self):
         """
@@ -72,6 +84,18 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         current_user_pk = self.request.user.pk
         drop_owner_pk = Drop.objects.get(pk=detail_drop_pk).owner.pk
         return drop_owner_pk == current_user_pk
+
+    def create(self, request, **kwargs):
+
+        self.request.data.pop('picture_small',None)
+        self.request.data.pop('picture_big',None)
+        serializer = self.get_serializer(data=self.request.data)
+        result = serializer.create(self.request.data)
+
+        if serializer.is_valid():
+            return Response(self.get_serializer(result).data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors)
 
     @action(
         detail=True,

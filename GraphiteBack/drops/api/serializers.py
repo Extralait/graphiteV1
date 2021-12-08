@@ -6,7 +6,7 @@ from drops_collections.api.serializers import CollectionListSerializer
 from drops_collections.models import SpecialCollection
 from users.api.serializers import UserListSerializer
 from utils.serializers import RelationshipCheck
-
+from django.core.files.base import File
 
 class CategorySerializer(serializers.ModelSerializer):
     """
@@ -170,6 +170,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
         Создать дроп
         """
+
         from_collection = validated_data.get('from_collection', None)
 
         if from_collection and not self._user().collections.filter(pk=from_collection.pk).count():
@@ -188,14 +189,21 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             artist=self._user(),
             **validated_data
         ))
-        print(tags)
+
+        if 'included_images' in self.context:  # checking if key is in context
+            images_data = self.context['included_images']
+            for field_name, image in images_data.items():
+                getattr(drop, field_name).save(image.name, File(image))
+
+        # print(tags)
         if tags:
             for tag in tags:
-                print(tag)
+                # print(tag)
                 tag, create = Tag.objects.get_or_create(name=tag['name'])
                 drop.tags.add(tag)
 
         drop.save()
+        print(drop.picture_small)
         return drop
 
     def update(self, instance, validated_data):
