@@ -23,13 +23,13 @@ class RelationshipCheck(serializers.ModelSerializer):
         """
         Получить наличие подписки
         """
-        return bool(obj.subscribers.filter(pk=self._user().pk).count())
+        return bool(obj.subscribers.filter(pk=self._user().pk, is_active=True).count())
 
     def get_is_liked(self, obj):
         """
         Получить наличие лайка
         """
-        return bool(obj.likes.filter(pk=self._user().pk).count())
+        return bool(obj.likes.filter(pk=self._user().pk, is_active=True).count())
 
     def get_is_viewed(self, obj):
         """
