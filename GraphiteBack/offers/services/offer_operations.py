@@ -24,12 +24,16 @@ def make_offer(drop_pk: int, count: int, unit_price: float, buyer: User):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    offer = Offer.objects.create(
+    offer, created = Offer.objects.get_or_create(
         drop_id=drop_pk,
         buyer_id=buyer.pk,
         copies_count=count,
         unit_price=unit_price
     )
+
+    if not created:
+        offer.is_active=True
+        offer.save()
 
     Notification.objects.create(
         from_user_id=buyer.pk,
@@ -43,6 +47,27 @@ def make_offer(drop_pk: int, count: int, unit_price: float, buyer: User):
         OfferSerializer(offer).data,
         status=status.HTTP_200_OK
     )
+
+
+def delete_offer(buyer: int, drop: int):
+    """
+    Удалить предложение
+    """
+    try:
+        offer = Offer.objects.get(
+            drop_id=drop,
+            buyer_id=buyer
+        )
+        offer.is_active = False
+        offer.save()
+        return Response(status=status.HTTP_200_OK)
+    except Drop.DoesNotExist:
+        return Response(
+            {
+                'detail': 'You did not make offer'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 def confirm(offer: Offer):

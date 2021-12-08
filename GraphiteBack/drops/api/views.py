@@ -18,7 +18,7 @@ from drops.services.like import delete_like, add_like
 from drops.services.subscription import delete_subscription, add_subscription
 from drops.services.view import add_view
 from drops_collections.models import SpecialCollection
-from offers.services.offer_operations import make_offer
+from offers.services.offer_operations import make_offer, delete_offer
 from transactions.services.transaction_operations import buy_drop
 from utils.pagination import StandardResultsSetPagination
 from utils.parsers import MultipartJsonParser
@@ -87,8 +87,8 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def create(self, request, **kwargs):
 
-        self.request.data.pop('picture_small',None)
-        self.request.data.pop('picture_big',None)
+        self.request.data.pop('picture_small', None)
+        self.request.data.pop('picture_big', None)
         serializer = self.get_serializer(data=self.request.data)
         result = serializer.create(self.request.data)
 
@@ -260,6 +260,22 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                     serializer.errors, status=status.HTTP_400_BAD_REQUEST
                 )
 
+    @make_offer.mapping.delete
+    def delete_offer(self, request, **kwargs):
+        """
+        Удаление предложения
+        """
+        if self._is_owner():
+            return Response(
+                {
+                    'detail': 'It is impossible to delete offer on yourself drop'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            return delete_offer(drop=int(self.kwargs.get('pk')),
+                                buyer=int(self.request.user.pk))
+
 
 class SpecialCollectionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
@@ -318,4 +334,3 @@ class CategoryViewSet(viewsets.ModelViewSet):
             permission_classes = (IsAdminUser,)
 
         return [permission() for permission in permission_classes]
-
