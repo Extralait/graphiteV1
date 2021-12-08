@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from drops.api.serializers import DropListSerializer
+from drops_collections.api.serializers import CollectionListSerializer
 from notifications.models import Notification
 from users.api.serializers import UserListSerializer
 
@@ -11,6 +13,11 @@ class NotificationSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         kwargs['partial'] = True
         super(NotificationSerializer, self).__init__(*args, **kwargs)
+
+    to_user = UserListSerializer(read_only=True)
+    from_user = UserListSerializer(read_only=True)
+    to_drop = DropListSerializer(read_only=True)
+    to_collection = CollectionListSerializer(read_only=True)
 
     class Meta:
         model = Notification

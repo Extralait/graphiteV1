@@ -8,6 +8,8 @@ class TransactionSerializer(serializers.ModelSerializer):
     """
     Транзакции (Сериализатор)
     """
+    owner = UserListSerializer(read_only=True)
+    buyer = UserListSerializer(read_only=True)
 
     class Meta:
         model = Transaction

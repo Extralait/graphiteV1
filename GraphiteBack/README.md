@@ -1341,8 +1341,8 @@ https://dev.artgraphite.ru/api/v1/transactions/{id} \
                 "royalty": <float>,
                 "is_active": <bool>,
                 "drop": <int>,
-                "owner": <int>,
-                "buyer": <int>
+                "owner": <object(user_in_list)>,
+                "buyer": <object(user_in_list)>,
                 "created_at": <str(datetime)>,
                 "updated_at": <str(datetime)>,
             }
@@ -1357,8 +1357,8 @@ https://dev.artgraphite.ru/api/v1/transactions/{id} \
         "royalty": <float>,
         "is_active": <bool>,
         "drop": <int>,
-        "owner": <int>,
-        "buyer": <int>
+        "owner": <object(user_in_list)>,
+        "buyer": <object(user_in_list)>,
         "created_at": <str(datetime)>,
         "updated_at": <str(datetime)>,
     }
@@ -1372,8 +1372,8 @@ https://dev.artgraphite.ru/api/v1/transactions/{id} \
 `royalty` | ***float*** | Процент с продаж, получаемый художником
 `is_active` | ***bool*** | Активна ли транзакция
 `drop` | ***int*** | Первичный ключ [дропа](#получение-дропа)
-`owner` | ***int*** | Первичный ключ [продавца](#получение-пользователя)
-`buyer` | ***int*** | Первичный ключ [покупателя](#получение-пользователя)
+`owner` | ***object(user_in_list)*** | Продавец (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`buyer` | ***object(user_in_list)*** | Покупатель (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
 `created_at` | ***str(datetime)*** | Дата и время создания транзакции
 `updated_at` | ***str(datetime)*** | Дата и время обновления транзакции
 
@@ -1399,8 +1399,8 @@ https://dev.artgraphite.ru/api/v1/offers/{id} \
                 "unit_price": <float>,
                 "is_active": <bool>,
                 "drop": <int>,
-                "owner": <int>,
-                "buyer": <int>
+                "owner": <object(user_in_list)>,
+                "buyer": <object(user_in_list)>,
                 "created_at": <str(datetime)>,
                 "updated_at": <str(datetime)>,
             }
@@ -1413,9 +1413,9 @@ https://dev.artgraphite.ru/api/v1/offers/{id} \
         "copies_count": <int>,
         "unit_price": <float>,
         "is_active": <bool>,
-        "drop": <int>,
-        "owner": <int>,
-        "buyer": <int>
+        "drop": <object(drop_in_list)>,
+        "owner": <object(user_in_list)>,
+        "buyer": <object(user_in_list)>,
         "created_at": <str(datetime)>,
         "updated_at": <str(datetime)>,
     }
@@ -1428,8 +1428,8 @@ https://dev.artgraphite.ru/api/v1/offers/{id} \
 `unit_price` | ***float*** | Цена за единицу
 `is_active` | ***bool*** | Активна ли транзакция
 `drop` | ***int*** | Первичный ключ [дропа](#получение-дропа)
-`owner` | ***int*** | Первичный ключ [продавца](#получение-пользователя)
-`buyer` | ***int*** | Первичный ключ [покупателя](#получение-пользователя)
+`owner` | ***object(user_in_list)*** | продавец (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`buyer` | ***object(user_in_list)*** | Покупатель (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
 `created_at` | ***str(datetime)*** | Дата и время создания предложения
 `updated_at` | ***str(datetime)*** | Дата и время обновления предложения
 
@@ -1467,10 +1467,10 @@ https://dev.artgraphite.ru/api/v1/notifications/{id} \
                 "details": <str>,
                 "is_viewed": <bool>,
                 "is_active": <bool>,
-                "from_user": <int>,
-                "to_user": <int>,
-                "to_drop": <int>,
-                "to_collection": <int>
+                "from_user": <object(user_in_list)>,
+                "to_user": <object(user_in_list)>,
+                "to_drop": <object(drop_in_list)>,
+                "to_collection": <object(collection_in_list)>,
                 "created_at": <str(datetime)>,
                 "updated_at": <str(datetime)>,
             }
@@ -1486,10 +1486,10 @@ https://dev.artgraphite.ru/api/v1/notifications/{id} \
         "details": <str>,
         "is_viewed": <bool>,
         "is_active": <bool>,
-        "from_user": <int>,
-        "to_user": <int>,
-        "to_drop": <int>,
-        "to_collection": <int>
+        "from_user": <object(user_in_list)>,
+        "to_user": <object(user_in_list)>,
+        "to_drop": <object(drop_in_list)>,
+        "to_collection": <object(collection_in_list)>,
         "created_at": <str(datetime)>,
         "updated_at": <str(datetime)>,
     }
@@ -1504,10 +1504,10 @@ https://dev.artgraphite.ru/api/v1/notifications/{id} \
 `details` | ***str*** | Детали 
 `is_viewed` | ***bool*** | Просмотрено ли уведомление
 `is_active` | ***bool*** | Активно ли уведомление
-`from_user` | ***int*** | Отправитель
-`to_user` | ***int*** | Получатель
-`to_drop` | ***int*** | Целевой дроп
-`to_collection` | ***int*** | Целевая коллекция
+`from_user` | ***object(user_in_list)*** | Отправитель (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`to_user` | ***object(user_in_list)*** | Получатель (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`to_drop` | ***object(drop_in_list)*** | Целевой дроп (такой же, как при получении [списка дропов](#получение-дропов))
+`to_collection` | ***object(collection_in_list)*** | Целевая коллекция (такая же, как при получении [списка коллекций](#получение-коллекций))
 `created_at` | ***str(datetime)*** | Дата и время создания уведомления
 `updated_at` | ***str(datetime)*** | Дата и время обновления уведомления
 
