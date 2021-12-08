@@ -189,9 +189,10 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             **validated_data
         ))
 
-        for tag in tags:
-            tag, create = Tag.objects.get_or_create(name=tag['name'])
-            drop.tags.add(tag)
+        if tags:
+            for tag in tags:
+                tag, create = Tag.objects.get_or_create(name=tag['name'])
+                drop.tags.add(tag)
 
         drop.save()
         return drop
@@ -210,14 +211,6 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         if len(to_sell_errors['errors']):
             raise APIException(to_sell_errors)
 
-        tags = validated_data.pop('tags', instance.tags)
-        instance_tags = instance.tags.all()
-        if tags != instance.tags:
-            instance.tags.set(Tag.objects.none())
-            for tag in tags:
-                tag, create = Tag.objects.get_or_create(name=tag['name'])
-                if tag not in instance_tags:
-                    instance.tags.add(tag)
 
         instance.sell_type = validated_data.get('sell_type', instance.sell_type)
         instance.sell_count = validated_data.get('sell_count', instance.sell_count)
@@ -238,6 +231,18 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             instance.url_landing = validated_data.get('url_landing', instance.url_landing)
             instance.specifications = validated_data.get('specifications', instance.specifications)
             instance.royalty = validated_data.get('royalty', instance.royalty)
+
+            tags = validated_data.pop('tags', instance.tags)
+            instance_tags = instance.tags.all()
+            if tags != instance.tags:
+                if tags:
+                    instance.tags.set(Tag.objects.none())
+                    for tag in tags:
+                        tag, create = Tag.objects.get_or_create(name=tag['name'])
+                        if tag not in instance_tags:
+                            instance.tags.add(tag)
+                else:
+                    instance.tags.set(Tag.objects.none())
 
         instance.save()
         return instance
