@@ -992,6 +992,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "tags": <array(object(tag))>,
                 "artist": <object(user_in_list)>,
                 "owner": <object(user_in_list)>,
+                "auction_deadline": <str(datetime)>,
                 "picture_big": <str(image_path)>,
                 "picture_small": <str(image_path)>,
                 "parent": <object(drop_in_list)>,
@@ -1020,6 +1021,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `tags` | ***array(object(tag))*** | [Теги дропа](#получение-категорий-и-тегов-дропов) 
 `artist` | ***object(user_in_list)*** | Художник (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
 `owner` | ***object(user_in_list)*** | Владелец (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
+`auction_deadline` | ***str(datetime)*** | Дата и время окончания аукциона
 `picture_big` | ***str(image_path)*** | Большая картинка
 `picture_small` | ***str(image_path)*** | Маленькая картинка
 `parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)

@@ -96,7 +96,7 @@ class BaseDropSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_active', 'updated_at', 'created_at', 'init_cost'
+            'is_active', 'updated_at', 'created_at', 'init_cost','auction_deadline'
         ]
 
 
@@ -113,7 +113,7 @@ class DropListSerializer(StatsSerializer, DropRelationshipCheck, BaseDropSeriali
             'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked', 'is_active', 'init_cost',
-            'updated_at', 'created_at'
+            'updated_at', 'created_at','auction_deadline'
         ]
 
 
