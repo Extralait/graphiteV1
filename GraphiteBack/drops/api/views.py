@@ -1,5 +1,6 @@
 from rest_framework import viewsets, serializers, status
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
@@ -25,6 +26,8 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     Дроп (Представление)
     """
+    parser_classes = (MultiPartParser,JSONParser)
+
     pagination_class = StandardResultsSetPagination
     queryset = Drop.objects.all()
     filter_fields = [f.name for f in Drop._meta.fields + Drop._meta.related_objects if not f.__dict__.get('upload_to')]
