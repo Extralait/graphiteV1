@@ -264,8 +264,11 @@ class Drop(models.Model):
         """
         Переопределение удаления модели
         """
-        self.is_active = False
-        super().save(*args, **kwargs)
+        if self.in_stock:
+            self.is_active = False
+            super().save(*args, **kwargs)
+        else:
+            super().delete()
 
     def __str__(self):
         return self.name
