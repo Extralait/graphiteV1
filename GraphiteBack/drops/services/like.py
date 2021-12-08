@@ -40,7 +40,7 @@ def delete_like(user: int, drop: int):
     Удалить лайк на коллекции
     """
     try:
-        drop_like = DropLike.objects.ge(
+        drop_like = DropLike.objects.get(
             user_id=user,
             drop_id=drop
         )
