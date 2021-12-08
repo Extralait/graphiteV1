@@ -28,6 +28,21 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+class PKTagSerializer(serializers.ModelSerializer):
+    """
+    Тег дропа (сериализатор)
+    """
+
+    class Meta:
+        model = Tag
+        fields = ['name']
+        extra_kwargs = {
+            'name': {'validators': []},
+        }
+
+
+
 class StatsSerializer(serializers.ModelSerializer):
     """
     Статистика дропа (Сериализатор)
@@ -72,11 +87,9 @@ class BaseDropSerializer(serializers.ModelSerializer):
     """
     Базовый класс дропа (Сериализатор)
     """
-    category = CategorySerializer()
     owner = UserListSerializer(read_only=True)
     artist = UserListSerializer(read_only=True)
     from_collection = CollectionListSerializer()
-    tags = TagSerializer(many=True)
 
     class Meta:
         model = Drop
@@ -87,7 +100,7 @@ class BaseDropSerializer(serializers.ModelSerializer):
         ]
 
 
-class DropListSerializer(StatsSerializer,DropRelationshipCheck, BaseDropSerializer):
+class DropListSerializer(StatsSerializer, DropRelationshipCheck, BaseDropSerializer):
     """
     Лист дропов (Сериализатор)
     """
@@ -96,7 +109,7 @@ class DropListSerializer(StatsSerializer,DropRelationshipCheck, BaseDropSerializ
     class Meta:
         model = Drop
         fields = [
-            'id','subscriptions_quantity','likes_quantity', 'views_quantity',
+            'id', 'subscriptions_quantity', 'likes_quantity', 'views_quantity',
             'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked', 'is_active', 'init_cost',
@@ -112,6 +125,8 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         kwargs['partial'] = True
         super(DropCreateOrUpdateSerializer, self).__init__(*args, **kwargs)
+
+    tags = PKTagSerializer(many=True)
 
     class Meta:
         model = Drop
@@ -155,7 +170,6 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
         Создать дроп
         """
-        tags = validated_data.pop('tags', None)
         from_collection = validated_data.get('from_collection', None)
 
         if from_collection and not self._user().collections.filter(pk=from_collection.pk).count():
@@ -166,16 +180,18 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         if len(to_sell_errors['errors']):
             raise APIException(to_sell_errors)
 
+        tags = validated_data.pop('tags', None)
+        # self.create_or_get_tags(tags)
+
         drop = (Drop.objects.create(
             owner=self._user(),
             artist=self._user(),
             **validated_data
         ))
 
-        try:
-            drop.tags.set(tags)
-        except TypeError:
-            drop.tags.set(Tag.objects.none())
+        for tag in tags:
+            tag, create = Tag.objects.get_or_create(name=tag['name'])
+            drop.tags.add(tag)
 
         drop.save()
         return drop
@@ -193,6 +209,15 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
         if len(to_sell_errors['errors']):
             raise APIException(to_sell_errors)
+
+        tags = validated_data.pop('tags', instance.tags)
+        instance_tags = instance.tags.all()
+        if tags != instance.tags:
+            instance.tags.set(Tag.objects.none())
+            for tag in tags:
+                tag, create = Tag.objects.get_or_create(name=tag['name'])
+                if tag not in instance_tags:
+                    instance.tags.add(tag)
 
         instance.sell_type = validated_data.get('sell_type', instance.sell_type)
         instance.sell_count = validated_data.get('sell_count', instance.sell_count)
@@ -213,10 +238,6 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             instance.url_landing = validated_data.get('url_landing', instance.url_landing)
             instance.specifications = validated_data.get('specifications', instance.specifications)
             instance.royalty = validated_data.get('royalty', instance.royalty)
-            try:
-                instance.tags.set(validated_data.get('tags', instance.tags))
-            except TypeError:
-                instance.tags.set(Tag.objects.none())
 
         instance.save()
         return instance

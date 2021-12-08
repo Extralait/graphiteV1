@@ -926,7 +926,6 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "previous": <str(page_link)>,
         "results": [
             {
-                "id": <int>,
                 "name": <str>
             },
         ]
@@ -935,8 +934,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 
 Параметр | Тип | Описание | 
 ---|---|---
-`id` | ***int*** | Первичный ключ тега/категории
-`name` | ***str*** | Название тега/категории
+`name` | ***str*** | Название тега/категории (первичный ключ)
 
 #### Создание и редактирование категорий и тегов дропов
 
@@ -954,7 +952,20 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 
 Параметр | Тип  | Обязательный  | Описание | 
 ---|---|---|---
-`name` | ***int*** | :heavy_check_mark: | Название тега/категории
+`name` | ***int*** | :heavy_check_mark: | Название тега/категории (первичный ключ)
+
+
+#### Пример объекта для добавления тегов в дроп
+```sh
+    {
+        ...
+        "tags":[
+          {"name": <str>},
+          {"name": <str>},
+        ]
+        ...
+    }
+```
 
 #### Получение дропов
 
@@ -1046,9 +1057,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "royalty": <flot>,
         "specifications": <json>,
         "level": <int>,
-        "category": <int>,
+        "category": <str>,
         "from_collection": <int>,
-        "tags": <array(int)>
+        "tags": <array(object)>
     }
 ```
 
@@ -1072,9 +1083,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `royalty` | ***float*** | :x: | Процент с продаж, получаемый автором
 `specifications` | ***json*** | :x: | Характеристики дропа (произвольный json)
 `level` | ***int*** | :x: | Уровень дропа в коллекции 
-`category` | ***int*** | :x: | Первичный ключ [категории](#получение-категорий-и-тегов-дропов) дропа
+`category` | ***str*** | :x: | Первичный ключ [категории](#получение-категорий-и-тегов-дропов) дропа
 `from_collection` | ***int*** | :x: | Первичный ключ [коллекции](#получение-коллекции) в которую входит дроп (вы обязательно должны быть владельцем этой коллекции)
-`tags` | ***array(int)*** | :x: | Массив первичныъ ключей [тегов](#получение-категорий-и-тегов-дропов) дропа
+`tags` | ***array(object)*** | :x: | Массив словарей [тегов](#пример-объекта-для-добавления-тегов-в-дроп) дропа
 
 #### Получение дропа
 
@@ -1183,9 +1194,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "royalty": <float>,
         "specifications": <json>,
         "level": <int>,
-        "category": <int>,
+        "category": <str>,
         "from_collection": <int>,
-        "tags": <array(int)>
+        "tags": <array(object)>
     }
 ```
 
@@ -1207,7 +1218,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `level` | ***int*** | :x: | Уровень дропа в коллекции 
 `category` | ***int*** | :heavy_check_mark: | Первичный ключ [категории](#получение-категорий-и-тегов-дропов) дропа
 `from_collection` | ***int*** | :x: | Первичный ключ [коллекции](#получение-коллекции) в которую входит дроп (вы обязательно должны быть владельцем этой коллекции)
-`tags` | ***array(int)*** | :heavy_check_mark: | Массив первичныъ ключей [тегов](#получение-категорий-и-тегов-дропов) дропа
+`tags` | ***array(object)*** | :x: | Массив словарей [тегов](#пример-объекта-для-добавления-тегов-в-дроп) дропа
 
 #### Подписка на дроп
 

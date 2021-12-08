@@ -10,7 +10,8 @@ class Category(models.Model):
     name = models.CharField(
         verbose_name='Name',
         max_length=256,
-        unique=True
+        unique=True,
+        primary_key=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +19,13 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
+
+    def save(self, *args, **kwargs):
+        """
+        Обработка полей перед сохранением модели
+        """
+        self.name = self.name.lower()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name}'
@@ -30,7 +38,8 @@ class Tag(models.Model):
     name = models.CharField(
         verbose_name='Name',
         max_length=256,
-        unique=True
+        unique=True,
+        primary_key=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,6 +47,13 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+
+    def save(self, *args, **kwargs):
+        """
+        Обработка полей перед сохранением модели
+        """
+        self.name = self.name.lower()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name}'
@@ -188,7 +204,9 @@ class Drop(models.Model):
         validators=[
             MaxValueValidator(100),
             MinValueValidator(0)
-        ]
+        ],
+        null=True,
+        blank=True
     )
     specifications = models.JSONField(
         verbose_name='Specifications',
@@ -220,7 +238,9 @@ class Drop(models.Model):
         default=0,
         validators=[
             MinValueValidator(0)
-        ]
+        ],
+        null=True,
+        blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

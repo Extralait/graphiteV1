@@ -261,6 +261,17 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
+    def get_permissions(self):
+        """
+        Возвращает права доступа
+        """
+        if self.action in ['create', 'list', 'retrieve']:
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser,)
+
+        return [permission() for permission in permission_classes]
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -269,3 +280,15 @@ class CategoryViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def get_permissions(self):
+        """
+        Возвращает права доступа
+        """
+        if self.action in ['list', 'retrieve']:
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser,)
+
+        return [permission() for permission in permission_classes]
+
