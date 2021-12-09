@@ -86,11 +86,22 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return drop_owner_pk == current_user_pk
 
     def create(self, request, **kwargs):
-
         self.request.data.pop('picture_small', None)
         self.request.data.pop('picture_big', None)
         serializer = self.get_serializer(data=self.request.data)
         result = serializer.create(self.request.data)
+
+        if serializer.is_valid():
+            return Response(self.get_serializer(result).data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors)
+
+    def update(self, request, **kwargs):
+        self.request.data.pop('picture_small', None)
+        self.request.data.pop('picture_big', None)
+        serializer = self.get_serializer(data=self.request.data)
+        instance = Drop.objects.get(pk=self.kwargs.get('pk'))
+        result = serializer.update(instance=instance,validated_data=self.request.data)
 
         if serializer.is_valid():
             return Response(self.get_serializer(result).data, status=status.HTTP_200_OK)

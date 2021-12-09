@@ -203,7 +203,6 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
                 drop.tags.add(tag)
 
         drop.save()
-        print(drop.picture_small)
         return drop
 
     def update(self, instance, validated_data):
@@ -232,8 +231,14 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             instance.name = validated_data.get('name', instance.name)
             instance.descriptions = validated_data.get('descriptions', instance.descriptions)
             instance.category = validated_data.get('category', instance.category)
-            instance.picture_big = validated_data.get('picture_big', instance.picture_big)
-            instance.picture_small = validated_data.get('picture_small', instance.picture_small)
+
+            if 'included_images' in self.context:  # checking if key is in context
+                images_data = self.context['included_images']
+                for field_name, image in images_data.items():
+                    getattr(instance, field_name).save(image.name, File(image))
+
+            # instance.picture_big = validated_data.get('picture_big', instance.picture_big)
+            # instance.picture_small = validated_data.get('picture_small', instance.picture_small)
             # instance.blockchain_type = validated_data.get('blockchain_type', instance.blockchain_type)
             # instance.blockchain_address = validated_data.get('blockchain_address', instance.blockchain_address)
             # instance.blockchain_identifier = validated_data.get('blockchain_identifier', instance.blockchain_identifier)
