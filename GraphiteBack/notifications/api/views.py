@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AnonymousUser
 from rest_framework import viewsets
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
@@ -9,7 +10,6 @@ from utils.permissions import Nobody, AddresseeOrAdmin
 
 class NotificationViewSet(NestedViewSetMixin,viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
     filter_fields = [f.name for f in Notification._meta.fields + Notification._meta.related_objects if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
@@ -25,10 +25,12 @@ class NotificationViewSet(NestedViewSetMixin,viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    def filter_queryset(self, queryset):
+    def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            pass
+            queryset = Notification.objects.all()
+        elif type(self.request.user) == AnonymousUser:
+            queryset = Notification.objects.none()
         else:
-            queryset = queryset.filter(to_user=user)
+            queryset = Notification.objects.filter(to_user=user).all()
         return queryset

@@ -14,7 +14,6 @@ from utils.permissions import OwnerOrAdmin, ParticipantsOrAdmin, Nobody
 
 class OfferViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    queryset = Offer.objects.all()
     serializer_class = OfferSerializer
     filter_fields = [f.name for f in Offer._meta.fields + Offer._meta.related_objects if not f.__dict__.get('upload_to')]
     ordering_fields = filter_fields
@@ -50,15 +49,15 @@ class OfferViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             serializer_class = OfferSerializer
         return serializer_class
 
-    def filter_queryset(self, queryset):
+    def get_queryset(self):
 
         user = self.request.user
         if user.is_staff:
-            pass
+            queryset = Offer.objects.all()
         elif type(self.request.user) == AnonymousUser:
-            return queryset.none()
+            queryset = Offer.objects.none()
         else:
-            queryset = queryset.filter(Q(buyer=user) | Q(owner=user))
+            queryset = Offer.objects.filter(Q(buyer=user) | Q(owner=user)).all()
         return queryset
 
     @action(

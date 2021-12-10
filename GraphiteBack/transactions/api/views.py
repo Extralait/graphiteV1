@@ -11,7 +11,6 @@ from utils.permissions import Nobody, ParticipantsOrAdmin, OwnerOrAdmin
 
 class TransactionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     filter_fields = [f.name for f in Transaction._meta.fields + Transaction._meta.related_objects if
                      not f.__dict__.get('upload_to')]
@@ -28,12 +27,14 @@ class TransactionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    def filter_queryset(self, queryset):
+    def get_queryset(self):
+
         user = self.request.user
         if user.is_staff:
-            pass
+            queryset = Transaction.objects.all()
         elif type(self.request.user) == AnonymousUser:
-            return queryset.none()
+            queryset = Transaction.objects.none()
         else:
-            queryset = queryset.filter(Q(buyer=user) | Q(owner=user))
+            queryset = Transaction.objects.filter(Q(buyer=user) | Q(owner=user)).all()
         return queryset
+
