@@ -5,7 +5,7 @@ from offers.api.views import OfferViewSet
 
 router = routers.SimpleRouter()
 
-router.register(r'offers', OfferViewSet)
+router.register(r'offers', OfferViewSet, basename='offer')
 
 urlpatterns = [
     # DRF router

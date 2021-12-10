@@ -5,7 +5,7 @@ from transactions.api.views import TransactionViewSet
 
 router = routers.SimpleRouter()
 
-router.register(r'transactions', TransactionViewSet)
+router.register(r'transactions', TransactionViewSet, basename='transactions')
 
 urlpatterns = [
     # DRF router
