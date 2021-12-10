@@ -173,8 +173,8 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
         from_collection = validated_data.get('from_collection', None)
 
-        if from_collection and not self._user().collections.filter(pk=from_collection.pk).count():
-            raise APIException(f'You are not the owner of collection "{from_collection.name}"')
+        if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
+            raise APIException(f'You are not the owner of collection "{from_collection}"')
 
         to_sell_errors = self.to_sell_check(validated_data)
 
@@ -211,8 +211,8 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
         from_collection = validated_data.get('from_collection', None)
 
-        if from_collection and not self._user().collections.filter(pk=from_collection.pk).count():
-            raise APIException(f'You are not the owner of collection "{from_collection.name}"')
+        if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
+            raise APIException(f'You are not the owner of collection "{from_collection}"')
 
         to_sell_errors = self.to_sell_check(validated_data)
 

@@ -230,6 +230,21 @@ class UserRelationshipCheck(RelationshipCheck):
         model = User
 
 
+class BaseUserListSerializer(ShortStatsSerializer):
+    """
+    Лист пользователей (Сериализатор)
+    """
+    class Meta:
+        model = User
+        fields = [
+            'id', 'first_name', 'last_name',
+            'drops_in_possession_quantity', 'collections_in_possession_quantity',
+            'user_subscribers_quantity', 'users_views_quantity',
+            'avatar', 'wallet_number', 'instagram',
+            'twitter', 'discord', 'telegram','website', 'profile_type',
+            'last_login','date_joined','updated_at'
+        ]
+
 class UserListSerializer(ShortStatsSerializer,UserRelationshipCheck):
     """
     Лист пользователей (Сериализатор)
