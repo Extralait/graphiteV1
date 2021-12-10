@@ -17,6 +17,9 @@ class MultipartJsonParser(parsers.MultiPartParser):
             if type(value) != str:
                 data[key] = value
                 continue
+            if value in ['true','false']:
+                data[key] = bool(value)
+                continue
             if '{' in value or "[" in value:
                 try:
                     data[key] = json.loads(value)
