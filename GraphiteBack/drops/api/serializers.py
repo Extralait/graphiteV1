@@ -3,7 +3,7 @@ from rest_framework.exceptions import APIException
 
 from drops.models import Category, Tag, Drop, SpecialCollectionDrop
 from drops_collections.api.serializers import CollectionListSerializer
-from drops_collections.models import SpecialCollection
+from drops_collections.models import SpecialCollection, Collection
 from users.api.serializers import UserListSerializer
 from utils.serializers import RelationshipCheck
 from django.core.files.base import File
@@ -171,7 +171,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         Создать дроп
         """
 
-        from_collection = validated_data.get('from_collection', None)
+        from_collection = validated_data.pop('from_collection', None)
 
         if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
             raise APIException(f'You are not the owner of collection "{from_collection}"')
@@ -187,6 +187,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         drop = (Drop.objects.create(
             owner=self._user(),
             artist=self._user(),
+            from_collection_id = int(from_collection)
             **validated_data
         ))
 
@@ -210,6 +211,8 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         Обновить дроп
         """
         from_collection = validated_data.get('from_collection', None)
+        if from_collection:
+            validated_data['from_collection'] = Collection.objects.get(pk = int(from_collection))
 
         if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
             raise APIException(f'You are not the owner of collection "{from_collection}"')
