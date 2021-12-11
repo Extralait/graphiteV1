@@ -21,6 +21,14 @@ class MultipartJsonParser(parsers.MultiPartParser):
 
             if value == '':
                 continue
+            if '{' in value or "[" in value:
+                try:
+                    data[key] = json.loads(value)
+                    print(key, value, type(value))
+                    continue
+                except ValueError:
+                    data[key] = value
+                    continue
             if type(value) != str:
                 data[key] = value
                 print(key, value, type(value))
@@ -31,6 +39,7 @@ class MultipartJsonParser(parsers.MultiPartParser):
                 continue
             if value == 'null':
                 data[key]=None
+                continue
             if str(value).isdigit():
                 data[key] = int(value)
                 print(key, value, type(value))
@@ -40,12 +49,6 @@ class MultipartJsonParser(parsers.MultiPartParser):
                 data[key] = float(value)
                 print(key, value, type(value))
                 continue
-            if '{' in value or "[" in value:
-                try:
-                    data[key] = json.loads(value)
-                    print(key, value, type(value))
-                except ValueError:
-                    data[key] = value
             else:
                 data[key] = value
         pprint(data)
