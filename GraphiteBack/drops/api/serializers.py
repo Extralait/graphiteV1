@@ -8,6 +8,7 @@ from users.api.serializers import UserListSerializer
 from utils.serializers import RelationshipCheck
 from django.core.files.base import File
 
+
 class CategorySerializer(serializers.ModelSerializer):
     """
     Категория дропа (сериализатор)
@@ -28,7 +29,6 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class PKTagSerializer(serializers.ModelSerializer):
     """
     Тег дропа (сериализатор)
@@ -40,7 +40,6 @@ class PKTagSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'name': {'validators': []},
         }
-
 
 
 class StatsSerializer(serializers.ModelSerializer):
@@ -96,7 +95,7 @@ class BaseDropSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_active', 'updated_at', 'created_at', 'init_cost','auction_deadline'
+            'is_active', 'updated_at', 'created_at', 'init_cost', 'auction_deadline'
         ]
 
 
@@ -113,7 +112,7 @@ class DropListSerializer(StatsSerializer, DropRelationshipCheck, BaseDropSeriali
             'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked', 'is_active', 'init_cost',
-            'updated_at', 'created_at','auction_deadline'
+            'updated_at', 'created_at', 'auction_deadline'
         ]
 
 
@@ -172,9 +171,17 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
 
         from_collection = validated_data.pop('from_collection', None)
+        validated_data.pop('csrfmiddlewaretoken', None)
 
         if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
             raise APIException(f'You are not the owner of collection "{from_collection}"')
+
+        data = {
+            'owner': self._user(),
+            'artist': self._user()
+        }
+        if from_collection:
+            data['from_collection'] = int(from_collection)
 
         to_sell_errors = self.to_sell_check(validated_data)
 
@@ -184,9 +191,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags', None)
         # self.create_or_get_tags(tags)
         drop = (Drop.objects.create(
-            owner=self._user(),
-            artist=self._user(),
-            from_collection_id=int(from_collection) if from_collection else None,
+            **data,
             **validated_data
         ))
 
@@ -210,8 +215,9 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         Обновить дроп
         """
         from_collection = validated_data.get('from_collection', None)
+        validated_data.pop('csrfmiddlewaretoken', None)
         if from_collection:
-            validated_data['from_collection'] = Collection.objects.get(pk = int(from_collection))
+            validated_data['from_collection'] = Collection.objects.get(pk=int(from_collection))
 
         if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
             raise APIException(f'You are not the owner of collection "{from_collection}"')
@@ -220,7 +226,6 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
         if len(to_sell_errors['errors']):
             raise APIException(to_sell_errors)
-
 
         instance.sell_type = validated_data.get('sell_type', instance.sell_type)
         instance.sell_count = validated_data.get('sell_count', instance.sell_count)
@@ -232,7 +237,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         if not instance.parent:
             instance.name = validated_data.get('name', instance.name)
             instance.descriptions = validated_data.get('descriptions', instance.descriptions)
-            instance.category = validated_data.get('category', instance.category)
+            instance.gory = validated_data.get('category', instance.category)
 
             if 'included_images' in self.context:  # checking if key is in context
                 images_data = self.context['included_images']
