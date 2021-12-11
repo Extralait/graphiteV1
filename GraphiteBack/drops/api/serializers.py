@@ -183,7 +183,6 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
 
         tags = validated_data.pop('tags', None)
         # self.create_or_get_tags(tags)
-        print(int(from_collection))
         drop = (Drop.objects.create(
             owner=self._user(),
             artist=self._user(),
