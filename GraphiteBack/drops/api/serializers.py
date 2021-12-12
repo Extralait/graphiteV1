@@ -181,7 +181,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
             'artist': self._user()
         }
         if from_collection:
-            data['from_collection'] = int(from_collection)
+            data['from_collection_id'] = int(from_collection)
 
         to_sell_errors = self.to_sell_check(validated_data)
 
@@ -214,10 +214,10 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
         Обновить дроп
         """
-        from_collection = validated_data.get('from_collection', None)
+        from_collection = validated_data.pop('from_collection', None)
         validated_data.pop('csrfmiddlewaretoken', None)
         if from_collection:
-            validated_data['from_collection'] = Collection.objects.get(pk=int(from_collection))
+            validated_data['from_collection_id'] = int(from_collection)
 
         if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
             raise APIException(f'You are not the owner of collection "{from_collection}"')
@@ -233,7 +233,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         instance.init_cost = validated_data.get('init_cost', instance.init_cost)
         instance.min_rate = validated_data.get('min_rate', instance.min_rate)
         instance.auction_deadline = validated_data.get('auction_deadline', instance.auction_deadline)
-        instance.from_collection = validated_data.get('from_collection', instance.from_collection)
+        instance.from_collection_id = validated_data.get('from_collection_id', instance.from_collection_id)
         if not instance.parent:
             instance.name = validated_data.get('name', instance.name)
             instance.descriptions = validated_data.get('descriptions', instance.descriptions)
