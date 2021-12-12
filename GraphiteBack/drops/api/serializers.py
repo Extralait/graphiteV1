@@ -1,3 +1,4 @@
+import PIL.Image
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
@@ -274,6 +275,36 @@ class DropDetailsSerializer(DropRelationshipCheck, StatsSerializer, BaseDropSeri
     Детали дропа (Сериализатор)
     """
     parent = DropListSerializer(read_only=True)
+
+    size = serializers.SerializerMethodField()
+    height = serializers.SerializerMethodField()
+    width = serializers.SerializerMethodField()
+
+    def get_size(self, obj):
+        """
+        Получить размер
+        """
+        return obj.picture_big.size if obj.picture_big else None
+
+    def get_height(self, obj):
+        """
+        Получить высоту
+        """
+        if obj.picture_big:
+            img = PIL.Image.open(obj.picture_big.path)
+            return img.height
+        else:
+            return None
+
+    def get_width(self, obj):
+        """
+        Получить ширину
+        """
+        if obj.picture_big:
+            img = PIL.Image.open(obj.picture_big.path)
+            return img.width
+        else:
+            return None
 
     class Meta:
         model = Drop

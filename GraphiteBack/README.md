@@ -1123,6 +1123,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "min_rate": <float>,
         "picture_big": <str(image)>,
         "picture_small": <str(image)>,
+        "size": <int>,
+        "height": <int>,
+        "width": <int>,
         "to_sell": <bool>,
         "url_landing": <str>,
         "auction_deadline": <str(datetime)>,
@@ -1163,6 +1166,9 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `min_rate` | ***str*** | Минимальная ставка
 `picture_big` | ***str(image_path)*** | Большая картинка
 `picture_small` | ***str(image_path)*** | Маленькая картинка
+`size` | ***int*** | Размер изображения в байтах
+`width` | ***int*** | Ширина изображений в пикселях
+`height` | ***int*** | Высота изображения в пикселях
 `to_sell` | ***bool*** | Выставлен ли на продажу
 `url_landing` | ***str*** | Ссылка на лендинг
 `auction_deadline` | ***str(datetime)*** | Дата и время окончания аукциона
