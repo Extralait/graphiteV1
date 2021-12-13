@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Permission, Group
 from rest_framework import serializers
 
-from users.models import User, PassportData
+from users.models import User, PassportData, UsersGroupUser, UsersGroup
 from utils.serializers import RelationshipCheck
 
 
@@ -341,3 +341,21 @@ class UserDetailsSerializer(UserRelationshipCheck, CurrentUserDetailsSerializer)
             'last_login', 'wallet_number', 'date_joined'
         ]
 
+
+class UsersGroupUserSerializer(serializers.ModelSerializer):
+    user = UserDetailsSerializer(read_only=True)
+
+    class Meta:
+        model = UsersGroupUser
+        fields = ['user', 'level']
+
+
+class UsersGroupSerializer(serializers.ModelSerializer):
+    """
+    Группы пользователей (Сериализатор)
+    """
+    users = UsersGroupUserSerializer(read_only=True, many=True, source='user_group_user')
+
+    class Meta:
+        model = UsersGroup
+        fields = '__all__'

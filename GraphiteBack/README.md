@@ -666,6 +666,58 @@ http://example.com/api/users/?page=15
 **views** | ***/api/v1/users-profiles/{id_1}/views/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [user-profile](#получение-пользователя) | **GET** Возвращает пользователя с id = id_2 просматривающего пользователя c id = id_1
 
 
+### UsersGroup - */users-groups/*
+
+#### Получение групп пользователей
+
+***https://dev.artgraphite.ru/api/v1/users-groups/ \
+/api/v1/users-groups/***
+
+```sh
+# GET возвращает
+{
+    "count": <int>,
+    "next": <str(page_link)>,
+    "previous": <str(page_link)>,
+    "results": [
+        {
+            "id": <int>,
+            "users": [
+                {
+                    "user": <object(user_details)>,
+                    "level": <int>
+                }
+                {
+                    "user": <object(user_details)>,
+                    "level": <int>
+                }
+            ],
+            "name": <str>
+        }
+    ]
+}
+```
+
+Параметр | Тип  | Описание | 
+---|---|---
+`id` | ***int*** | Первичный ключ группы пользователей
+`drops` | ***array(object(users_group_user))*** | [Массив пользователей в группе пользователей](#пользователь-в-группе-пользователей)
+`name` | ***str*** | Название группы пользователей
+
+#### Пользователь в группе пользователей
+```sh
+{
+    "user": <object(user_details)>,
+    "level": <int>
+}
+```
+
+Параметр | Тип  | Описание | 
+---|---|---
+`user` | ***object(user_details)*** | Пользователь (такой же, как при получении [деталей пользопателя](#получение-пользователя))
+`level` | ***int*** | Уровень пользователя в группе пользователей
+
+
 ### Collection - */collections/*
 
 #### Получение коллекций

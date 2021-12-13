@@ -7,7 +7,8 @@ from drops_collections.api.views import CollectionViewSet
 from notifications.api.views import NotificationViewSet
 from offers.api.views import OfferViewSet
 from transactions.api.views import TransactionViewSet
-from users.api.views import UserProfileViewSet
+from users.api.views import UserProfileViewSet, UsersGroupViewSet
+from users.models import UsersGroup
 
 router = ExtendedSimpleRouter()
 
@@ -142,6 +143,11 @@ users_profiles_router = router.register(
         parents_query_lookups=['owner'],
         basename='users-profiles-drops'
     ),
+)
+router.register(
+    prefix=r'users-groups',
+    viewset=UsersGroupViewSet,
+    basename='users-groups'
 )
 
 

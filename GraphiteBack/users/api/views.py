@@ -11,12 +11,13 @@ from users.api.serializers import (
     UserDetailsSerializer,
     CurrentUserDetailsSerializer,
     UserListSerializer,
-    PassportDataSerializer
+    PassportDataSerializer, UsersGroupSerializer
 )
-from users.models import User, PassportData
+from users.models import User, PassportData, UsersGroup
 from users.services.subscription import add_subscription, delete_subscription
 from users.services.view import add_view
 from utils.pagination import StandardResultsSetPagination
+from utils.permissions import Nobody
 
 
 class UserProfileViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -236,3 +237,23 @@ class UserProfileViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         serializer = self.get_serializer(expensive_artists, many=True)
         return Response(serializer.data)
+
+
+class UsersGroupViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    pagination_class = StandardResultsSetPagination
+    queryset = UsersGroup.objects.all()
+    filter_fields = [f.name for f in UsersGroup._meta.fields + UsersGroup._meta.related_objects if
+                     not f.__dict__.get('upload_to')]
+    ordering_fields = filter_fields
+    serializer_class = UsersGroupSerializer
+
+    def get_permissions(self):
+        """
+        Возвращает права доступа
+        """
+        if self.action in ['list', 'retrieve']:
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (Nobody,)
+
+        return [permission() for permission in permission_classes]

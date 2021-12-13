@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -231,6 +232,73 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.wallet_number} {self.last_name} {self.first_name}"
+
+
+class UsersGroup(models.Model):
+    """
+    Группы пользователей (Модель)
+    """
+    name = models.CharField(
+        verbose_name='Name',
+        max_length=256
+    )
+    users = models.ManyToManyField(
+        to='users.User',
+        related_name='users_groups',
+        verbose_name="User",
+        through='users.UsersGroupUser'
+    )
+
+    class Meta:
+        verbose_name = 'User group'
+        verbose_name_plural = 'Users groups'
+
+    def __str__(self):
+        return self.name
+
+
+class UsersGroupUser(models.Model):
+    """
+    Пользователь в группе пользователей (Модель)
+    """
+    user_group = models.ForeignKey(
+        to='users.UsersGroup',
+        related_name='user_group_user',
+        verbose_name='User group',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    user = models.ForeignKey(
+        to='users.User',
+        related_name='user_group_user',
+        verbose_name='User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    level = models.IntegerField(
+        verbose_name='Level',
+        default=0,
+        validators=[
+            MinValueValidator(0)
+        ],
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = 'Users group user'
+        verbose_name_plural = 'Users groups users'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user_group', 'user'],
+                name='unique_user_group_user'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user_group} {self.user}'
 
 
 class PassportData(models.Model):
