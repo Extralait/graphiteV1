@@ -1,9 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
-from django.contrib.admin.options import InlineModelAdmin
-
-from drops.models import SpecialCollectionDrop, DropSubscription, DropLike, DropView
+from drops.models import DropSubscription, DropLike, DropView
 from drops_collections.models import CollectionSubscription, CollectionLike, CollectionView
 from notifications.models import Notification
 from offers.models import Offer
@@ -11,20 +8,14 @@ from transactions.models import Transaction
 from users.models import User, PassportData, UsersGroup, UsersGroupUser, UserSubscription, UserView
 
 
-# admin.site.register(User)
-# admin.site.register(PassportData)
-
-
 class UsersInline(admin.TabularInline):
     model = UsersGroupUser
     extra = 1
 
 
+@admin.register(UsersGroup)
 class UsersGroupAdmin(admin.ModelAdmin):
     inlines = (UsersInline,)
-
-
-admin.site.register(UsersGroup, UsersGroupAdmin)
 
 
 class UserSubscriptionsInline(admin.TabularInline):

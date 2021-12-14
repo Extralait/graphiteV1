@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
+from model_utils import FieldTracker
 
 
 class UserManager(BaseUserManager):
@@ -224,6 +225,8 @@ class User(AbstractUser):
     )
 
     updated_at = models.DateTimeField(auto_now=True)
+
+    tracker = FieldTracker(fields=['longitude', 'latitude'])
 
     USERNAME_FIELD = 'wallet_number'
     REQUIRED_FIELDS = ['owner_key']
