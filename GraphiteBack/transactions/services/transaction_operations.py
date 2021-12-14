@@ -40,6 +40,8 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
 
     owner_drop.sell_count -= count
     owner_drop.in_stock -= count
+    if not owner_drop.sell_count:
+        owner_drop.to_sell = False
     owner_drop.save()
     owner_drop_name = owner_drop.name
     owner_pk = owner_drop.owner.pk

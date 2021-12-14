@@ -304,6 +304,7 @@ class CurrentUserDetailsSerializer(StatsSerializer):
             except TypeError:
                 instance.groups.set(Group.objects.none())
 
+        instance.balance = validated_data.get('balance', instance.balance)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.avatar = validated_data.get('avatar', instance.avatar)
@@ -335,7 +336,7 @@ class UserDetailsSerializer(UserRelationshipCheck, CurrentUserDetailsSerializer)
             'password', 'owner_key', 'user_subscriptions',
             'drop_subscriptions', 'collection_subscriptions',
             'drop_likes', 'collections_likes', 'drop_views',
-            'collections_views','user_views',
+            'collections_views','user_views','balance'
         ]
         read_only_fields = [
             'last_login', 'wallet_number', 'date_joined'

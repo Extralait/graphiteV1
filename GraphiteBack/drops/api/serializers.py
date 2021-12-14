@@ -138,15 +138,36 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
         return self.context['request'].user
 
-    def to_sell_check(self, validated_data):
-
+    def to_sell_check(self, validated_data, instance=None):
+        """
+        Проверка статуса продажи
+        """
+        to_sell = validated_data.get('to_sell', None)
+        sell_type = validated_data.get('sell_type', None)
         sell_count = validated_data.get('sell_count', None)
         init_cost = validated_data.get('init_cost', None)
         min_rate = validated_data.get('min_rate', None)
-        to_sell = validated_data.get('to_sell', None)
-        sell_type = validated_data.get('sell_type', None)
+
 
         errors = {'errors': []}
+
+        if instance and instance.sell_type == 'auction' and instance.to_sell:
+            royalty = validated_data.get('royalty', None)
+            auction_deadline = validated_data.get('auction_deadline', None)
+            if (
+                    not to_sell
+                    or sell_type != 'auction'
+                    or royalty != instance.royalty
+                    or auction_deadline != instance.auction_deadline
+                    or sell_count != instance.sell_count
+                    or init_cost != instance.init_cost
+                    or min_rate != instance.min_rate
+            ):
+                errors['errors'].append({
+                    'details': 'You can`t change the  fields (to_sell, sell_type, '
+                               'royalty, auction_deadline , sell_count, init_cost, '
+                               'min_rate) on which the auction depends until is ends'
+                })
 
         if to_sell:
             if sell_type in ["to_sell", "auction"]:
@@ -223,7 +244,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         if from_collection and not self._user().collections.filter(pk=int(from_collection)).count():
             raise APIException(f'You are not the owner of collection "{from_collection}"')
 
-        to_sell_errors = self.to_sell_check(validated_data)
+        to_sell_errors = self.to_sell_check(validated_data, instance)
 
         if len(to_sell_errors['errors']):
             raise APIException(to_sell_errors)
@@ -238,15 +259,13 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         if not instance.parent:
             instance.name = validated_data.get('name', instance.name)
             instance.descriptions = validated_data.get('descriptions', instance.descriptions)
-            instance.gory = validated_data.get('category', instance.category)
+            instance.category = validated_data.get('category', instance.category)
 
             if 'included_images' in self.context:  # checking if key is in context
                 images_data = self.context['included_images']
                 for field_name, image in images_data.items():
                     getattr(instance, field_name).save(image.name, File(image))
 
-            # instance.picture_big = validated_data.get('picture_big', instance.picture_big)
-            # instance.picture_small = validated_data.get('picture_small', instance.picture_small)
             # instance.blockchain_type = validated_data.get('blockchain_type', instance.blockchain_type)
             # instance.blockchain_address = validated_data.get('blockchain_address', instance.blockchain_address)
             # instance.blockchain_identifier = validated_data.get('blockchain_identifier', instance.blockchain_identifier)

@@ -67,13 +67,15 @@ class Notification(models.Model):
         null=True,
         blank=True,
     )
-    body = models.TextField(
+    body = models.CharField(
         verbose_name='Body',
+        max_length=500,
         null=True,
         blank=True
     )
-    details = models.TextField(
+    details = models.CharField(
         verbose_name='Details',
+        max_length=500,
         default='',
         blank=True
     )

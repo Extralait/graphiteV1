@@ -329,6 +329,7 @@ http://example.com/api/users/?page=15
         "is_staff": <bool>,
         "is_active": <bool>,
         "wallet_number": <int>,
+        "balance": <float>,
         "inn": <str>,
         "avatar": <str(image_path)>,
         "cover": <str(image_path)>,
@@ -380,6 +381,7 @@ http://example.com/api/users/?page=15
 `last_name` | ***str*** | Фамилия
 `email` | ***str*** | Электронная почта
 `wallet_number` | ***str*** | Номер криптовалютного кошелька пользователя
+`balance` | ***float*** | Баланс пользователя
 `inn` | ***str*** | ИНН пользователя
 `avatar` | ***str(image_path)*** | Аватар профиля пользователя
 `cover` | ***str(image_path)*** | Обложка профиля пользователя

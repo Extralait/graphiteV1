@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils.safestring import mark_safe
 
 
 class UserManager(BaseUserManager):
@@ -83,6 +84,15 @@ class User(AbstractUser):
         null=True,
         blank=True
     )
+    balance = models.FloatField(
+        verbose_name='Balance',
+        default=0,
+        validators=[
+            MinValueValidator(0)
+        ],
+        null=True,
+        blank=True
+    )
     avatar = models.ImageField(
         verbose_name='Avatar',
         upload_to='user/avatars',
@@ -112,8 +122,9 @@ class User(AbstractUser):
         verbose_name='E-mail notification',
         default=False
     )
-    description = models.TextField(
+    description = models.CharField(
         verbose_name="Description",
+        max_length=2000,
         null=True,
         blank=True
     )
@@ -222,6 +233,15 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+    def avatar_tag(self):
+        return mark_safe('<img src="/media/%s" width="150" height="94" />' % self.avatar)
+
+    def cover_tag(self):
+        return mark_safe('<img src="/media/%s" width="150" height="94" />' % self.cover)
+
+    avatar_tag.short_description = 'Avatar'
+    cover_tag.short_description = 'Cover'
 
     def delete(self, *args, **kwargs):
         """
