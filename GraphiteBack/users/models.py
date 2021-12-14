@@ -226,7 +226,6 @@ class User(AbstractUser):
 
     updated_at = models.DateTimeField(auto_now=True)
 
-    tracker = FieldTracker(fields=['longitude', 'latitude'])
 
     USERNAME_FIELD = 'wallet_number'
     REQUIRED_FIELDS = ['owner_key']
