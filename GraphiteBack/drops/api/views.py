@@ -51,7 +51,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         if self.action in ['list', 'retrieve']:
             permission_classes = (AllowAny,)
-        elif self.action in ['create', 'buy_drop']:
+        elif self.action in ['create', 'buy_drop','on_auction']:
             permission_classes = (IsAuthenticated,)
         else:
             permission_classes = (OwnerOrAdmin,)
@@ -64,7 +64,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         if self.action in ['add_subscription', 'add_view', 'add_like']:
             serializer_class = serializers.Serializer
-        elif self.action == 'list':
+        elif self.action in ['list','on_auction']:
             serializer_class = DropListSerializer
         elif self.action == 'buy_drop':
             serializer_class = DropBuySerializer
@@ -108,19 +108,39 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         else:
             return Response(serializer.errors)
 
-    # @action(
-    #     detail=False,
-    #     methods=['get'],
-    #     name='me',
-    #     permission_classes=(IsAuthenticated,),
-    # )
-    # def (self, request, **kwargs):
-    #     """
-    #     Получить мой профиль
-    #     """
-    #     queryset = self.request.user
-    #     serializer = self.get_serializer(queryset)
-    #     return Response(serializer.data)
+    @action(
+        detail=False,
+        methods=['get'],
+        name='on-auction',
+        url_path='on-auction',
+        permission_classes=(IsAuthenticated,),
+    )
+    def on_auction(self, request, **kwargs):
+        """
+        Получить мой профиль
+        """
+        print(self.request.user)
+        queryset_1 = Drop.objects.filter(
+            owner=self.request.user,
+            to_sell=True,
+            sell_type='auction'
+        )
+        print(queryset_1)
+        queryset_2 = Drop.objects.filter(
+            auction__auction_user_bid__user=self.request.user,
+            auction__auction_user_bid__is_active=True,
+        )
+
+        queryset = queryset_1 | queryset_2
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
     @action(
         detail=True,

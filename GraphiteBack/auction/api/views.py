@@ -57,7 +57,7 @@ class AuctionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if not detail_auction_pk:
             return False
         current_user_pk = self.request.user.pk
-        auction_owner_pk = Auction.objects.get(drop_id=detail_auction_pk).drop.owner.pk
+        auction_owner_pk = Auction.objects.get(pk=detail_auction_pk).drop.owner.pk
         return auction_owner_pk == current_user_pk
 
     @action(

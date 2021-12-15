@@ -289,7 +289,6 @@ class CurrentUserDetailsSerializer(StatsSerializer):
         """
         if instance.is_superuser or instance.is_staff:
             instance.is_active = validated_data.get('is_active', instance.is_active)
-            instance.is_verify = validated_data.get('is_verify', instance.is_verify)
             instance.verify_status = validated_data.get('verify_status', instance.verify_status)
 
         if instance.is_superuser:
