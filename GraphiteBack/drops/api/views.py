@@ -84,14 +84,14 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         name_query = self.request.query_params.get('name', None)
         self.request.query_params.pop('name', None)
         if name_query:
-            queryset = Drop.objects.filter(
+            queryset = self.filter_queryset(Drop.objects.filter(
                 Q(name__icontains=name_query)
                 | Q(from_collection__name__icontains=name_query)
                 | Q(artist__first_name__icontains=name_query)
                 | Q(artist__last_name__icontains=name_query)
-            ).all()
+            ).all())
         else:
-            queryset = Drop.objects.all()
+            queryset = self.filter_queryset(Drop.objects.all())
         return queryset
 
     def _is_owner(self):
