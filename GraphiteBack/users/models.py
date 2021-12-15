@@ -233,7 +233,6 @@ class User(AbstractUser):
 
     updated_at = models.DateTimeField(auto_now=True)
 
-
     USERNAME_FIELD = 'wallet_number'
     REQUIRED_FIELDS = ['owner_key']
 
