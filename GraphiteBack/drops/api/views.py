@@ -136,17 +136,11 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         Получить мой профиль
         """
-        queryset_1 = Drop.objects.filter(
-            owner=self.request.user,
-            to_sell=True,
-            sell_type='auction'
-        )
-        queryset_2 = Drop.objects.filter(
+
+        queryset = Drop.objects.filter(
             auction__auction_user_bid__user=self.request.user,
             auction__auction_user_bid__is_active=True,
         )
-
-        queryset = queryset_1 | queryset_2
 
         page = self.paginate_queryset(queryset)
         if page is not None:
