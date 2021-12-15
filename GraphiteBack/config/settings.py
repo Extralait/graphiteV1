@@ -246,7 +246,6 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_FILTER_BACKENDS": [
         "url_filter.integrations.drf.DjangoFilterBackend",
-        "utils.filtering.CustomizedBackend",
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
