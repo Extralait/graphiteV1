@@ -64,7 +64,7 @@ class UserProfileViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         Возвращает права доступа
         """
-        if self.action in ['list', 'retrieve', 'create']:
+        if self.action in ['list', 'retrieve', 'create','expensive_artists']:
             permission_classes = (AllowAny,)
         else:
             permission_classes = (CurrentUserOrAdmin,)
