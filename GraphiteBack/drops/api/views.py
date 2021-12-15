@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from django.db.models import Q
 from rest_framework import viewsets, serializers, status
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser
@@ -32,9 +33,10 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     parser_classes = [JSONParser, MultipartJsonParser]
 
     pagination_class = StandardResultsSetPagination
-    queryset = Drop.objects.all()
-    filter_fields = [f.name for f in Drop._meta.fields + Drop._meta.related_objects if not f.__dict__.get('upload_to')]
+    filter_fields = [f.name for f in Drop._meta.fields + Drop._meta.related_objects
+                     if not (f.__dict__.get('upload_to') or f.name == 'name')]
     ordering_fields = filter_fields
+    ordering_fields.append('name')
 
     def get_serializer_context(self):
         context = super(DropViewSet, self).get_serializer_context()
@@ -51,7 +53,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         if self.action in ['list', 'retrieve']:
             permission_classes = (AllowAny,)
-        elif self.action in ['create', 'buy_drop','on_auction']:
+        elif self.action in ['create', 'buy_drop', 'on_auction']:
             permission_classes = (IsAuthenticated,)
         else:
             permission_classes = (OwnerOrAdmin,)
@@ -64,7 +66,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         if self.action in ['add_subscription', 'add_view', 'add_like']:
             serializer_class = serializers.Serializer
-        elif self.action in ['list','on_auction']:
+        elif self.action in ['list', 'on_auction']:
             serializer_class = DropListSerializer
         elif self.action == 'buy_drop':
             serializer_class = DropBuySerializer
@@ -76,6 +78,21 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             serializer_class = DropDetailsSerializer
 
         return serializer_class
+
+    def get_queryset(self):
+        self.request.query_params._mutable = True
+        name_query = self.request.query_params.get('name', None)
+        self.request.query_params.pop('name', None)
+        if name_query:
+            queryset = Drop.objects.filter(
+                Q(name__icontains=name_query)
+                | Q(from_collection__name__icontains=name_query)
+                | Q(artist__first_name__icontains=name_query)
+                | Q(artist__last_name__icontains=name_query)
+            ).all()
+        else:
+            queryset = Drop.objects.all()
+        return queryset
 
     def _is_owner(self):
         detail_drop_pk = self.kwargs.get('pk')
@@ -101,7 +118,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         self.request.data.pop('picture_big', None)
         serializer = self.get_serializer(data=self.request.data)
         instance = Drop.objects.get(pk=self.kwargs.get('pk'))
-        result = serializer.update(instance=instance,validated_data=self.request.data)
+        result = serializer.update(instance=instance, validated_data=self.request.data)
 
         if serializer.is_valid():
             return Response(self.get_serializer(result).data, status=status.HTTP_200_OK)
@@ -119,13 +136,11 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         """
         Получить мой профиль
         """
-        print(self.request.user)
         queryset_1 = Drop.objects.filter(
             owner=self.request.user,
             to_sell=True,
             sell_type='auction'
         )
-        print(queryset_1)
         queryset_2 = Drop.objects.filter(
             auction__auction_user_bid__user=self.request.user,
             auction__auction_user_bid__is_active=True,
@@ -140,7 +155,6 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
 
     @action(
         detail=True,
