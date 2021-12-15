@@ -140,7 +140,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         queryset = Drop.objects.filter(
             auction__auction_user_bid__user=self.request.user,
             auction__auction_user_bid__is_active=True,
-        )
+        ).distinct('pk')
 
         page = self.paginate_queryset(queryset)
         if page is not None:
