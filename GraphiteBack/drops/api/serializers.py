@@ -167,25 +167,25 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         """
         Проверка статуса продажи
         """
-        to_sell = validated_data.get('to_sell', None)
-        sell_type = validated_data.get('sell_type', None)
-        sell_count = validated_data.get('sell_count', None)
-        init_cost = validated_data.get('init_cost', None)
-        min_rate = validated_data.get('min_rate', None)
-        auction_deadline = validated_data.get('auction_deadline', None)
+        to_sell = validated_data.get('to_sell', '+')
+        sell_type = validated_data.get('sell_type', '+')
+        sell_count = validated_data.get('sell_count', '+')
+        init_cost = validated_data.get('init_cost', '+')
+        min_rate = validated_data.get('min_rate', '+')
+        auction_deadline = validated_data.get('auction_deadline', '+')
 
         errors = {'errors': []}
 
         if instance and instance.sell_type == 'auction' and instance.to_sell:
-            royalty = validated_data.get('royalty', None)
+            royalty = validated_data.get('royalty', '+')
             if (
-                    not to_sell
-                    or sell_type != 'auction'
-                    or royalty != instance.royalty
-                    or auction_deadline != instance.auction_deadline
-                    or sell_count != instance.sell_count
-                    or init_cost != instance.init_cost
-                    or min_rate != instance.min_rate
+                to_sell != '+'
+                or sell_type != '+'
+                or royalty != '+'
+                or auction_deadline != '+'
+                or sell_count != '+'
+                or init_cost != '+'
+                or min_rate != '+'
             ):
                 errors['errors'].append({
                     'details': 'You can`t change the  fields (to_sell, sell_type, '
