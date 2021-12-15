@@ -1,7 +1,7 @@
 from django.contrib import admin
 
+from drops.models import SpecialCollectionDrop, Drop
 from drops_collections.models import SpecialCollection
-from drops.models import SpecialCollectionDrop
 
 
 class DropsInline(admin.TabularInline):
@@ -9,8 +9,11 @@ class DropsInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(SpecialCollection)
 class SpecialCollectionAdmin(admin.ModelAdmin):
-    inlines = (DropsInline,)
+    inlines = [DropsInline]
 
 
-admin.site.register(SpecialCollection, SpecialCollectionAdmin)
+@admin.register(Drop)
+class DropAdmin(admin.ModelAdmin):
+    pass

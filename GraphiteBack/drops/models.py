@@ -326,6 +326,9 @@ class DropSubscription(models.Model):
             )
         ]
 
+    def __str__(self):
+        return f'{self.user} {self.drop}'
+
 
 class DropLike(models.Model):
     """

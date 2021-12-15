@@ -190,7 +190,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
                 errors['errors'].append({
                     'details': 'You can`t change the  fields (to_sell, sell_type, '
                                'royalty, auction_deadline , sell_count, init_cost, '
-                               'min_rate) on which the auction depends until is ends'
+                               'min_rate) on which the auction depends until it ends'
                 })
 
         if to_sell:

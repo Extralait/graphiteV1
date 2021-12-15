@@ -108,6 +108,20 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         else:
             return Response(serializer.errors)
 
+    # @action(
+    #     detail=False,
+    #     methods=['get'],
+    #     name='me',
+    #     permission_classes=(IsAuthenticated,),
+    # )
+    # def (self, request, **kwargs):
+    #     """
+    #     Получить мой профиль
+    #     """
+    #     queryset = self.request.user
+    #     serializer = self.get_serializer(queryset)
+    #     return Response(serializer.data)
+
     @action(
         detail=True,
         methods=['post'],
