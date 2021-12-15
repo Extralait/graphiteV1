@@ -32,6 +32,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.DeleteModel(
-            name='AuctionUserBit',
+            name='AuctionUserBid',
         ),
     ]
