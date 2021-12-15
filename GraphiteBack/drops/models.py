@@ -4,7 +4,6 @@ from django.db import models
 from model_utils import FieldTracker
 
 
-
 class Category(models.Model):
     """
     Категория Дропа (Модель)
