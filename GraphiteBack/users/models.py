@@ -224,6 +224,13 @@ class User(AbstractUser):
         through='drops_collections.CollectionView'
     )
 
+    auction_bids = models.ManyToManyField(
+        to='auction.Auction',
+        related_name='bids',
+        verbose_name="Auction bids",
+        through='auction.AuctionUserBid'
+    )
+
     updated_at = models.DateTimeField(auto_now=True)
 
 

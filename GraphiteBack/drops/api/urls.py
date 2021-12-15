@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework_extensions.routers import ExtendedSimpleRouter
 
+from auction.api.views import AuctionViewSet, AuctionUserBidViewSet
 from drops.api.views import DropViewSet, CategoryViewSet, TagViewSet
 from offers.api.views import OfferViewSet
 from transactions.api.views import TransactionViewSet
@@ -62,6 +63,18 @@ drops_router = router.register(
         viewset=OfferViewSet,
         parents_query_lookups=['drop'],
         basename='drops-buy-offers'
+    ),
+    # Аукционы
+    drops_router.register(
+        prefix=r'auctions',
+        viewset=AuctionViewSet,
+        parents_query_lookups=['drop'],
+        basename='drops-auctions'
+    ).register(
+        prefix=r'bids',
+        viewset=AuctionUserBidViewSet,
+        parents_query_lookups=['auction__drop', 'auction'],
+        basename='drops-auctions-bids'
     ),
 )
 router.register(

@@ -20,7 +20,7 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
 
     owner_drop = Drop.objects.get(pk=drop_pk)
 
-    if owner_drop.sell_type != 'sell' or not owner_drop.to_sell:
+    if not owner_drop.sell_type or not owner_drop.to_sell:
         return Response(
             {
                 'detail': 'This drop not for sale'
@@ -38,13 +38,25 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    if not unit_price:
+        unit_price = owner_drop.init_cost
+
+    if unit_price*count > buyer.balance:
+        return Response(
+            {
+                'detail': 'Too low balance'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     owner_drop.sell_count -= count
     owner_drop.in_stock -= count
     if not owner_drop.sell_count:
         owner_drop.to_sell = False
     owner_drop.save()
     owner_drop_name = owner_drop.name
-    owner_pk = owner_drop.owner.pk
+    owner = owner_drop.owner
+    owner_pk = owner.pk
     owner_drop_parent = owner_drop.parent
     if buyer_drop:
         owner_drop.in_stock += count
@@ -62,6 +74,11 @@ def buy_drop(drop_pk: int, count: int, buyer: User, unit_price=None):
         buyer_drop.to_sell = False
         buyer_drop.from_collection = None
         buyer_drop.save()
+
+    buyer.balance -= unit_price*count
+    owner.balance += unit_price*count
+    buyer.save()
+    owner.save()
 
     transaction = Transaction.objects.create(
         drop_id=drop_pk,

@@ -274,7 +274,7 @@ class CurrentUserDetailsSerializer(StatsSerializer):
     class Meta:
         model = User
         exclude = [
-            'user_subscriptions', 'drop_subscriptions',
+            'user_subscriptions', 'drop_subscriptions','auction_bids',
             'collection_subscriptions', 'drop_likes',
             'collections_likes', 'drop_views','user_views',
             'collections_views', 'password', 'owner_key'
@@ -336,7 +336,7 @@ class UserDetailsSerializer(UserRelationshipCheck, CurrentUserDetailsSerializer)
             'password', 'owner_key', 'user_subscriptions',
             'drop_subscriptions', 'collection_subscriptions',
             'drop_likes', 'collections_likes', 'drop_views',
-            'collections_views','user_views','balance'
+            'collections_views','user_views','balance','auction_bids'
         ]
         read_only_fields = [
             'last_login', 'wallet_number', 'date_joined'

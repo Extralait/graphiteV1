@@ -1041,6 +1041,8 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "is_viewed": <bool>,
                 "is_subscribed": <bool>,
                 "is_liked": <bool>,
+                "current_auction_id": <int>
+                "current_auction_cost": <float>
                 "name": <str>,
                 "category": <object(category)>,
                 "tags": <array(object(tag))>,
@@ -1070,6 +1072,8 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `is_viewed` | ***bool*** | Просмотрен ли дроп текущим пользователем
 `is_subscribed` | ***bool*** | Подписан ли текущий пользователь на дроп
 `is_liked` | ***bool*** | Лайкнул ли текущий пользователь дроп
+`current_auction_id` | ***int*** | Первичный ключ текущего аукциона
+`current_auction_cost` | ***float*** | Текущая цена на текущем аукционе
 `name` | ***str*** | Название дропа
 `category` | ***object(category)*** | [Категория дропа](#получение-категорий-и-тегов-дропов) 
 `tags` | ***array(object(tag))*** | [Теги дропа](#получение-категорий-и-тегов-дропов) 
@@ -1158,6 +1162,8 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
         "subscriptions_quantity": <int>,
         "likes_quantity": <int>,
         "views_quantity": <int>,
+        "current_auction_id": <int>
+        "current_auction_cost": <float>
         "category": <object(category)>,
         "tags": array(object(tag)),
         "artist": <object(user_in_list)>,
@@ -1201,6 +1207,8 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `subscriptions_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
 `likes_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
 `views_quantity` | ***int*** | Лайкнул ли текущий пользователь дроп
+`current_auction_id` | ***int*** | Первичный ключ текущего аукциона
+`current_auction_cost` | ***float*** | Текущая цена на текущем аукционе
 `category` | ***object(category)*** | [Категория дропа](#получение-категорий-и-тегов-дропов) 
 `tags` | ***array(object(tag))*** | [Теги дропа](#получение-категорий-и-тегов-дропов) 
 `artist` | ***object(user_in_list)*** | Художник (такой же, как при получении [списка пользователей](#получение-списка-пользователей))
@@ -1377,6 +1385,10 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 **sell-offers** | ***/api/v1/drops/{id_1}/sell-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer](#получение-предложения) | **GET** Возвращает предложение продажи с id = id_2, дропа c id = id_1
 **buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/*** | **GET, EXTRA** | [offers](#получение-предложения) | **GET** Возвращает предложения покупки дропа c id = id_1
 **buy-offers** | ***/api/v1/drops/{id_1}/buy-offers/{id_2}*** | **GET, PUT, PATCH, DELETE, EXTRA** | [offer](#получение-предложения) | **GET** Возвращает предложение покупки с id = id_2, дропа c id = id_1
+**auctions** | ***/api/v1/drops/{id_1}/auctions/*** | **GET, EXTRA** | [auctions](#получение-аукционов) | **GET** Возвращает аукционы дропа c id = id_1
+**auctions** | ***/api/v1/drops/{id_1}/auctions/{id_2}*** | **GET, DELETE, EXTRA** | [auction](#получение-аукциона) | **GET** Возвращает аукцион с id = id_2, дропа c id = id_1
+**auctions/bids** | ***/api/v1/drops/{id_1}/auctions/{id_2}/bids/*** | **GET, EXTRA** | [auctions](#получение-аукционов) | **GET** Возвращает ставки аукциона с id = id_2, дропа c id = id_1
+**auctions/bids** | ***/api/v1/drops/{id_1}/auctions/{id_2}/bids/{id_3}*** | **GET, DELETE, EXTRA** | [auction](#получение-аукциона) | **GET** Возвращает савку с id = id_3 аукцион с id = id_2, дропа c id = id_1
 
 ### Transaction - */transactions/*
 

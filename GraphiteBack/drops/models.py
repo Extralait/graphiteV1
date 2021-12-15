@@ -1,6 +1,8 @@
 import blank
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from model_utils import FieldTracker
+
 
 
 class Category(models.Model):
@@ -146,28 +148,43 @@ class Drop(models.Model):
         verbose_name='Sell count',
         default=0,
         null=True,
-        blank=True
+        blank=True,
+        validators=[
+            MinValueValidator(0)
+        ],
     )
     in_stock = models.IntegerField(
         verbose_name='In Stock',
         default=0,
         null=True,
-        blank=True
+        blank=True,
+        validators=[
+            MinValueValidator(0)
+        ],
     )
     all_count = models.IntegerField(
         verbose_name='All count',
+        validators=[
+            MinValueValidator(0)
+        ],
     )
     init_cost = models.FloatField(
         verbose_name='Init cost',
         default=0,
         null=True,
-        blank=True
+        blank=True,
+        validators=[
+            MinValueValidator(0)
+        ],
     )
     min_rate = models.FloatField(
         verbose_name='Min rate',
         default=0,
         null=True,
-        blank=True
+        blank=True,
+        validators=[
+            MinValueValidator(0)
+        ],
     )
     picture_big = models.ImageField(
         verbose_name='Big picture',
@@ -196,7 +213,7 @@ class Drop(models.Model):
         verbose_name='Auction deadline',
         default=None,
         null=True,
-        blank=True
+        blank=True,
     )
     royalty = models.FloatField(
         verbose_name='Royalty',
@@ -244,6 +261,8 @@ class Drop(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    tracker = FieldTracker(fields=['to_sell', 'sell_type'])
 
     class Meta:
         verbose_name = 'Drop'

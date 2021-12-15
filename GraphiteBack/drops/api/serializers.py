@@ -1,7 +1,9 @@
 import PIL.Image
+from django.utils.timezone import now
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
+from auction.models import Auction
 from drops.models import Category, Tag, Drop, SpecialCollectionDrop
 from drops_collections.api.serializers import CollectionListSerializer
 from drops_collections.models import SpecialCollection, Collection
@@ -50,6 +52,8 @@ class StatsSerializer(serializers.ModelSerializer):
     subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
     views_quantity = serializers.SerializerMethodField()
+    current_auction_id = serializers.SerializerMethodField()
+    current_auction_cost = serializers.SerializerMethodField()
 
     class Meta:
         model = Drop
@@ -71,6 +75,26 @@ class StatsSerializer(serializers.ModelSerializer):
         Получить просмотров дропа
         """
         return obj.views.count()
+
+    def get_current_auction_id(self, obj):
+        """
+        Получить id текущего аукциона
+        """
+        try:
+            auction = obj.auction.get(is_active=True).pk
+        except Auction.DoesNotExist:
+            auction = None
+        return auction
+
+    def get_current_auction_cost(self, obj):
+        """
+        Получить текущую цену на аукционе
+        """
+        try:
+            current_cost = obj.auction.get(is_active=True).current_cost
+        except Auction.DoesNotExist:
+            current_cost = None
+        return current_cost
 
 
 class DropRelationshipCheck(RelationshipCheck):
@@ -96,7 +120,8 @@ class BaseDropSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
-            'is_active', 'updated_at', 'created_at', 'init_cost', 'auction_deadline'
+            'is_active', 'updated_at', 'created_at', 'init_cost', 'auction_deadline',
+            'current_auction_cost','current_auction_id'
         ]
 
 
@@ -113,7 +138,7 @@ class DropListSerializer(StatsSerializer, DropRelationshipCheck, BaseDropSeriali
             'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked', 'is_active', 'init_cost',
-            'updated_at', 'created_at', 'auction_deadline'
+            'updated_at', 'created_at', 'auction_deadline','current_auction_id','current_auction_cost'
         ]
 
 
@@ -147,13 +172,12 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
         sell_count = validated_data.get('sell_count', None)
         init_cost = validated_data.get('init_cost', None)
         min_rate = validated_data.get('min_rate', None)
-
+        auction_deadline = validated_data.get('auction_deadline', None)
 
         errors = {'errors': []}
 
         if instance and instance.sell_type == 'auction' and instance.to_sell:
             royalty = validated_data.get('royalty', None)
-            auction_deadline = validated_data.get('auction_deadline', None)
             if (
                     not to_sell
                     or sell_type != 'auction'
@@ -170,6 +194,11 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
                 })
 
         if to_sell:
+            if sell_type == 'auction':
+                if not min_rate:
+                    errors['errors'].append({
+                        'details': 'min_rate must be greater than 0'
+                    })
             if sell_type in ["to_sell", "auction"]:
                 if not sell_count:
                     errors['errors'].append({
@@ -179,11 +208,10 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
                     errors['errors'].append({
                         'details': 'init_cost must be greater than 0'
                     })
-            if sell_type == 'auction':
-                if not min_rate:
-                    errors['errors'].append({
-                        'details': 'min_rate must be greater than 0'
-                    })
+            else:
+                errors['errors'].append({
+                    'details': 'sell_type must be "auction" or "to_sell"'
+                })
 
         return errors
 

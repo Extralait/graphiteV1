@@ -29,7 +29,7 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     Дроп (Представление)
     """
-    parser_classes = [MultipartJsonParser]
+    parser_classes = [JSONParser, MultipartJsonParser]
 
     pagination_class = StandardResultsSetPagination
     queryset = Drop.objects.all()

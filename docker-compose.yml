@@ -4,6 +4,32 @@ version: "3.7"
 
 services:
 
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:alpine
+    networks:
+      - second
+    expose:
+      - "6379"
+    restart: always
+
+  rabbit:
+    container_name: rabbit
+    hostname: rabbit
+    build:
+      context: ./rabbitmq
+      dockerfile: Dockerfile
+    volumes:
+      - /rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+      - /rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+    networks:
+      - second
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: always
+
   postgres_2:
     container_name: postgres_2
     hostname: postgres_2
@@ -22,52 +48,154 @@ services:
     container_name: pgbackups_2
     hostname: pgbackups_2
     image: prodrigestivill/postgres-backup-local
-    restart: always
-    user: postgres:postgres
     volumes:
       - ./backups:/backups
+    env_file:
+      - project_config/.env.postgres
+    user: postgres:postgres
     links:
       - postgres_2
     depends_on:
       - postgres_2
-    env_file:
-      - project_config/.env.postgres
     networks:
       - second
+    restart: always
 
   web_2:
-    build: GraphiteBack
     container_name: web_2
-    ports:
-      - "8001:8001"
+    hostname: web_2
+    build: GraphiteBack
+    image: web-image
     command: sh -c "python manage.py makemigrations&& python manage.py migrate&& gunicorn config.asgi:application --bind 0.0.0.0:8001 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
-    hostname: web_2
-    image: web-image
-    networks:
-      - second
     depends_on:
       - postgres_2
+      - rabbit
+      - redis
+    networks:
+      - second
+    ports:
+      - "8001:8001"
+    restart: always
+
+  celery_multi_worker:
+    container_name: celery_multi_worker
+    hostname: celery_multi_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q multi_task -P gevent -c 500 -l INFO -n worker1@%h --pidfile= "
+    volumes:
+      - media_volume:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  default_worker:
+    container_name: default_worker
+    hostname: default_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q default,email -P gevent -c 50 -l INFO -n worker2@%h --pidfile= "
+    volumes:
+      - media_volume:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  celery_solo_worker:
+    container_name: celery_solo_worker
+    hostname: celery_solo_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q solo_task -l INFO -P solo -n worker3@%h --pidfile= "
+    volumes:
+      - media_volume:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  celery_beat:
+    container_name: celery_beat
+    hostname: celery_beat
+    image: web-image
+    command: sh -c "celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - media_volume:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  flower:
+    container_name: flower
+    hostname: flower
+    image: web-image
+    command: sh -c "celery -A config flower --basic_auth=user1:password1 --brocker=amqp://user1:password1@rabbit:5672/#/ --broker_api=http://user1:password1@rabbit:15672/api --address=0.0.0.0 --port=5555"
+    volumes:
+      - media_volume:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    links:
+      - redis
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    ports:
+      - "5555:5555"
     restart: always
 
   nginx_2:
     container_name: nginx_2
-    image: nginx:alpine
     hostname: nginx_2
+    image: nginx:alpine
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
-    ports:
-      - "4000:4000"
     depends_on:
       - web_2
     networks:
       - second
+    ports:
+      - "4000:4000"
     restart: always
 
 networks:
