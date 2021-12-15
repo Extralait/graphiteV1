@@ -70,7 +70,6 @@ services:
     volumes:
       - static_volume:/home/app/web/static
       - media_volume:/home/app/web/media
-      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
     depends_on:
@@ -90,7 +89,6 @@ services:
     command: sh -c "celery -A config worker -E -Q multi_task -P gevent -c 500 -l INFO -n worker1@%h --pidfile= "
     volumes:
       - media_volume:/home/app/web/media
-      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
     depends_on:
@@ -109,7 +107,6 @@ services:
     command: sh -c "celery -A config worker -E -Q default,email -P gevent -c 50 -l INFO -n worker2@%h --pidfile= "
     volumes:
       - media_volume:/home/app/web/media
-      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
     depends_on:
@@ -128,7 +125,6 @@ services:
     command: sh -c "celery -A config worker -E -Q solo_task -l INFO -P solo -n worker3@%h --pidfile= "
     volumes:
       - media_volume:/home/app/web/media
-      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
     depends_on:
@@ -147,7 +143,6 @@ services:
     command: sh -c "celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
     volumes:
       - media_volume:/home/app/web/media
-      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
     depends_on:
@@ -166,7 +161,6 @@ services:
     command: sh -c "celery -A config flower --basic_auth=user1:password1 --brocker=amqp://user1:password1@rabbit:5672/#/ --broker_api=http://user1:password1@rabbit:15672/api --address=0.0.0.0 --port=5555"
     volumes:
       - media_volume:/home/app/web/media
-      - ./GraphiteBack:/home/app/web
     env_file:
       - project_config/.env.back
     links:
