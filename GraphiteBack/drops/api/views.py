@@ -92,7 +92,9 @@ class DropViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             ).all())
         else:
             queryset = self.filter_queryset(Drop.objects.all())
-        return queryset
+        return self.filter_queryset_by_parents_lookups(
+            queryset
+        )
 
     def _is_owner(self):
         detail_drop_pk = self.kwargs.get('pk')

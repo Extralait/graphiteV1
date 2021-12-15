@@ -36,5 +36,7 @@ class TransactionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             queryset = Transaction.objects.none()
         else:
             queryset = Transaction.objects.filter(Q(buyer=user) | Q(owner=user)).all()
-        return queryset
+        return self.filter_queryset_by_parents_lookups(
+            queryset
+        )
 

@@ -58,7 +58,9 @@ class OfferViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             queryset = Offer.objects.none()
         else:
             queryset = Offer.objects.filter(Q(buyer=user) | Q(owner=user)).all()
-        return queryset
+        return self.filter_queryset_by_parents_lookups(
+            queryset
+        )
 
     @action(
         detail=True,

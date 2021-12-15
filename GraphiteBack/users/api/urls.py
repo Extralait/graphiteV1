@@ -140,7 +140,7 @@ users_profiles_router = router.register(
     users_profiles_router.register(
         prefix=r'drops',
         viewset=DropViewSet,
-        parents_query_lookups=['owner'],
+        parents_query_lookups=['owner_id'],
         basename='users-profiles-drops'
     ),
 )

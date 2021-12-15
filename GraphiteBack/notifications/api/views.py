@@ -33,4 +33,6 @@ class NotificationViewSet(NestedViewSetMixin,viewsets.ModelViewSet):
             queryset = Notification.objects.none()
         else:
             queryset = Notification.objects.filter(to_user=user).all()
-        return queryset
+        return self.filter_queryset_by_parents_lookups(
+            queryset
+        )
