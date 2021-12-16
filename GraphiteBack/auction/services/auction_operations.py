@@ -1,4 +1,3 @@
-from celery import shared_task
 from rest_framework import status
 from rest_framework.response import Response
 from bulk_update.helper import bulk_update
