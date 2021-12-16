@@ -52,8 +52,6 @@ class StatsSerializer(serializers.ModelSerializer):
     subscriptions_quantity = serializers.SerializerMethodField()
     likes_quantity = serializers.SerializerMethodField()
     views_quantity = serializers.SerializerMethodField()
-    current_auction_id = serializers.SerializerMethodField()
-    current_auction_cost = serializers.SerializerMethodField()
 
     class Meta:
         model = Drop
@@ -76,6 +74,27 @@ class StatsSerializer(serializers.ModelSerializer):
         """
         return obj.views.count()
 
+
+class DropRelationshipCheck(RelationshipCheck):
+    """
+    Отношения с пользователями (Сериализатор)
+    """
+
+    class Meta:
+        model = Drop
+        fields = '__all__'
+
+
+class BaseDropSerializer(serializers.ModelSerializer):
+    """
+    Базовый класс дропа (Сериализатор)
+    """
+    owner = UserListSerializer(read_only=True)
+    artist = UserListSerializer(read_only=True)
+    from_collection = CollectionListSerializer()
+    current_auction_id = serializers.SerializerMethodField()
+    current_auction_cost = serializers.SerializerMethodField()
+
     def get_current_auction_id(self, obj):
         """
         Получить id текущего аукциона
@@ -95,25 +114,6 @@ class StatsSerializer(serializers.ModelSerializer):
         except Auction.DoesNotExist:
             current_cost = None
         return current_cost
-
-
-class DropRelationshipCheck(RelationshipCheck):
-    """
-    Отношения с пользователями (Сериализатор)
-    """
-
-    class Meta:
-        model = Drop
-        fields = '__all__'
-
-
-class BaseDropSerializer(serializers.ModelSerializer):
-    """
-    Базовый класс дропа (Сериализатор)
-    """
-    owner = UserListSerializer(read_only=True)
-    artist = UserListSerializer(read_only=True)
-    from_collection = CollectionListSerializer()
 
     class Meta:
         model = Drop
