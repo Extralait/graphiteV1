@@ -273,7 +273,8 @@ class Command(BaseCommand):
                     continue
             print('stop adding make_offer')
             print('start adding bids')
-            for drop in drops:
+            random.shuffle(drops)
+            for drop in drops[1:random.randint(5,30)]:
                 for i in range(random.randint(1, 5)):
                     try:
                         auction = drop.auction.get(is_active=True)
