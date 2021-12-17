@@ -104,6 +104,11 @@ ADMINS = [
 
 # Установленные приложения
 INSTALLED_APPS = [
+    # # Admin tools
+    # 'admin_tools',
+    # 'admin_tools.theming',
+    # 'admin_tools.menu',
+    # 'admin_tools.dashboard',
     # Defaults
     "django.contrib.admin",
     "django.contrib.auth",

@@ -1,9 +1,12 @@
+import PIL
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.safestring import mark_safe
 from model_utils import FieldTracker
+
+from utils.admin import image_to_admin_view
 
 
 class UserManager(BaseUserManager):
@@ -243,10 +246,10 @@ class User(AbstractUser):
         verbose_name_plural = 'Users'
 
     def avatar_tag(self):
-        return mark_safe('<img src="/media/%s" width="150" height="94" />' % self.avatar)
+        return image_to_admin_view(self.avatar)
 
     def cover_tag(self):
-        return mark_safe('<img src="/media/%s" width="150" height="94" />' % self.cover)
+        return image_to_admin_view(self.cover)
 
     avatar_tag.short_description = 'Avatar'
     cover_tag.short_description = 'Cover'

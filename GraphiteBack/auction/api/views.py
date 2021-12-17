@@ -4,8 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from auction.api.serializers import AuctionListSerializer, PlaceBidSerializer, AuctionUserBidSerializer, \
-    AuctionDetailSerializer
+from auction.api.serializers import AuctionListSerializer, PlaceBidSerializer, AuctionUserBidSerializer
 from auction.models import Auction, AuctionUserBid
 from auction.permissions import AuctionOwnerOrAdmin
 from auction.services.auction_operations import place_bid, delete_bid
@@ -45,10 +44,7 @@ class AuctionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         if self.action in ['place_bid']:
             serializer_class = PlaceBidSerializer
         else:
-            if self.detail:
-                serializer_class = AuctionDetailSerializer
-            else:
-                serializer_class = AuctionListSerializer
+            serializer_class = AuctionListSerializer
 
         return serializer_class
 

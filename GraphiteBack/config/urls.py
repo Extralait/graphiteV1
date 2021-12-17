@@ -10,6 +10,7 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
     # Панель администратора
     path('admin/', admin.site.urls),
+    # path('admin_tools/', include('admin_tools.urls')),
     # API для приложений
     path("api/v1/", include("config.api.v1",)),
 ]

@@ -11,6 +11,7 @@ class AuctionListSerializer(serializers.ModelSerializer):
     """
     all_bids_quantity = serializers.SerializerMethodField()
     current_user = UserListSerializer(read_only=True)
+    drop = DropDetailsSerializer(read_only=True)
 
     def get_all_bids_quantity(self, obj):
         """
@@ -24,10 +25,6 @@ class AuctionListSerializer(serializers.ModelSerializer):
         read_only_fields = ['drop', 'init_cost', 'current_cost',
                             'current_user', 'min_rate', 'sell_count',
                             'auction_deadline', 'royalty', 'is_active']
-
-
-class AuctionDetailSerializer(AuctionListSerializer):
-    drop = DropDetailsSerializer(read_only=True)
 
 
 class AuctionUserBidSerializer(serializers.ModelSerializer):

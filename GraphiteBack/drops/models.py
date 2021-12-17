@@ -3,6 +3,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_utils import FieldTracker
 
+from utils.admin import image_to_admin_view
+
 
 class Category(models.Model):
     """
@@ -267,6 +269,15 @@ class Drop(models.Model):
         verbose_name = 'Drop'
         verbose_name_plural = 'Drops'
 
+    def picture_small_tag(self):
+        return image_to_admin_view(self.picture_small)
+
+    def picture_big_tag(self):
+        return image_to_admin_view(self.picture_big)
+
+    picture_small_tag.short_description = 'Picture small'
+    picture_big_tag.short_description = 'Picture big'
+
     def save(self, *args, **kwargs):
         """
         Обработка полей перед сохранением модели
@@ -282,11 +293,8 @@ class Drop(models.Model):
         """
         Переопределение удаления модели
         """
-        if self.in_stock:
-            self.is_active = False
-            super().save(*args, **kwargs)
-        else:
-            super().delete()
+        self.is_active = False
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

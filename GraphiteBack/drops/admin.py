@@ -22,3 +22,26 @@ class SpecialCollectionAdmin(admin.ModelAdmin):
 class DropAdmin(admin.ModelAdmin):
     autocomplete_fields = ['artist', 'owner', 'from_collection', 'parent']
     search_fields = ['artist', 'owner', 'from_collection', 'parent']
+    list_filter = ('owner',)
+
+    list_display = ['name', 'picture_small_tag', 'category', 'all_count', 'in_stock', 'sell_count']
+
+    fieldsets = (
+        ('Blockchain', {'fields': ('blockchain_type', 'blockchain_address', 'blockchain_identifier')}),
+        ('About drop', {'fields': ('name', 'descriptions','category','tags','specifications')}),
+        ('Relations', {'fields': ('artist', 'owner', 'parent','from_collection','level')}),
+        ('Sell settings', {'fields': ('sell_type','sell_count','in_stock',
+                                      'all_count','init_cost','min_rate',
+                                      'royalty','auction_deadline','to_sell',)}),
+        ('Media content', {
+            'fields': ('url_landing','picture_small_tag','picture_big_tag'),
+        }),
+        ('Hronology', {
+            'fields': ('created_at', 'updated_at'),
+        }),
+        ('Permissions', {
+            'fields': ('is_active',),
+        }),
+    )
+
+    readonly_fields = ['created_at', 'updated_at','picture_small_tag','picture_big_tag']

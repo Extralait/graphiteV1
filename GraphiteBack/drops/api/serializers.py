@@ -75,6 +75,7 @@ class StatsSerializer(serializers.ModelSerializer):
         return obj.views.count()
 
 
+
 class DropRelationshipCheck(RelationshipCheck):
     """
     Отношения с пользователями (Сериализатор)

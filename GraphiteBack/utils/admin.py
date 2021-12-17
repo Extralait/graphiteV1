@@ -1,6 +1,9 @@
+import PIL
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.core.paginator import EmptyPage, InvalidPage, Paginator
+from django.utils.safestring import mark_safe
+
 
 class InlineChangeList(object):
     can_show_all = True
@@ -25,6 +28,7 @@ class PaginationInline(admin.TabularInline):
     def get_formset(self, request, obj=None, **kwargs):
         formset_class = super(PaginationInline, self).get_formset(
             request, obj, **kwargs)
+
         class PaginationFormSet(formset_class):
             def __init__(self, *args, **kwargs):
                 super(PaginationFormSet, self).__init__(*args, **kwargs)
@@ -52,3 +56,21 @@ class PaginationInline(admin.TabularInline):
 
         PaginationFormSet.per_page = self.per_page
         return PaginationFormSet
+
+
+def image_to_admin_view(image):
+    width = None
+    height = None
+    if image:
+        try:
+            width = PIL.Image.open(image.path).width
+        except:
+            pass
+        try:
+            height = PIL.Image.open(image.path).height
+        except:
+            pass
+    if width and height:
+        return mark_safe(f'<img src="/media/%s" width="{width * (94 / height)}" height="94" />' % image)
+
+    return mark_safe('<img src="/media/%s" width="94" height="94" />' % image)

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Permission, Group
+from django.db.models import Count
 from rest_framework import serializers
 
 from users.models import User, PassportData, UsersGroupUser, UsersGroup
@@ -9,6 +10,7 @@ class PassportDataSerializer(serializers.ModelSerializer):
     """
     Паспортные данные (Сериализатор)
     """
+
     def __init__(self, *args, **kwargs):
         kwargs['partial'] = True
         super(PassportDataSerializer, self).__init__(*args, **kwargs)
@@ -33,7 +35,9 @@ class PassportDataSerializer(serializers.ModelSerializer):
         instance.passport_series = validated_data.get('passport_series', instance.passport_series)
         instance.passport_number = validated_data.get('passport_number', instance.passport_number)
         instance.passport_issue_date = validated_data.get('passport_issue_date', instance.passport_issue_date)
-        instance.passport_expiration_date = validated_data.get('passport_expiration_date', instance.passport_expiration_date)
+        instance.passport_expiration_date = validated_data.get('passport_expiration_date',
+                                                               instance.passport_expiration_date)
+
 
 class StatsSerializer(serializers.ModelSerializer):
     """
@@ -63,6 +67,7 @@ class StatsSerializer(serializers.ModelSerializer):
 
     all_notifications_quantity = serializers.SerializerMethodField()
     unseen_notifications_quantity = serializers.SerializerMethodField()
+
 
     class Meta:
         model = User
@@ -191,6 +196,8 @@ class ShortStatsSerializer(serializers.ModelSerializer):
     user_subscribers_quantity = serializers.SerializerMethodField()
     users_views_quantity = serializers.SerializerMethodField()
 
+    popular_drop_picture_big = serializers.SerializerMethodField()
+
     class Meta:
         model = User
 
@@ -218,6 +225,21 @@ class ShortStatsSerializer(serializers.ModelSerializer):
         """
         return obj.views.count()
 
+    def get_popular_drop_picture_big(self, obj):
+        """
+        Получить популярный дроп
+        """
+        drop = obj.owners_drops.annotate(
+            likes_count=Count('likes')
+        ).order_by('-likes_count').first()
+
+        if drop:
+            request = self.context.get('request')
+            photo_url = drop.picture_big.url
+            return request.build_absolute_uri(photo_url)
+        else:
+            return
+
 
 class UserRelationshipCheck(RelationshipCheck):
     """
@@ -234,6 +256,7 @@ class BaseUserListSerializer(ShortStatsSerializer):
     """
     Лист пользователей (Сериализатор)
     """
+
     class Meta:
         model = User
         fields = [
@@ -241,23 +264,25 @@ class BaseUserListSerializer(ShortStatsSerializer):
             'drops_in_possession_quantity', 'collections_in_possession_quantity',
             'user_subscribers_quantity', 'users_views_quantity',
             'avatar', 'wallet_number', 'instagram',
-            'twitter', 'discord', 'telegram','website', 'profile_type',
-            'last_login','date_joined','updated_at'
+            'twitter', 'discord', 'telegram', 'website', 'profile_type',
+            'last_login', 'date_joined', 'updated_at'
         ]
 
-class UserListSerializer(ShortStatsSerializer,UserRelationshipCheck):
+
+class UserListSerializer(ShortStatsSerializer,RelationshipCheck):
     """
     Лист пользователей (Сериализатор)
     """
+
     class Meta:
         model = User
         fields = [
-            'id', 'first_name', 'last_name',
+            'id', 'first_name', 'last_name', 'popular_drop_picture_big',
             'drops_in_possession_quantity', 'collections_in_possession_quantity',
             'user_subscribers_quantity', 'users_views_quantity',
             'avatar', 'wallet_number', 'instagram',
-            'twitter', 'discord', 'telegram','website', 'profile_type',
-            'is_viewed','is_subscribed','last_login','date_joined','updated_at'
+            'twitter', 'discord', 'telegram', 'website', 'profile_type',
+            'is_viewed', 'is_subscribed', 'last_login', 'date_joined', 'updated_at'
         ]
 
 
@@ -265,6 +290,7 @@ class CurrentUserDetailsSerializer(StatsSerializer):
     """
     Детали текущего пользователя (сериализатор)
     """
+
     def __init__(self, *args, **kwargs):
         kwargs['partial'] = True
         super(CurrentUserDetailsSerializer, self).__init__(*args, **kwargs)
@@ -274,9 +300,9 @@ class CurrentUserDetailsSerializer(StatsSerializer):
     class Meta:
         model = User
         exclude = [
-            'user_subscriptions', 'drop_subscriptions','auction_bids',
+            'user_subscriptions', 'drop_subscriptions', 'auction_bids',
             'collection_subscriptions', 'drop_likes',
-            'collections_likes', 'drop_views','user_views',
+            'collections_likes', 'drop_views', 'user_views',
             'collections_views', 'password', 'owner_key'
         ]
         read_only_fields = [
@@ -335,7 +361,7 @@ class UserDetailsSerializer(UserRelationshipCheck, CurrentUserDetailsSerializer)
             'password', 'owner_key', 'user_subscriptions',
             'drop_subscriptions', 'collection_subscriptions',
             'drop_likes', 'collections_likes', 'drop_views',
-            'collections_views','user_views','balance','auction_bids'
+            'collections_views', 'user_views', 'balance', 'auction_bids'
         ]
         read_only_fields = [
             'last_login', 'wallet_number', 'date_joined'

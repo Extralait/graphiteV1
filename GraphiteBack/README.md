@@ -479,6 +479,7 @@ http://example.com/api/users/?page=15
         "id": 2,
         "is_subscribed": <bool>,
         "is_viewed": <bool>,
+        "popular_drop_picture_big": <str(image_path)>
         "drops_in_possession_quantity": <int>,
         "drops_in_authorship_quantity": <int>,
         "collections_in_possession_quantity": <int>,
@@ -530,6 +531,7 @@ http://example.com/api/users/?page=15
 `id` | ***int*** | Первичный ключ пользователя
 `is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером
 `is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер
+`popular_drop_picture_big` | ***str(image_path)*** | Ссылка на изображение популярного дропа
 `drops_in_possession_quantity` | ***int*** | Количество дропов во владении
 `drops_in_authorship_quantity` | ***int*** | Количество дропов под авторством
 `collections_in_possession_quantity` | ***int*** | Количество коллекций во владении
