@@ -331,26 +331,27 @@ class DropDetailsSerializer(DropRelationshipCheck, StatsSerializer, BaseDropSeri
         """
         Получить размер
         """
-        return obj.picture_big.size if obj.picture_big else None
+        try:
+            return obj.picture_big.size
+        except:
+            return None
 
     def get_height(self, obj):
         """
         Получить высоту
         """
-        if obj.picture_big:
-            img = PIL.Image.open(obj.picture_big.path)
-            return img.height
-        else:
+        try:
+            return PIL.Image.open(obj.picture_big.path).height
+        except:
             return None
 
     def get_width(self, obj):
         """
         Получить ширину
         """
-        if obj.picture_big:
-            img = PIL.Image.open(obj.picture_big.path)
-            return img.width
-        else:
+        try:
+            return PIL.Image.open(obj.picture_big.path).width
+        except:
             return None
 
     class Meta:
