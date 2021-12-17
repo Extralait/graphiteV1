@@ -36,13 +36,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for i,drop in enumerate(Drop.objects.all()):
-            if str(drop.picture_big).startswith('/'):
-                drop.picture_big = str(drop.picture_big)[1:]
-                drop.picture_small = str(drop.picture_small)[1:]
+            try:
+                drop.specifications = json.loads(drop.specifications)
                 drop.save()
-                print(i, drop.pk)
-        for i,user in enumerate(User.objects.all()):
-            if str(user.avatar).startswith('/'):
-                user.avatar = str(user.avatar)[1:]
-                user.save()
-                print(i, user.pk)
+            except:
+                pass
+            print(i, drop.pk)

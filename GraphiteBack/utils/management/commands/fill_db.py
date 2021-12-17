@@ -77,7 +77,7 @@ def create_specification():
     random.shuffle(SECIFICATIONS)
     for key in SECIFICATIONS[:random.randint(1, len(SECIFICATIONS) - 1)]:
         dict[key] = random.randint(0, 1000)
-    return json.dumps(dict, ensure_ascii=False, indent=4)
+    return dict
 
 
 class Command(BaseCommand):
