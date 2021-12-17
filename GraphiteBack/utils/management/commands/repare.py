@@ -38,5 +38,11 @@ class Command(BaseCommand):
         for i,drop in enumerate(Drop.objects.all()):
             if str(drop.picture_big).startswith('/'):
                 drop.picture_big = str(drop.picture_big)[1:]
+                drop.picture_small = str(drop.picture_small)[1:]
                 drop.save()
                 print(i, drop.pk)
+        for i,user in enumerate(User.objects.all()):
+            if str(user.avatar).startswith('/'):
+                user.avatar = str(user.avatar)[1:]
+                user.save()
+                print(i, user.pk)
