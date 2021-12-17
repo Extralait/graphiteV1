@@ -7,4 +7,5 @@ from django.contrib import admin
 
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
-    pass
+    autocomplete_fields = ['owner']
+    search_fields = ['owner']

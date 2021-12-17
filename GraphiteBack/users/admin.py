@@ -6,99 +6,133 @@ from notifications.models import Notification
 from offers.models import Offer
 from transactions.models import Transaction
 from users.models import User, PassportData, UsersGroup, UsersGroupUser, UserSubscription, UserView
+from utils.admin import PaginationInline
 
 
-class UsersInline(admin.TabularInline):
+class UsersInline(PaginationInline):
     model = UsersGroupUser
     extra = 1
+    autocomplete_fields = ['user_group','user']
+    search_fields = ['user_group','user']
 
 
 @admin.register(UsersGroup)
 class UsersGroupAdmin(admin.ModelAdmin):
     inlines = (UsersInline,)
+    search_fields = ['name']
 
 
-class UserSubscriptionsInline(admin.TabularInline):
+class UserSubscriptionsInline(PaginationInline):
     model = UserSubscription
     extra = 1
     fk_name = 'subscription'
+    autocomplete_fields = ['subscriber', 'subscription']
+    search_fields = ['subscriber', 'subscription']
 
 
-class DropSubscriptionsInline(admin.TabularInline):
+class DropSubscriptionsInline(PaginationInline):
     model = DropSubscription
     extra = 1
+    autocomplete_fields = ['user', 'drop']
+    search_fields = ['user', 'drop']
 
 
-class CollectionSubscriptionsInline(admin.TabularInline):
+class CollectionSubscriptionsInline(PaginationInline):
     model = CollectionSubscription
     extra = 1
+    autocomplete_fields = ['user', 'collection']
+    search_fields = ['user', 'collection']
 
 
-class DropLikesInline(admin.TabularInline):
+class DropLikesInline(PaginationInline):
     model = DropLike
     extra = 1
+    autocomplete_fields = ['user', 'drop']
+    search_fields = ['user', 'drop']
 
 
-class CollectionsLikesInline(admin.TabularInline):
+class CollectionsLikesInline(PaginationInline):
     model = CollectionLike
     extra = 1
+    autocomplete_fields = ['user', 'collection']
+    search_fields = ['user', 'collection']
 
 
-class UserViewsInline(admin.TabularInline):
+class UserViewsInline(PaginationInline):
     fk_name = 'overlooked'
     model = UserView
     extra = 1
+    autocomplete_fields = ['overlooked', 'looking']
+    search_fields = ['overlooked', 'looking']
 
 
-class DropViewsInline(admin.TabularInline):
+class DropViewsInline(PaginationInline):
     model = DropView
     extra = 1
+    autocomplete_fields = ['user', 'drop']
+    search_fields = ['user', 'drop']
 
 
-class CollectionViewsInline(admin.TabularInline):
+class CollectionViewsInline(PaginationInline):
     model = CollectionView
     extra = 1
+    autocomplete_fields = ['user', 'collection']
+    search_fields = ['user', 'collection']
 
 
 class PassportDataInline(admin.StackedInline):
     model = PassportData
     inline_type = 'stacked'
+    autocomplete_fields = ['owner']
+    search_fields = ['owner']
 
 
-class FromYouNotificationInline(admin.TabularInline):
+class FromYouNotificationInline(PaginationInline):
     model = Notification
     inline_type = 'tabular'
     fk_name = 'from_user'
+    autocomplete_fields = ['to_user','from_user','to_drop','to_collection']
+    search_fields = ['to_user','from_user','to_drop','to_collection']
 
 
-class ToYouNotificationInline(admin.TabularInline):
+class ToYouNotificationInline(PaginationInline):
     model = Notification
     inline_type = 'tabular'
     fk_name = 'to_user'
+    autocomplete_fields = ['to_user','from_user','to_drop','to_collection']
+    search_fields = ['to_user','from_user','to_drop','to_collection']
 
 
-class ToYouUserOfferInline(admin.TabularInline):
+class ToYouUserOfferInline(PaginationInline):
     model = Offer
     inline_type = 'tabular'
     fk_name = 'owner'
+    autocomplete_fields = ['owner','buyer','drop']
+    search_fields = ['owner','buyer','drop']
 
 
-class FromYouUserOfferInline(admin.TabularInline):
+class FromYouUserOfferInline(PaginationInline):
     model = Offer
     inline_type = 'tabular'
     fk_name = 'buyer'
+    autocomplete_fields = ['owner','buyer','drop']
+    search_fields = ['owner','buyer','drop']
 
 
-class FromYouTransactionInline(admin.TabularInline):
+class FromYouTransactionInline(PaginationInline):
     model = Transaction
     inline_type = 'tabular'
     fk_name = 'buyer'
+    autocomplete_fields = ['owner','buyer','drop']
+    search_fields = ['owner','buyer','drop']
 
 
-class ToYouTransactionInline(admin.TabularInline):
+class ToYouTransactionInline(PaginationInline):
     model = Transaction
     inline_type = 'tabular'
     fk_name = 'owner'
+    autocomplete_fields = ['owner','buyer','drop']
+    search_fields = ['owner','buyer','drop']
 
 
 @admin.register(User)
@@ -112,6 +146,7 @@ class UserInlinesAdmin(admin.ModelAdmin):
     list_display = ['wallet_number', 'avatar_tag', 'first_name', 'last_name', 'profile_type', 'verify_status']
     search_fields = ['wallet_number', 'first_name', 'last_name', 'profile_type', 'verify_status', 'is_active']
     ordering = ['wallet_number']
+
 
     fieldsets = (
         (None, {'fields': ('wallet_number', 'owner_key', 'password')}),
