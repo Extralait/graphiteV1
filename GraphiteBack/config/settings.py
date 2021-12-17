@@ -62,13 +62,13 @@ CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST")
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
 # Базовые настройки Celery
-RABBITMQ_DEFAULT_USER=env.str("RABBITMQ_DEFAULT_USER")
+RABBITMQ_DEFAULT_USER = env.str("RABBITMQ_DEFAULT_USER")
 
-RABBITMQ_DEFAULT_PASS=env.str("RABBITMQ_DEFAULT_PASS")
+RABBITMQ_DEFAULT_PASS = env.str("RABBITMQ_DEFAULT_PASS")
 
-CELERY_BROKER_URL= f"amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@rabbit:5672/"
+CELERY_BROKER_URL = f"amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@rabbit:5672/"
 
-CELERY_ACCEPT_CONTENT = env.list("CELERY_ACCEPT_CONTENT")\
+CELERY_ACCEPT_CONTENT = env.list("CELERY_ACCEPT_CONTENT")
 
 CELERY_TASK_SERIALIZER = env.str("CELERY_TASK_SERIALIZER")
 
@@ -104,11 +104,12 @@ ADMINS = [
 
 # Установленные приложения
 INSTALLED_APPS = [
-    # # Admin tools
-    # 'admin_tools',
-    # 'admin_tools.theming',
-    # 'admin_tools.menu',
-    # 'admin_tools.dashboard',
+    # Admin tools
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
+    # 'grappelli',
     # Defaults
     "django.contrib.admin",
     "django.contrib.auth",
@@ -160,7 +161,6 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -168,15 +168,17 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            'loaders': [
+                # Loads templates from admin_tools setting:
+                "admin_tools.template_loaders.Loader",
+                # Loads templates from DIRS setting:
+                "django.template.loaders.filesystem.Loader",
+                # Loads templates from your installed apps:
+                "django.template.loaders.app_directories.Loader",
+            ],
+
         },
     },
-]
-
-TEMPLATE_LOADERS = [
-    # Loads templates from DIRS setting:
-    "django.template.loaders.filesystem.Loader",
-    # Loads templates from your installed apps:
-    "django.template.loaders.app_directories.Loader",
 ]
 
 # Настройка запуска приложения
