@@ -63,7 +63,7 @@ def take_files_names(dir_path):
     for root, dirs, files in os.walk(dir_path):
         for file in files:
             print(dir_path+file)
-            files_list.append((dir_path+file).split('media')[-1])
+            files_list.append((dir_path+file).split('media')[-1][1:])
     return files_list
 
 
