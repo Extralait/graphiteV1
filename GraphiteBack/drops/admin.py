@@ -20,5 +20,5 @@ class SpecialCollectionAdmin(admin.ModelAdmin):
 
 @admin.register(Drop)
 class DropAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['artist', 'owner','from_collection','parent']
-    search_fields = ['artist', 'owner','from_collection','parent']
+    autocomplete_fields = ['artist', 'owner', 'from_collection', 'parent']
+    search_fields = ['artist', 'owner', 'from_collection', 'parent']
