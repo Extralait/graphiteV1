@@ -68,7 +68,7 @@ services:
     image: web-image
     command: sh -c "python manage.py makemigrations&& python manage.py migrate&& gunicorn config.asgi:application --bind 0.0.0.0:8001 -w 3 -k uvicorn.workers.UvicornWorker --log-file -"
     volumes:
-      - static_volume:/home/app/web/static
+      - ./GraphiteBack/static:/home/app/web/static
       - ./GraphiteBack/media:/home/app/web/media
     env_file:
       - project_config/.env.back
@@ -182,7 +182,7 @@ services:
     image: nginx:alpine
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - static_volume:/home/app/web/static
+      - ./GraphiteBack/static:/home/app/web/static
       - ./GraphiteBack/media:/home/app/web/media
     depends_on:
       - web_2
