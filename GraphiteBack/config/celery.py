@@ -22,10 +22,11 @@ CELERY_QUEUES = (
     Queue('solo_task', Exchange('solo_task'), routing_key='solo_task'),
     Queue('multi_task', Exchange('multi_task'), routing_key='multi_task'),
     Queue('beat_task', Exchange('beat_task'), routing_key='beat_task'),
+    Queue('image_converter', Exchange('image_converter'), routing_key='image_converter'),
 )
 
 # Автоматический поиск задач
-app.autodiscover_tasks(['users.services'])
+app.autodiscover_tasks(['auction.services','drops.services'])
 
 # Создание расписания периодических задач для рабочих Celery
 app.conf.beat_schedule = {

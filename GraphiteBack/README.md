@@ -1055,7 +1055,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "auction_deadline": <str(datetime)>,
                 "picture_big": <str(image_path)>,
                 "picture_small": <str(image_path)>,
-                "color": <int(hex)>,
+                "color": <str(hex)>,
                 "parent": <object(drop_in_list)>,
                 "from_collection": <object(collection_in_list)>,
                 "sell_type": <str>, # (auction|sell)
@@ -1087,7 +1087,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `auction_deadline` | ***str(datetime)*** | Дата и время окончания аукциона
 `picture_big` | ***str(image_path)*** | Большая картинка
 `picture_small` | ***str(image_path)*** | Маленькая картинка
-`color` | ***int(hex)*** | Основной цвет дропа в hex
+`color` | ***str(hex)*** | Основной цвет дропа в hex
 `parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)
 `from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
 `to_sell` | ***bool*** | Выставлен ли на продажу

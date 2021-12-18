@@ -50,7 +50,8 @@ RUN mkdir $APP_HOME/media
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apt-get update && apt-get install -y libpq-dev bash netcat python-pydot python-pydot-ng graphviz
+RUN apt-get update && apt-get install -y libpq-dev bash netcat python-pydot \
+ python-pydot-ng graphviz ffmpeg libsm6 libxext6
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 

@@ -247,6 +247,13 @@ class Drop(models.Model):
         null=True,
         blank=True
     )
+    color = models.CharField(
+        verbose_name='Color',
+        null=True,
+        blank=True,
+        default=None,
+        max_length=6
+    )
     is_active = models.BooleanField(
         verbose_name='Is active',
         default=True,
@@ -263,7 +270,7 @@ class Drop(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    tracker = FieldTracker(fields=['to_sell', 'sell_type'])
+    tracker = FieldTracker(fields=['to_sell', 'sell_type','color','picture_big'])
 
     class Meta:
         verbose_name = 'Drop'

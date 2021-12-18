@@ -13,6 +13,7 @@ from lorem import get_paragraph
 
 from auction.services.auction_operations import place_bid
 from drops.models import Drop, Tag, Category
+from drops.services.color_converter import find_closest_color
 from drops.services.like import add_like as add_drop_like
 from drops.services.subscription import add_subscription as add_drop_subscription
 from drops.services.view import add_view as add_drop_view
@@ -36,9 +37,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for i,drop in enumerate(Drop.objects.all()):
-            try:
-                drop.specifications = json.loads(drop.specifications)
-                drop.save()
-            except:
-                pass
+            # try:
+            find_closest_color.delay(drop.pk, drop.picture_big.path)
+            # except:
+            #     pass
             print(i, drop.pk)

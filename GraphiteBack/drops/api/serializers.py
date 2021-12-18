@@ -136,7 +136,7 @@ class DropListSerializer(StatsSerializer, DropRelationshipCheck, BaseDropSeriali
         model = Drop
         fields = [
             'id', 'subscriptions_quantity', 'likes_quantity', 'views_quantity',
-            'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type',
+            'name', 'category', 'tags', 'artist', 'to_sell', 'sell_type','color',
             'owner', 'from_collection', 'parent', 'picture_big', 'picture_small',
             'is_viewed', 'is_subscribed', 'is_liked', 'is_active', 'init_cost',
             'updated_at', 'created_at', 'auction_deadline','current_auction_id','current_auction_cost'
