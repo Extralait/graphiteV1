@@ -178,6 +178,7 @@ http://example.com/api/users/?page=15
     "results": [
         {
             "id": <int>,
+            "popular_drop_picture_big": <str(image_path)>
             "first_name": <str>,
             "last_name": <str>,
             "drops_in_possession_quantity": <int>,
@@ -207,6 +208,7 @@ http://example.com/api/users/?page=15
 `id` | ***int*** | Уникальный ключ пользователя
 `is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером
 `is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер
+`popular_drop_picture_big` | ***str(image_path)*** | Ссылка на изображение популярного дропа
 `first_name` | ***str*** | Имя
 `last_name` | ***str*** | Фамилия
 `drops_in_possession_quantity` | ***int*** | Количество дропов во владении
@@ -321,7 +323,7 @@ http://example.com/api/users/?page=15
         "collections_views_quantity": <int>,
         "all_notifications_quantity": <int>,
         "unseen_notifications_quantity": <int>,
-        "passport_data": object(user_passport),
+       "passport_data": object(user_passport),
         "is_superuser": <bool>,
         "first_name": <str>,
         "last_name": <str>,
@@ -479,7 +481,6 @@ http://example.com/api/users/?page=15
         "id": 2,
         "is_subscribed": <bool>,
         "is_viewed": <bool>,
-        "popular_drop_picture_big": <str(image_path)>
         "drops_in_possession_quantity": <int>,
         "drops_in_authorship_quantity": <int>,
         "collections_in_possession_quantity": <int>,
@@ -499,6 +500,7 @@ http://example.com/api/users/?page=15
         "collections_views_quantity": <int>,
         "all_notifications_quantity": <int>,
         "unseen_notifications_quantity": <int>,
+        "popular_drop_picture_big": <str(image_path)>
         "is_superuser": <bool>,
         "first_name": <str>,
         "last_name": <str>,
@@ -531,7 +533,6 @@ http://example.com/api/users/?page=15
 `id` | ***int*** | Первичный ключ пользователя
 `is_viewed` | ***bool*** | Просмотрен ли этот профиль текущим юзером
 `is_subscribed` | ***bool*** | Подписан ли на этот профиль текущий юзер
-`popular_drop_picture_big` | ***str(image_path)*** | Ссылка на изображение популярного дропа
 `drops_in_possession_quantity` | ***int*** | Количество дропов во владении
 `drops_in_authorship_quantity` | ***int*** | Количество дропов под авторством
 `collections_in_possession_quantity` | ***int*** | Количество коллекций во владении
@@ -551,6 +552,7 @@ http://example.com/api/users/?page=15
 `collections_views_quantity` | ***int*** | Количество просмотров на коллекциях
 `all_notifications_quantity` | ***int*** | Общее количество уведомлений
 `unseen_notifications_quantity` | ***int*** | Дропы во владении
+`popular_drop_picture_big` | ***str(image_path)*** | Ссылка на изображение популярного дропа
 `is_superuser` | ***bool*** | Является ли пользователь суперпользователем
 `is_staff` | ***str*** | Является ли пользователь администратором
 `is_active` | ***str*** | Является ли пользователь активным
@@ -1053,6 +1055,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
                 "auction_deadline": <str(datetime)>,
                 "picture_big": <str(image_path)>,
                 "picture_small": <str(image_path)>,
+                "color": <int(hex)>,
                 "parent": <object(drop_in_list)>,
                 "from_collection": <object(collection_in_list)>,
                 "sell_type": <str>, # (auction|sell)
@@ -1084,6 +1087,7 @@ https://dev.artgraphite.ru/api/v1/drops-categories/ \
 `auction_deadline` | ***str(datetime)*** | Дата и время окончания аукциона
 `picture_big` | ***str(image_path)*** | Большая картинка
 `picture_small` | ***str(image_path)*** | Маленькая картинка
+`color` | ***int(hex)*** | Основной цвет дропа в hex
 `parent` | ***object(drop_in_list)*** | Дроп - первоисточник (такой же, как при получении [списка дропов](#получение-дропов) но без поля ***parent***)
 `from_collection` | ***object(collection_in_list)*** | Коллекция, в которую входит дроп (такая же, как при получении [списка коллекций](#получение-коллекций))
 `to_sell` | ***bool*** | Выставлен ли на продажу

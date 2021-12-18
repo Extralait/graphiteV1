@@ -68,6 +68,7 @@ class StatsSerializer(serializers.ModelSerializer):
     all_notifications_quantity = serializers.SerializerMethodField()
     unseen_notifications_quantity = serializers.SerializerMethodField()
 
+    popular_drop_picture_big = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -185,6 +186,22 @@ class StatsSerializer(serializers.ModelSerializer):
         Получить количество непрочитанных уведомлений
         """
         return obj.to_user_notifications.filter(is_viewed=False).count()
+
+    def get_popular_drop_picture_big(self, obj):
+        """
+        Получить популярный дроп
+        """
+        drop = obj.owners_drops.annotate(
+            likes_count=Count('likes')
+        ).order_by('-likes_count').first()
+
+        if drop:
+            request = self.context.get('request')
+            photo_url = drop.picture_big.url
+            return request.build_absolute_uri(photo_url)
+        else:
+            return
+
 
 
 class ShortStatsSerializer(serializers.ModelSerializer):
