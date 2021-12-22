@@ -31,7 +31,16 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: cd /home/extralait/apps/graphiteV1/&&ls
-        
+
+    - name: Share command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.SSH_PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+        script: cd /home/extralait/apps/graphiteV1/&&chmod -R 777 .
+
     - name: Rebuild command
       uses: appleboy/ssh-action@master
       with:
@@ -39,14 +48,5 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
-        script:  cd /home/extralait/apps/graphiteV1/&&docker build -t web-image ./GraphiteBack
+        script:  cd /home/extralait/apps/graphiteV1/&&docker-compose up -d --build
 
-
-    - name: Rebuild command
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        script:  cd /home/extralait/apps/graphiteV1/&&docker-compose up -d

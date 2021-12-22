@@ -751,6 +751,7 @@ http://example.com/api/users/?page=15
             "name": <str>,
             "picture_big": <str(image_path)>,
             "picture_small": <str(image_path)>,
+            "specifications": <json>,
             "is_active": <bool>,
             "created_at": <str(datetime)>,
             "updated_at": <str(datetime)>
@@ -773,6 +774,7 @@ http://example.com/api/users/?page=15
 `name` | ***int*** | Название коллекции
 `picture_big` | ***int*** | Большая картинка
 `picture_small` | ***int*** | Маленькая картинка
+`specifications` | ***json*** | :x: | Характеристики дропа (произвольный json)
 `is_active` | ***int*** | Активна ли текуая коллекция
 `created_at` | ***int*** | Дата и время создания коллекции
 `updated_at` | ***int*** | Дата и время обновления коллекции
@@ -820,6 +822,7 @@ api/v1/collections/{id}***
         "name": <str>,
         "picture_big": <str(image_path)>,
         "picture_small": <str(image_path)>,
+        "specifications": <json>,
         "is_active": <bool>,
         "created_at": <str(datetime)>,
         "updated_at": <str(datetime)>
@@ -843,6 +846,7 @@ api/v1/collections/{id}***
 `name` | ***str*** | Название коллекции
 `picture_big` | ***str(image_path)*** | Большая картинка
 `picture_small` | ***str(image_path)*** | Маленькая картинка
+`specifications` | ***json*** | :x: | Характеристики дропа (произвольный json)
 `is_active` | ***bool*** | Активна ли текуая коллекция
 `created_at` | ***str(datetime)*** | Дата и время создания коллекции
 `updated_at` | ***str(datetime)*** | Дата и время обновления коллекции

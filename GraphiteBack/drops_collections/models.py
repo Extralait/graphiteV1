@@ -29,6 +29,11 @@ class Collection(models.Model):
         null=True,
         blank=True
     )
+    specifications = models.JSONField(
+        verbose_name='Specifications',
+        null=True,
+        blank=True
+    )
     is_active = models.BooleanField(
         verbose_name='Is active',
         default=True
