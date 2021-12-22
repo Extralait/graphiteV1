@@ -1,0 +1,229 @@
+# docker-compose.yml
+
+version: "3.7"
+
+services:
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:alpine
+    networks:
+      - second
+    expose:
+      - "6379"
+    restart: always
+
+  rabbit:
+    container_name: rabbit
+    hostname: rabbit
+    build:
+      context: ./rabbitmq
+      dockerfile: Dockerfile
+    volumes:
+      - /rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+      - /rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+    networks:
+      - second
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: always
+
+  postgres_2:
+    container_name: postgres_2
+    hostname: postgres_2
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - project_config/.env.postgres
+    networks:
+      - second
+    ports:
+      - "5433:5432"
+    restart: always
+
+  pgbackups_2:
+    container_name: pgbackups_2
+    hostname: pgbackups_2
+    image: prodrigestivill/postgres-backup-local
+    volumes:
+      - ./backups:/backups
+    env_file:
+      - project_config/.env.postgres
+    user: postgres:postgres
+    links:
+      - postgres_2
+    depends_on:
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  web_2:
+    container_name: web_2
+    hostname: web_2
+    build: GraphiteBack
+    image: web-image
+    command: sh -c "python manage.py makemigrations&& python manage.py migrate&& python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./GraphiteBack/static:/home/app/web/static
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - postgres_2
+      - rabbit
+      - redis
+    networks:
+      - second
+    ports:
+      - "8000:8000"
+    restart: always
+
+  celery_multi_worker:
+    container_name: celery_multi_worker
+    hostname: celery_multi_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q multi_task -P gevent -c 500 -l INFO -n worker1@%h --pidfile= "
+    volumes:
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  celery_image_converter_worker:
+    container_name: celery_image_converter_worker
+    hostname: celery_image_converter_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q image_converter -P gevent -c 10 -l INFO -n worker2@%h --pidfile= "
+    volumes:
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  default_worker:
+    container_name: default_worker
+    hostname: default_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q default,email -P gevent -c 50 -l INFO -n worker3@%h --pidfile= "
+    volumes:
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  celery_solo_worker:
+    container_name: celery_solo_worker
+    hostname: celery_solo_worker
+    image: web-image
+    command: sh -c "celery -A config worker -E -Q solo_task -l INFO -P solo -n worker4@%h --pidfile= "
+    volumes:
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  celery_beat:
+    container_name: celery_beat
+    hostname: celery_beat
+    image: web-image
+    command: sh -c "celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    volumes:
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    restart: always
+
+  flower:
+    container_name: flower
+    hostname: flower
+    image: web-image
+    command: sh -c "celery -A config flower --basic_auth=user1:password1 --brocker=amqp://user1:password1@rabbit:5672/#/ --broker_api=http://user1:password1@rabbit:15672/api --address=0.0.0.0 --port=5500"
+    volumes:
+      - ./GraphiteBack/media:/home/app/web/media
+      - ./GraphiteBack:/home/app/web
+    env_file:
+      - project_config/.env.back
+    links:
+      - redis
+    depends_on:
+      - web_2
+      - redis
+      - rabbit
+      - postgres_2
+    networks:
+      - second
+    ports:
+      - "5500:5500"
+    restart: always
+
+  nginx_2:
+    container_name: nginx_2
+    hostname: nginx_2
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf
+      - ./GraphiteBack/static:/home/app/web/static
+      - ./GraphiteBack/media:/home/app/web/media
+    depends_on:
+      - web_2
+    networks:
+      - second
+    ports:
+      - "80:80"
+    restart: always
+
+networks:
+  second:
+    name: second
+#    external: true
+#    driver: bridge
+
+volumes:
+  static_volume:
+  media_volume:
+  postgres_data:

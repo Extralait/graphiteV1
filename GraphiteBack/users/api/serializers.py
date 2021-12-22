@@ -196,9 +196,12 @@ class StatsSerializer(serializers.ModelSerializer):
         ).order_by('-likes_count').first()
 
         if drop:
-            request = self.context.get('request')
-            photo_url = drop.picture_big.url
-            return request.build_absolute_uri(photo_url)
+            try:
+                request = self.context.get('request')
+                photo_url = drop.picture_big.url
+                return request.build_absolute_uri(photo_url)
+            except:
+                return None
         else:
             return
 
