@@ -63,7 +63,7 @@ class DropAdmin(JsonAdmin):
                                       'all_count','init_cost','min_rate',
                                       'royalty','auction_deadline','to_sell',)}),
         ('Media content', {
-            'fields': ('url_landing','picture_small_tag','picture_big_tag'),
+            'fields': ('url_landing',('picture_small_tag','picture_small'),('picture_big_tag','picture_big')),
         }),
         ('Hronology', {
             'fields': ('created_at', 'updated_at'),

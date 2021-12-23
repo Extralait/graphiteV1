@@ -1,4 +1,7 @@
 from django.db import models
+from model_utils import FieldTracker
+
+from utils.admin import image_to_admin_view
 
 
 class Collection(models.Model):
@@ -39,12 +42,23 @@ class Collection(models.Model):
         default=True
     )
 
+    tracker = FieldTracker(fields=['picture_big','picture_small'])
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Collection'
         verbose_name_plural = 'Collections'
+
+    def picture_small_tag(self):
+        return image_to_admin_view(self.picture_small)
+
+    def picture_big_tag(self):
+        return image_to_admin_view(self.picture_big)
+
+    picture_small_tag.short_description = 'Picture small'
+    picture_big_tag.short_description = 'Picture big'
 
     def delete(self, *args, **kwargs):
         """

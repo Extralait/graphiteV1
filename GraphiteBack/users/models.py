@@ -234,6 +234,8 @@ class User(AbstractUser):
         through='auction.AuctionUserBid'
     )
 
+    tracker = FieldTracker(fields=['avatar', 'cover'])
+
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'wallet_number'

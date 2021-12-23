@@ -1,4 +1,6 @@
-import blank
+from io import StringIO
+
+from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from model_utils import FieldTracker
@@ -270,7 +272,7 @@ class Drop(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    tracker = FieldTracker(fields=['to_sell', 'sell_type','color','picture_big'])
+    tracker = FieldTracker(fields=['to_sell', 'sell_type','color','picture_big','picture_small'])
 
     class Meta:
         verbose_name = 'Drop'
@@ -294,6 +296,7 @@ class Drop(models.Model):
         if self.sell_count:
             if self.sell_count > self.in_stock:
                 self.sell_count = self.in_stock
+
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
