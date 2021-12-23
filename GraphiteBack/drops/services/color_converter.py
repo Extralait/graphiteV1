@@ -3,6 +3,7 @@ from collections import Counter
 from math import sqrt, inf
 
 import cv2
+import numpy as np
 from sklearn.cluster import KMeans
 
 from config.celery import app as celery_app
@@ -81,19 +82,17 @@ for color in color_list:
 list_of_hsv = list(map(lambda x: colorsys.rgb_to_hsv(*x), list_of_rgb))
 
 
-def prep_image(raw_img):
-    modified_img = cv2.resize(raw_img, (900, 600), interpolation=cv2.INTER_AREA)
-    modified_img = modified_img.reshape(modified_img.shape[0] * modified_img.shape[1], 3)
-    return modified_img
+def dominant_color(img):
+    pixels = np.float32(img.reshape(-1, 3))
 
+    n_colors = 5
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 200, .1)
+    flags = cv2.KMEANS_RANDOM_CENTERS
 
-def color_analysis(img):
-    clf = KMeans(n_clusters=1)
-    color_labels = clf.fit_predict(img)
-    center_colors = clf.cluster_centers_
-    counts = Counter(color_labels)
-    ordered_colors = [center_colors[i] for i in counts.keys()]
-    return colorsys.rgb_to_hsv(*ordered_colors[0])
+    _, labels, palette = cv2.kmeans(pixels, n_colors, None, criteria, 10, flags)
+    _, counts = np.unique(labels, return_counts=True)
+    dominant = palette[np.argmax(counts)]
+    return colorsys.rgb_to_hsv(*dominant)
 
 
 def closest_colour(selected_colour):
@@ -112,10 +111,9 @@ def closest_colour(selected_colour):
 
 @celery_app.task(name='api.task.find_closest_color', queue='image_converter', routing_key='image_converter')
 def find_closest_color(drop_pk,image_path):
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    modified_image = prep_image(image)
-    hsv = color_analysis(modified_image)
+    img = cv2.imread(image_path)
+    img = cv2.resize(img,(600,600))
+    hsv = dominant_color(img)
     set_closest_color.delay(drop_pk,closest_colour(hsv))
 
 
