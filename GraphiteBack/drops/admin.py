@@ -63,7 +63,7 @@ class DropAdmin(JsonAdmin):
                                       'all_count','init_cost','min_rate',
                                       'royalty','auction_deadline','to_sell',)}),
         ('Media content', {
-            'fields': ('url_landing',('picture_small_tag','picture_small'),('picture_big_tag','picture_big')),
+            'fields': ('url_landing',('picture_small_tag','picture_small'),('picture_big_tag','picture_big'),('color','color_tag')),
         }),
         ('Hronology', {
             'fields': ('created_at', 'updated_at'),
@@ -73,7 +73,7 @@ class DropAdmin(JsonAdmin):
         }),
     )
 
-    readonly_fields = ['created_at', 'updated_at','picture_small_tag','picture_big_tag']
+    readonly_fields = ['created_at', 'updated_at','picture_small_tag','picture_big_tag','color_tag']
 
     def specifications(self, instance):
         data = json.loads(instance.specifications)

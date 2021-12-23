@@ -3,6 +3,8 @@ from io import StringIO
 from PIL import Image
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from model_utils import FieldTracker
 
 from utils.admin import image_to_admin_view
@@ -278,6 +280,9 @@ class Drop(models.Model):
         verbose_name = 'Drop'
         verbose_name_plural = 'Drops'
 
+    def color_tag(self):
+        return mark_safe(f'<div style="background-color: #{self.color};width:100px;height:20px"></span>')
+
     def picture_small_tag(self):
         return image_to_admin_view(self.picture_small)
 
@@ -286,6 +291,7 @@ class Drop(models.Model):
 
     picture_small_tag.short_description = 'Picture small'
     picture_big_tag.short_description = 'Picture big'
+    color_tag.short_description = ''
 
     def save(self, *args, **kwargs):
         """
