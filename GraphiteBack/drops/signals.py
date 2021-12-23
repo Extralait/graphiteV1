@@ -1,4 +1,3 @@
-from io import StringIO
 
 from PIL import Image
 from django.db.models.signals import post_save
