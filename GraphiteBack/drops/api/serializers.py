@@ -200,7 +200,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
                     errors['errors'].append({
                         'details': 'min_rate must be greater than 0'
                     })
-            if sell_type in ["to_sell", "auction"]:
+            if sell_type in ["sell", "auction"]:
                 if not sell_count:
                     errors['errors'].append({
                         'details': 'sell_count must be greater than 0'
@@ -211,7 +211,7 @@ class DropCreateOrUpdateSerializer(serializers.ModelSerializer):
                     })
             else:
                 errors['errors'].append({
-                    'details': 'sell_type must be "auction" or "to_sell"'
+                    'details': 'sell_type must be "auction" or "sell"'
                 })
 
         return errors
