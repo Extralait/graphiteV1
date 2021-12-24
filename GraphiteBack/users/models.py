@@ -90,7 +90,7 @@ class User(AbstractUser):
     )
     balance = models.FloatField(
         verbose_name='Balance',
-        default=0,
+        default=1000,
         validators=[
             MinValueValidator(0)
         ],
