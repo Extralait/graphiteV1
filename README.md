@@ -28,18 +28,6 @@ docker stack deploy -c docker-compose.yml  proj
 docker stack rm proj
 docker swarm leave --force
 ```
-### URL
-**Api:** ***https://dev.artgraphite.ru/api/v1/*** \
-**Api documentation:** ***https://dev.artgraphite.ru/documentation/v1/api.html*** \
-**DB chart:** ***https://dev.artgraphite.ru/documentation/v1/db.png***
-
-# Инфо Сервер
-ssh -i ~/.ssh/kisi_key root@134.209.249.203 \
-git@github.com:atknin/graphite-back.git \
-git@github.com:Extralait/graphite.git \
-docker-compose logs -f
-
-/home/extralait/apps/graphite/GraphiteBack/ \
 
 **Сборка** \
 docker-compose build
